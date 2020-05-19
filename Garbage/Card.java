@@ -1,5 +1,4 @@
 package Garbage;
-
 public class Card
 {
     private Suit suit;
@@ -16,9 +15,9 @@ public class Card
 
     }
 
-    public Card(Value value)
+    public Card(Value redJoker)
     {
-        setValue(value);
+        setValue(redJoker);
     }
 
     public Value getValue()
@@ -26,9 +25,9 @@ public class Card
         return value;
     }
 
-    private void setValue(Value value)
+    private void setValue(Value redJoker)
     {
-        this.value = value;
+        this.value = redJoker;
     }
 
     public int getValueOfCard()

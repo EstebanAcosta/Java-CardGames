@@ -78,7 +78,7 @@ public class Player
 
         for (Card c : playerCards)
         {
-            if (c.isUnflipped())
+            if (c.isFaceDown())
             {
                 return false;
             }
@@ -95,7 +95,7 @@ public class Player
 
         for (Card c : getPlayerCards())
         {
-            if (c.isUnflipped())
+            if (c.isFaceDown())
             {
                 System.out.print("Card " + count + " ");
                 switchable.add(count);
@@ -119,7 +119,7 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            if (playerCards.get(i).isUnflipped())
+            if (playerCards.get(i).isFaceDown())
             {
                 System.out.print(" ( CARD " + (i + 1) + " )");
             }
@@ -157,7 +157,7 @@ public class Player
 
         playerCards.set(position, newCard);
 
-        playerCards.get(position).setUnflipped(false);
+        playerCards.get(position).setFaceDown(false);
 
         return oldCard;
 

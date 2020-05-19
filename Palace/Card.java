@@ -6,7 +6,7 @@ public class Card
 
     private Value value;
 
-    private boolean unflipped;
+    private boolean faceDown;
 
     public Card(Suit suit, Value value)
     {
@@ -16,10 +16,6 @@ public class Card
 
     }
 
-    public Card(Value value)
-    {
-        setValue(value);
-    }
 
     public Value getValue()
     {
@@ -47,15 +43,15 @@ public class Card
         this.suit = suit;
     }
 
-    public void setUnflipped(boolean unflipped)
+    public void setFaceDown(boolean faceDown)
     {
-        this.unflipped = unflipped;
+        this.faceDown = faceDown;
     }
 
-    public boolean isUnflipped()
+    public boolean isFaceDown()
     {
 
-        return unflipped;
+        return faceDown;
     }
 
     public String toString()
