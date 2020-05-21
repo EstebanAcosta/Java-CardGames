@@ -2,7 +2,11 @@ package Garbage;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
-
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Garbage
 {
     private ArrayList<Player> players = new ArrayList<Player>();

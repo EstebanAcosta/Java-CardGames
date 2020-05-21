@@ -1,4 +1,9 @@
 package Garbage;
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Card
 {
     private Suit suit;

@@ -3,6 +3,11 @@ package Palace;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Palace
 {
     private ArrayList<Player> players = new ArrayList<Player>();
@@ -110,15 +115,20 @@ public class Palace
         startGame(deck);
     }
 
-
     public void startGame(Deck deck)
     {
         System.out.println("Welcome to Palace");
+        
+        
+        while(endGame())
+        {
+            
+        }
     }
 
-    public void endGame()
+    public boolean endGame()
     {
-
+        return false;
     }
 
     public static void main(String[] args)
@@ -128,6 +138,6 @@ public class Palace
         p.setUpNumOfPlayers();
 
         p.setUpPlayers();
-        
+
     }
 }

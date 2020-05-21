@@ -2,7 +2,11 @@ package Palace;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
-
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 
 public class Deck
 {

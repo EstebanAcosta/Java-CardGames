@@ -1,5 +1,10 @@
 package Palace;
 
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public enum Suit
 {
     HEARTS,

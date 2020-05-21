@@ -1,6 +1,10 @@
 package Garbage;
 import java.util.ArrayList;
-
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Player
 {
     private String name;

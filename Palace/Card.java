@@ -1,5 +1,10 @@
 package Palace;
 
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Card
 {
     private Suit suit;

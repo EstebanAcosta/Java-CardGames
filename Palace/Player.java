@@ -1,6 +1,10 @@
 package Palace;
 import java.util.ArrayList;
-
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public class Player
 {
     private String name;

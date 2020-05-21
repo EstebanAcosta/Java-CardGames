@@ -1,5 +1,9 @@
 package Garbage;
-
+/***
+ * 
+ * @author estebanacosta
+ *
+ */
 public enum Suit
 {
     HEARTS,
