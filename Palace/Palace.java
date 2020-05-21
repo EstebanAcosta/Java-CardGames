@@ -1,12 +1,11 @@
 package Palace;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 
 /***
- * 
- * @author estebanacosta
- *
+ * @author esteban acosta
  */
 public class Palace
 {
@@ -106,29 +105,60 @@ public class Palace
             // give each player their 9 cards
             players.get(i).setPlayerCards(playerCards);
 
+            players.get(i).setIsOutStatus(false);
+
             System.out.println(players.get(i).getNumPlayerCards() + " cards have been drawn from the deck\n");
             System.out.println("Three of the cards are faced down. The rest are in the player's hand");
             System.out.println(players.get(i).getName() + " has " + players.get(i).getNumPlayerCards() + " cards");
             System.out.println("__________________________________________________\n");
         }
 
+        setUpPalace(deck);
+
+    }
+
+    public void setUpPalace(Deck deck)
+    {
+
+        for (Player p : players)
+        {
+            System.out.println("Player " + p.getPlayerId() + " " + p.getName());
+            System.out.println("Which three cards would you like to put on your palace? ");
+            p.showPlayerCards();
+            
+        }
         startGame(deck);
     }
 
     public void startGame(Deck deck)
     {
         System.out.println("Welcome to Palace");
-        
-        
-        while(endGame())
+
+        Random rand = new Random();
+
+        int whoseTurn = rand.nextInt(players.size());
+
+        while (areAllPlayersOut() == false)
         {
-            
+            System.out.println("It's player " + players.get(whoseTurn).getPlayerId() + " " + players.get(whoseTurn).getName() + "'s turn");
+
+            players.get(whoseTurn).showPlayerCards();
+
+            break;
         }
     }
 
-    public boolean endGame()
+    public boolean areAllPlayersOut()
     {
-        return false;
+        for (Player p : players)
+        {
+            if (p.isOut() == false)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public static void main(String[] args)

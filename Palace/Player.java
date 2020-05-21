@@ -1,9 +1,9 @@
 package Palace;
+
 import java.util.ArrayList;
+
 /***
- * 
  * @author estebanacosta
- *
  */
 public class Player
 {
@@ -14,6 +14,8 @@ public class Player
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
     private int goalCards;
+
+    private boolean out;
 
     public Player(int id)
     {
@@ -72,6 +74,17 @@ public class Player
         this.playerId = playerId;
     }
 
+    public void setIsOutStatus(boolean out)
+    {
+        this.out = out;
+    }
+
+    public boolean isOut()
+    {
+
+        return this.out;
+    }
+
     /**
      * If all of the player's cards have been uncovered, then that means the player
      * has reached their goal
@@ -112,7 +125,6 @@ public class Player
 
         System.out.println();
 
-
         return switchable;
     }
 
@@ -123,11 +135,7 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            if (playerCards.get(i).isFaceDown())
-            {
-                System.out.print(" ( CARD " + (i + 1) + " )");
-            }
-            else
+            if (!playerCards.get(i).isFaceDown())
             {
                 System.out.print(" ( " + playerCards.get(i) + " ) ");
             }
@@ -141,7 +149,7 @@ public class Player
             }
 
         }
-        
+
         System.out.println();
         System.out.println();
 
@@ -156,7 +164,7 @@ public class Player
     {
 
         position = position - 1;
-        
+
         Card oldCard = playerCards.get(position);
 
         playerCards.set(position, newCard);
