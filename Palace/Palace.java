@@ -139,55 +139,72 @@ public class Palace
 
         Scanner kbd = new Scanner(System.in);
 
+     
+
         for (Player p : players)
         {
+            boolean notSure = true;
+            
             System.out.println("Player " + p.getPlayerId() + " " + p.getName());
-
 
             String choice = "";
 
             int numChoice = 0;
 
-            // create a list of 7 choices for the player
-            ArrayList<Integer> availableChoices = p.getAvailablePlayerCards();           
-
-            // ask the user three times which card they wish to put on their palace
-            for (int i = 0; i < 3; i++)
+            while (notSure)
             {
-                System.out.println("Choose a card you would like to put on your palace? ");
+                // create a list of 7 choices for the player
+                ArrayList<Integer> availableChoices = p.getAvailablePlayerCards();
 
-                // show the cards in the player's hands
-                p.showPlayerCards();;
-
-                while (availableChoices.contains(numChoice) == false)
+                // ask the user three times which card they wish to put on their palace
+                for (int i = 0; i < 3; i++)
                 {
-                    System.out.println("Please choose a card that is available");
+                    System.out.println("Choose a card you would like to put on your palace? ");
 
-                    choice = kbd.nextLine();
+                    // show the cards in the player's hands
+                    p.showPlayerCards();
 
-                    while (!choice.matches("[0-9]+"))
+                    while (availableChoices.contains(numChoice) == false)
                     {
-                        System.out.println("Please enter a number");
+                        System.out.println("Please choose a card that is available");
 
                         choice = kbd.nextLine();
+
+                        while (!choice.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number");
+
+                            choice = kbd.nextLine();
+                        }
+
+                        numChoice = Integer.parseInt(choice);
                     }
 
-                    numChoice = Integer.parseInt(choice);
-                }
-                
-                p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
+                    p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
 
-                numChoice = 0;
-                
-                System.out.println();
+                    numChoice = 0;
+
+                    System.out.println();
+                }
+
+                System.out.println("This is your palace");
+                p.showPlayerPalace();
+
+                System.out.println("Are you sure these are the cards you wish to place on your palace? y/n ");
+
+                String confirmation = kbd.nextLine();
+
+                if (confirmation.equalsIgnoreCase("y"))
+                {
+                    notSure = false;
+                }
+
             }
-            
-            p.showPlayerPalace();
 
             System.out.println("__________________________________________________\n");
 
         }
-        // startGame(deck);
+//        startGame(deck);
     }
 
     public void startGame(Deck deck)

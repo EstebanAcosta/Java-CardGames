@@ -151,11 +151,12 @@ public class Player
 
             if (!card.isFaceDown())
             {
-                System.out.print(card + " ");
+                System.out.print("( " +card + " ) ");
 
             }
         }
 
+        System.out.println();
         System.out.println();
 
         for (Card card : playerPalace)
