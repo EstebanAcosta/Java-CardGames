@@ -13,7 +13,7 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private int goalCards;
+    private ArrayList<Card> playerPalace = new ArrayList<Card>();
 
     private boolean out;
 
@@ -75,8 +75,17 @@ public class Player
         return this.out;
     }
 
-    
-    public void showAvailableCards()
+    public void setPlayerPalace(ArrayList<Card> playerPalace)
+    {
+        this.playerPalace = playerPalace;
+    }
+
+    public ArrayList<Card> getPlayerPalace()
+    {
+        return this.playerPalace;
+    }
+
+    public void showPlayerCards()
     {
         int count = 1;
 
@@ -85,12 +94,8 @@ public class Player
         for (Card c : getPlayerCards())
         {
 
-            if (c.isFaceDown() == false)
-            {
-                System.out.println("Card " + count + ": " + c + "\n");
-                count++;
-
-            }
+            System.out.println("Card " + count + ": " + c + "\n");
+            count++;
 
         }
 
@@ -98,37 +103,21 @@ public class Player
 
     public void showPalace()
     {
-        for (int i = 0; i < playerCards.size(); i++)
+        for (int i = 0; i < playerPalace.size(); i++)
         {
-
+            System.out.println(playerPalace.get(i));
         }
     }
 
-    public void showPlayerCards()
+    public Card removeFromPalace(int position)
     {
 
-        System.out.println(getName() + "'s Hand: \n");
-        for (int i = 0; i < playerCards.size(); i++)
-        {
+        return playerPalace.remove(position - 1);
+    }
 
-            if (!playerCards.get(i).isFaceDown())
-            {
-                System.out.print(" ( " + playerCards.get(i) + " ) ");
-            }
-
-            if ((i + 1) % 5 == 0 && i > 0)
-            {
-
-                System.out.println();
-                System.out.println();
-
-            }
-
-        }
-
-        System.out.println();
-        System.out.println();
-
+    public Card removeFromPlayerCards(int position)
+    {
+        return playerCards.remove(position - 1);
     }
 
     /**

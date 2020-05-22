@@ -103,9 +103,24 @@ public class Palace
                 }
 
             }
+            
+            ArrayList<Card> playerPalace = new ArrayList<Card>();
 
-            // give each player their 9 cards
+            for (int j = 0; j < playerCards.size(); j++)
+            {
+                if (playerCards.get(i).isFaceDown())
+                {
+                    playerPalace.add(playerCards.get(i));
+                    
+                    playerCards.remove(i);
+                }
+            }
+
+            // give each player their 6 cards
             players.get(i).setPlayerCards(playerCards);
+            
+            //put 3 of the face down cards in the player's palace
+            players.get(i).setPlayerPalace(playerPalace);
 
             players.get(i).setIsOutStatus(false);
 
@@ -128,21 +143,31 @@ public class Palace
         {
             System.out.println("Player " + p.getPlayerId() + " " + p.getName());
 
-            p.showAvailableCards();;
+            System.out.println("Choose a card you would like to put on your palace? ");
+
+            // show the cards in the player's hands
+            p.showPlayerCards();;
 
             String choice = "";
 
             int numChoice = 0;
 
-            ArrayList<Integer> savedChoices = new ArrayList<Integer>();
+            // create a list of 7 choices for the player
+            ArrayList<Integer> availableChoices = new ArrayList<Integer>();
 
+            // add the seven numbers in the list
+            for (int i = 1; i < 8; i++)
+            {
+                availableChoices.add(i);
+            }
+
+            // ask the user three times which card they wish to put on their palace
             for (int i = 0; i < 3; i++)
             {
-                System.out.println("Choose a card you would like to put on your palace? ");
 
-                while (!savedChoices.contains(numChoice))
+                while (!availableChoices.contains(numChoice))
                 {
-                    System.out.println("Please choose a card between 1 - 7");
+                    System.out.println("Please choose a card that is available");
 
                     choice = kbd.nextLine();
 
@@ -156,15 +181,15 @@ public class Palace
                     numChoice = Integer.parseInt(choice);
                 }
 
-                savedChoices.add(numChoice);
-                
+                availableChoices.add(numChoice);
+
                 numChoice = 0;
             }
 
             System.out.println("__________________________________________________\n");
 
         }
-        //startGame(deck);
+        // startGame(deck);
     }
 
     public void startGame(Deck deck)
