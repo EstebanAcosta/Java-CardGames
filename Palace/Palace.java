@@ -103,7 +103,7 @@ public class Palace
                 }
 
             }
-            
+
             ArrayList<Card> playerPalace = new ArrayList<Card>();
 
             for (int j = 0; j < playerCards.size(); j++)
@@ -111,15 +111,15 @@ public class Palace
                 if (playerCards.get(i).isFaceDown())
                 {
                     playerPalace.add(playerCards.get(i));
-                    
+
                     playerCards.remove(i);
                 }
             }
 
             // give each player their 6 cards
             players.get(i).setPlayerCards(playerCards);
-            
-            //put 3 of the face down cards in the player's palace
+
+            // put 3 of the face down cards in the player's palace
             players.get(i).setPlayerPalace(playerPalace);
 
             players.get(i).setIsOutStatus(false);
@@ -143,29 +143,23 @@ public class Palace
         {
             System.out.println("Player " + p.getPlayerId() + " " + p.getName());
 
-            System.out.println("Choose a card you would like to put on your palace? ");
-
-            // show the cards in the player's hands
-            p.showPlayerCards();;
 
             String choice = "";
 
             int numChoice = 0;
 
             // create a list of 7 choices for the player
-            ArrayList<Integer> availableChoices = new ArrayList<Integer>();
-
-            // add the seven numbers in the list
-            for (int i = 1; i < 8; i++)
-            {
-                availableChoices.add(i);
-            }
+            ArrayList<Integer> availableChoices = p.getAvailablePlayerCards();           
 
             // ask the user three times which card they wish to put on their palace
             for (int i = 0; i < 3; i++)
             {
+                System.out.println("Choose a card you would like to put on your palace? ");
 
-                while (!availableChoices.contains(numChoice))
+                // show the cards in the player's hands
+                p.showPlayerCards();;
+
+                while (availableChoices.contains(numChoice) == false)
                 {
                     System.out.println("Please choose a card that is available");
 
@@ -180,11 +174,15 @@ public class Palace
 
                     numChoice = Integer.parseInt(choice);
                 }
-
-                availableChoices.add(numChoice);
+                
+                p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
 
                 numChoice = 0;
+                
+                System.out.println();
             }
+            
+            p.showPlayerPalace();
 
             System.out.println("__________________________________________________\n");
 

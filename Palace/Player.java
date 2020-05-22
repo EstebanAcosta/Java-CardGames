@@ -42,12 +42,32 @@ public class Player
         this.playerCards = playerCards;
     }
 
-    public Card getCard(int whichCard)
+    /***
+     * Returns the card in the player's hand
+     * @param whichCard
+     * @return
+     */
+    public Card getCardInPlayerCards(int whichCard)
     {
 
         return this.playerCards.get(whichCard - 1);
     }
 
+    /***
+     * Returns the card in the player's palace
+     * @param whichCard
+     * @return
+     */
+    public Card getCardInPlayerPalace(int whichCard)
+    {
+
+        return this.playerPalace.get(whichCard - 1);
+    }
+
+    /***
+     * How many cards are in the player's hand
+     * @return
+     */
     public int getNumPlayerCards()
     {
         return this.playerCards.size();
@@ -64,17 +84,29 @@ public class Player
         this.playerId = playerId;
     }
 
+    /**
+     * Determines if the player is out of the game
+     * @param out
+     */
     public void setIsOutStatus(boolean out)
     {
         this.out = out;
     }
 
+    /***
+     * Returns the player's out status
+     * @return
+     */
     public boolean isOut()
     {
 
         return this.out;
     }
 
+    /***
+     * Sets up the player's palace
+     * @param playerPalace
+     */
     public void setPlayerPalace(ArrayList<Card> playerPalace)
     {
         this.playerPalace = playerPalace;
@@ -85,6 +117,9 @@ public class Player
         return this.playerPalace;
     }
 
+    /***
+     * Prints the cards in the player's hand
+     */
     public void showPlayerCards()
     {
         int count = 1;
@@ -101,15 +136,61 @@ public class Player
 
     }
 
-    public void showPalace()
+    /***
+     * Prints the cards in the player's palace
+     */
+    public void showPlayerPalace()
     {
-        for (int i = 0; i < playerPalace.size(); i++)
+        int count = 1;
+
+        System.out.println("Player's Palace:");
+        System.out.println();
+        
+        for (Card card : playerPalace)
         {
-            System.out.println(playerPalace.get(i));
+
+            if (!card.isFaceDown())
+            {
+                System.out.print(card + " ");
+
+            }
         }
+
+        System.out.println();
+
+        for (Card card : playerPalace)
+        {
+
+            if (card.isFaceDown())
+            {
+                System.out.print("( Card " + count + " )");
+                count++;
+            }
+        }
+        
+        System.out.println();
+        System.out.println();
     }
 
-    public Card removeFromPalace(int position)
+    /***
+     * Helper function that tells you how many cards in the palace are available
+     * @return
+     */
+    public ArrayList<Integer> getAvailablePlayerCards()
+    {
+        ArrayList<Integer> availablePlayerCards = new ArrayList<Integer>();
+
+        for (int i = 1; i < playerCards.size(); i++)
+        {
+
+            availablePlayerCards.add(i);
+
+        }
+
+        return availablePlayerCards;
+    }
+
+    public Card removeFromPlayerPalace(int position)
     {
 
         return playerPalace.remove(position - 1);
@@ -118,6 +199,16 @@ public class Player
     public Card removeFromPlayerCards(int position)
     {
         return playerCards.remove(position - 1);
+    }
+
+    public void addToPlayerPalace(Card thisCard)
+    {
+        this.playerPalace.add(thisCard);
+    }
+
+    public void addToPlayerCards(Card thisCard)
+    {
+        this.playerPalace.add(thisCard);
     }
 
     /**
