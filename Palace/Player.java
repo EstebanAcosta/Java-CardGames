@@ -145,13 +145,13 @@ public class Player
 
         System.out.println("Player's Palace:");
         System.out.println();
-        
+
         for (Card card : playerPalace)
         {
 
             if (!card.isFaceDown())
             {
-                System.out.print("( " +card + " ) ");
+                System.out.print("( " + card + " ) ");
 
             }
         }
@@ -168,13 +168,13 @@ public class Player
                 count++;
             }
         }
-        
+
         System.out.println();
         System.out.println();
     }
 
     /***
-     * Helper function that tells you how many cards in the palace are available
+     * Helper function that tells you how many cards in the player's hand are available
      * @return
      */
     public ArrayList<Integer> getAvailablePlayerCards()
@@ -197,9 +197,37 @@ public class Player
         return playerPalace.remove(position - 1);
     }
 
+    public void removeMultipleFromPlayerPalace(ArrayList<Card> cards)
+    {
+        int count = 0;
+        for (Card card : this.playerPalace)
+        {
+            if (card.equals(cards.get(count)))
+            {
+                this.playerCards.remove(card);
+
+                count++;
+            }
+        }
+    }
+
     public Card removeFromPlayerCards(int position)
     {
         return playerCards.remove(position - 1);
+    }
+
+    public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
+    {
+        int count = 0;
+        for (Card card : this.playerCards)
+        {
+            if (card.equals(cards.get(count)))
+            {
+                this.playerCards.remove(card);
+
+                count++;
+            }
+        }
     }
 
     public void addToPlayerPalace(Card thisCard)
@@ -207,9 +235,19 @@ public class Player
         this.playerPalace.add(thisCard);
     }
 
+    public void addMultipleToPlayerPalace(ArrayList<Card> cards)
+    {
+        this.playerPalace.addAll(cards);
+    }
+
     public void addToPlayerCards(Card thisCard)
     {
         this.playerPalace.add(thisCard);
+    }
+
+    public void addMultipleToPlayerCards(ArrayList<Card> cards)
+    {
+        this.playerCards.addAll(cards);
     }
 
     /**

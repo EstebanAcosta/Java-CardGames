@@ -139,12 +139,10 @@ public class Palace
 
         Scanner kbd = new Scanner(System.in);
 
-     
-
         for (Player p : players)
         {
             boolean notSure = true;
-            
+
             System.out.println("Player " + p.getPlayerId() + " " + p.getName());
 
             String choice = "";
@@ -153,6 +151,8 @@ public class Palace
 
             while (notSure)
             {
+                ArrayList<Card> savedChoices = new ArrayList<Card>();
+
                 // create a list of 7 choices for the player
                 ArrayList<Integer> availableChoices = p.getAvailablePlayerCards();
 
@@ -180,6 +180,8 @@ public class Palace
                         numChoice = Integer.parseInt(choice);
                     }
 
+                    savedChoices.add(p.getCardInPlayerCards(numChoice));
+
                     p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
 
                     numChoice = 0;
@@ -194,9 +196,23 @@ public class Palace
 
                 String confirmation = kbd.nextLine();
 
+                while (!confirmation.equalsIgnoreCase("y") && !confirmation.equalsIgnoreCase("n"))
+                {
+                    System.out.println("Please enter y for yes or n for no");
+
+                    confirmation = kbd.nextLine();
+                }
+
                 if (confirmation.equalsIgnoreCase("y"))
                 {
                     notSure = false;
+                }
+
+                else
+                {
+                    p.addMultipleToPlayerCards(savedChoices);
+                    
+//                    p.removeMultipleFromPlayerPalace(savedChoices);
                 }
 
             }
@@ -204,7 +220,7 @@ public class Palace
             System.out.println("__________________________________________________\n");
 
         }
-//        startGame(deck);
+        // startGame(deck);
     }
 
     public void startGame(Deck deck)
