@@ -1,6 +1,8 @@
 package Palace;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -120,14 +122,49 @@ public class Palace
     public void setUpPalace(Deck deck)
     {
 
+        Scanner kbd = new Scanner(System.in);
+
         for (Player p : players)
         {
             System.out.println("Player " + p.getPlayerId() + " " + p.getName());
-            System.out.println("Which three cards would you like to put on your palace? ");
-            p.showPlayerCards();
-            
+
+            p.showAvailableCards();;
+
+            String choice = "";
+
+            int numChoice = 0;
+
+            ArrayList<Integer> savedChoices = new ArrayList<Integer>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                System.out.println("Choose a card you would like to put on your palace? ");
+
+                while (!savedChoices.contains(numChoice))
+                {
+                    System.out.println("Please choose a card between 1 - 7");
+
+                    choice = kbd.nextLine();
+
+                    while (!choice.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        choice = kbd.nextLine();
+                    }
+
+                    numChoice = Integer.parseInt(choice);
+                }
+
+                savedChoices.add(numChoice);
+                
+                numChoice = 0;
+            }
+
+            System.out.println("__________________________________________________\n");
+
         }
-        startGame(deck);
+        //startGame(deck);
     }
 
     public void startGame(Deck deck)

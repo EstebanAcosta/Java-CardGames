@@ -37,9 +37,9 @@ public class Player
         return playerCards;
     }
 
-    public void setPlayerCards(ArrayList<Card> remaininingCards)
+    public void setPlayerCards(ArrayList<Card> playerCards)
     {
-        this.playerCards = remaininingCards;
+        this.playerCards = playerCards;
     }
 
     public Card getCard(int whichCard)
@@ -52,16 +52,6 @@ public class Player
     {
         return this.playerCards.size();
 
-    }
-
-    public void setPlayerGoalCards(int goalCards)
-    {
-        this.goalCards = goalCards;
-    }
-
-    public int getPlayerGoalCards()
-    {
-        return goalCards;
     }
 
     public int getPlayerId()
@@ -85,47 +75,33 @@ public class Player
         return this.out;
     }
 
-    /**
-     * If all of the player's cards have been uncovered, then that means the player
-     * has reached their goal
-     * @return
-     */
-    public boolean hasReachedPersonalGoalCards()
-    {
-
-        for (Card c : playerCards)
-        {
-            if (c.isFaceDown())
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public ArrayList<Integer> showAvailableCardsToSwitch()
+    
+    public void showAvailableCards()
     {
         int count = 1;
 
-        ArrayList<Integer> switchable = new ArrayList<Integer>();
+        System.out.println();
 
         for (Card c : getPlayerCards())
         {
-            if (c.isFaceDown())
+
+            if (c.isFaceDown() == false)
             {
-                System.out.print("Card " + count + " ");
-                switchable.add(count);
+                System.out.println("Card " + count + ": " + c + "\n");
+                count++;
 
             }
 
-            count++;
-
         }
 
-        System.out.println();
+    }
 
-        return switchable;
+    public void showPalace()
+    {
+        for (int i = 0; i < playerCards.size(); i++)
+        {
+
+        }
     }
 
     public void showPlayerCards()
