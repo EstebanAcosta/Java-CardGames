@@ -1,8 +1,7 @@
 package Palace;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -90,12 +89,14 @@ public class Palace
             // Draw 10 cards from the deck
             ArrayList<Card> playerCards = deck.draw(9);
 
-  
+            int count = 0;
+
             for (int j = 0; j < playerCards.size(); j++)
             {
                 if (j < 3)
                 {
                     playerCards.get(j).setFaceDown(true);
+
                 }
                 else
                 {
@@ -106,13 +107,17 @@ public class Palace
 
             ArrayList<Card> playerPalace = new ArrayList<Card>();
 
-            for (int j = 0; j < playerCards.size(); j++)
-            {
-                if (playerCards.get(i).isFaceDown())
-                {
-                    playerPalace.add(playerCards.get(i));
+            Iterator<Card> pCards = playerCards.iterator();
 
-                    playerCards.remove(i);
+            while (pCards.hasNext())
+            {
+                Card nextCard = pCards.next();
+
+                if (nextCard.isFaceDown())
+                {
+                    playerPalace.add(nextCard);
+
+                    pCards.remove();
                 }
             }
 
@@ -183,16 +188,12 @@ public class Palace
                     savedChoices.add(p.getCardInPlayerCards(numChoice));
 
                     p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
-                    
-   
 
                     numChoice = 0;
 
                     System.out.println();
                 }
-                System.out.println(p.getPlayerPalace().size() + "sizee");
 
-                System.out.println("This is your palace");
                 p.showPlayerPalace();
 
                 System.out.println("Are you sure these are the cards you wish to place on your palace? y/n ");
