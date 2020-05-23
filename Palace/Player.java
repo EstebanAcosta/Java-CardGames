@@ -1,6 +1,7 @@
 package Palace;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /***
  * @author estebanacosta
@@ -181,10 +182,10 @@ public class Player
     {
         ArrayList<Integer> availablePlayerCards = new ArrayList<Integer>();
 
-        for (int i = 1; i < playerCards.size(); i++)
+        for (int i = 0; i < playerCards.size(); i++)
         {
 
-            availablePlayerCards.add(i);
+            availablePlayerCards.add(i+1);
 
         }
 
@@ -200,12 +201,17 @@ public class Player
     public void removeMultipleFromPlayerPalace(ArrayList<Card> cards)
     {
         int count = 0;
-        for (Card card : this.playerPalace)
-        {
-            if (card.equals(cards.get(count)))
-            {
-                this.playerCards.remove(card);
 
+        Iterator<Card> c = playerPalace.iterator();
+
+        while (c.hasNext())
+        {
+            Card nextCard = c.next();
+            
+            if (nextCard.equals(cards.get(count)))
+            {
+                c.remove();
+                
                 count++;
             }
         }
@@ -219,12 +225,17 @@ public class Player
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
     {
         int count = 0;
-        for (Card card : this.playerCards)
-        {
-            if (card.equals(cards.get(count)))
-            {
-                this.playerCards.remove(card);
 
+        Iterator<Card> c = playerCards.iterator();
+
+        while (c.hasNext())
+        {
+            Card nextCard = c.next();
+            
+            if (nextCard.equals(cards.get(count)))
+            {
+                c.remove();
+                
                 count++;
             }
         }

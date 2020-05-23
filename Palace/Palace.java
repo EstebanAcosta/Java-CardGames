@@ -90,7 +90,7 @@ public class Palace
             // Draw 10 cards from the deck
             ArrayList<Card> playerCards = deck.draw(9);
 
-            // Make sure that the cards these players have are set to unflipped
+  
             for (int j = 0; j < playerCards.size(); j++)
             {
                 if (j < 3)
@@ -183,11 +183,14 @@ public class Palace
                     savedChoices.add(p.getCardInPlayerCards(numChoice));
 
                     p.addToPlayerPalace(p.removeFromPlayerCards(numChoice));
+                    
+   
 
                     numChoice = 0;
 
                     System.out.println();
                 }
+                System.out.println(p.getPlayerPalace().size() + "sizee");
 
                 System.out.println("This is your palace");
                 p.showPlayerPalace();
@@ -211,8 +214,8 @@ public class Palace
                 else
                 {
                     p.addMultipleToPlayerCards(savedChoices);
-                    
-//                    p.removeMultipleFromPlayerPalace(savedChoices);
+
+                    p.removeMultipleFromPlayerPalace(savedChoices);
                 }
 
             }
