@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Stack;
 
 /***
  * @author esteban acosta
@@ -262,17 +263,17 @@ public class Palace
 
         Scanner kbd = new Scanner(System.in);
 
-        Card middleCard = null;
+        ArrayList<Card> middleCards = new ArrayList<Card>();
 
         // randomly determine whose turn it will be
         int whoseTurn = rand.nextInt(players.size());
 
         while (areAllPlayersOut() == false)
         {
-            if (middleCard != null)
+            if (middleCards.size() > 0)
             {
                 System.out.println("Middle Card: ");
-                System.out.println(middleCard);
+                System.out.println(middleCards.get(middleCards.size() - 1));
                 System.out.println();
             }
             System.out.println("It's player " + players.get(whoseTurn).getPlayerId() + " " + players.get(whoseTurn).getName() + "'s turn");
@@ -291,33 +292,66 @@ public class Palace
 
             int selectedCard = 0;
 
-            // continue prompting the user until they enter a number between 1 and 3
-            while (selectedCard < 1 || selectedCard > players.get(whoseTurn).getPlayerCards().size())
+            if (middleCards.size() == 0 || players.get(whoseTurn).canPlayHand(middleCards.get(middleCards.size() - 1)))
             {
-
-                System.out.println("Please put a number that is between 1 and " + players.get(whoseTurn).getPlayerCards().size());
-
-                // get user input
-                whichCard = kbd.nextLine();
-
-                // continue prompting the user until they enter a number
-                while (whichCard.matches("[0-9]+") == false)
+                // continue prompting the user until they enter a number between 1 and 3
+                while (selectedCard < 1 || selectedCard > players.get(whoseTurn).getPlayerCards().size())
                 {
-                    System.out.println("Please enter a number");
+
+                    System.out.println("Please put a number that is between 1 and " + players.get(whoseTurn).getPlayerCards().size());
 
                     // get user input
                     whichCard = kbd.nextLine();
+
+                    // continue prompting the user until they enter a number
+                    while (whichCard.matches("[0-9]+") == false)
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get user input
+                        whichCard = kbd.nextLine();
+                    }
+
+                    // convert user input into an integer value
+                    selectedCard = Integer.parseInt(whichCard);
+
                 }
 
-                // convert user input into an integer value
-                selectedCard = Integer.parseInt(whichCard);
+                Card playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+
+                // while (playedCard.getValue() != Value.TWO && playedCard.getValue() != Value.TEN && playedCard.getValueOfCard() < middleCard.getValueOfCard())
+                // {
+                // System.out.println("Please choose a card that is greater than or equal to the middleCard");
+                // }
+
+                if (players.get(whoseTurn).getPlayerCards().size() == 3)
+                {
+                    // player draws a card and adds it to their hand
+                    // player puts the selected card in the middle
+                    middleCards.add(players.get(whoseTurn).changeCards(selectedCard, deck.draw()));
+
+                }
+                else if (players.get(whoseTurn).getPlayerCards().size() > 3)
+                {
+                    middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCard));
+
+                }
 
             }
 
-            // player draws a card and adds it to their hand
-            // player puts the selected card in the middle
-            middleCard =  players.get(whoseTurn).changeCards(selectedCard, deck.draw());
-            
+            else
+            {
+                System.out.println("You cannot play any card in your hand. You have to pick up from the middle.");
+
+                players.get(whoseTurn).addMultipleToPlayerCards(middleCards);
+
+                System.out.println();
+                System.out.println(middleCards.size() + " cards have been added to player " + players.get(whoseTurn).getPlayerId() + " " + players.get(whoseTurn).getName() + "'s hand");
+
+                middleCards.clear();
+
+            }
+
             // change turn
             whoseTurn = changeTurn(whoseTurn);
 
@@ -327,7 +361,7 @@ public class Palace
     }
 
     /**
-     * Determines which player goes next
+     * Determine which player goes next
      * @param currentTurn
      * @return
      */
@@ -350,6 +384,10 @@ public class Palace
         return currentTurn;
     }
 
+    /**
+     * Determine when the game ends
+     * @return
+     */
     public boolean areAllPlayersOut()
     {
         for (Player p : players)

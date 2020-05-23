@@ -185,7 +185,7 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            availablePlayerCards.add(i+1);
+            availablePlayerCards.add(i + 1);
 
         }
 
@@ -207,11 +207,11 @@ public class Player
         while (c.hasNext())
         {
             Card nextCard = c.next();
-            
+
             if (nextCard.equals(cards.get(count)))
             {
                 c.remove();
-                
+
                 count++;
             }
         }
@@ -231,11 +231,11 @@ public class Player
         while (c.hasNext())
         {
             Card nextCard = c.next();
-            
+
             if (nextCard.equals(cards.get(count)))
             {
                 c.remove();
-                
+
                 count++;
             }
         }
@@ -259,6 +259,63 @@ public class Player
     public void addMultipleToPlayerCards(ArrayList<Card> cards)
     {
         this.playerCards.addAll(cards);
+    }
+
+    /**
+     * Checks to see if the current player can play any of their cards
+     * @return
+     */
+    public boolean canPlayHand(Card middleCard)
+    {
+        for (Card card : this.playerCards)
+        {
+            if (card.getValue() == Value.TWO || card.getValue() == Value.TEN || card.getValueOfCard() >= middleCard.getValueOfCard())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean areThereMultipleCards()
+    {
+        if (playerCards.size() == 2)
+        {
+            if (playerCards.get(0).getValue() == playerCards.get(1).getValue())
+            {
+                return true;
+            }
+        }
+
+        else if (playerCards.size() == 3)
+        {
+            if (playerCards.get(0).getValue() == playerCards.get(1).getValue())
+            {
+                return true;
+            }
+
+            else if (playerCards.get(1).getValue() == playerCards.get(2).getValue())
+            {
+                return true;
+            }
+
+            else if (playerCards.get(0).getValue() == playerCards.get(2).getValue())
+            {
+                return true;
+            }
+            else if (playerCards.get(0).getValue() == playerCards.get(1).getValue() && playerCards.get(1).getValue() == playerCards.get(2).getValue())
+            {
+                return true;
+            }
+        }
+
+        else if(playerCards.size() > 3)
+        {
+
+        }
+
+        return false;
     }
 
     /**
