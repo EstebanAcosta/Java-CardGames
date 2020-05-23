@@ -130,7 +130,7 @@ public class Player
         for (Card c : getPlayerCards())
         {
 
-            System.out.println("Card " + count + ": " + c + "\n");
+            System.out.println("Card " + count + ": (" + c + ")\n");
             count++;
 
         }
@@ -253,7 +253,7 @@ public class Player
 
     public void addToPlayerCards(Card thisCard)
     {
-        this.playerPalace.add(thisCard);
+        this.playerCards.add(thisCard);
     }
 
     public void addMultipleToPlayerCards(ArrayList<Card> cards)
@@ -274,8 +274,6 @@ public class Player
         Card oldCard = playerCards.get(position);
 
         playerCards.set(position, newCard);
-
-        playerCards.get(position).setFaceDown(false);
 
         return oldCard;
 
