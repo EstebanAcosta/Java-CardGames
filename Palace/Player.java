@@ -278,46 +278,6 @@ public class Player
         return false;
     }
 
-    public boolean areThereMultipleCards()
-    {
-        if (playerCards.size() == 2)
-        {
-            if (playerCards.get(0).getValue() == playerCards.get(1).getValue())
-            {
-                return true;
-            }
-        }
-
-        else if (playerCards.size() == 3)
-        {
-            if (playerCards.get(0).getValue() == playerCards.get(1).getValue())
-            {
-                return true;
-            }
-
-            else if (playerCards.get(1).getValue() == playerCards.get(2).getValue())
-            {
-                return true;
-            }
-
-            else if (playerCards.get(0).getValue() == playerCards.get(2).getValue())
-            {
-                return true;
-            }
-            else if (playerCards.get(0).getValue() == playerCards.get(1).getValue() && playerCards.get(1).getValue() == playerCards.get(2).getValue())
-            {
-                return true;
-            }
-        }
-
-        else if(playerCards.size() > 3)
-        {
-
-        }
-
-        return false;
-    }
-
     /**
      * Replace the player's card in that position with the new card
      * @param newCard

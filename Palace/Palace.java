@@ -293,10 +293,33 @@ public class Palace
                 System.out.println("# Of Middle Cards: " + middleCards.size());
                 System.out.println();
             }
+
             System.out.println("It's player " + players.get(whoseTurn).getPlayerId() + " " + players.get(whoseTurn).getName() + "'s turn");
 
             // print the player's hand
             players.get(whoseTurn).showPlayerCards();
+
+            System.out.println();
+
+            System.out.println("Would you like to draw one card before putting a card down ? y/n");
+
+            String confirmation = kbd.nextLine();
+
+            while (!confirmation.equalsIgnoreCase("y") && !confirmation.equalsIgnoreCase("n"))
+            {
+                System.out.println("Please enter y for yes or n for n. Would you like to draw one card before putting a card down ? ");
+
+                confirmation = kbd.nextLine();
+
+            }
+
+            if (confirmation.equalsIgnoreCase("y"))
+            {
+                players.get(whoseTurn).addToPlayerCards(deck.draw());
+
+                // print the player's hand again
+                players.get(whoseTurn).showPlayerCards();
+            }
 
             System.out.println();
 
@@ -376,18 +399,59 @@ public class Palace
                     playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
                 }
 
-                if (players.get(whoseTurn).getPlayerCards().size() < 3)
+                if (players.get(whoseTurn).getPlayerCards().size() <= 3)
                 {
-                    //since the player needs to have 3 cards every time they draw a card
-                    //to find out how many cards they need to draw, we calculate it by taking the
-                    //the number of cards they currently have (either 0,1 or 2) and subtract it from 3.
-                    int howManyToDraw = 3 - players.get(whoseTurn).getPlayerCards().size();
-                    
-                    //add the drawn cards to the player's deck
-                    players.get(whoseTurn).addMultipleToPlayerCards(deck.draw(howManyToDraw));
-                }
 
-                else if (players.get(whoseTurn).getPlayerCards().size() == 3)
+                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+
+                    if (playedCard.getValue() == Value.TEN)
+                    {
+                        middleCards.add(playedCard);
+
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+
+                        middleCards.clear();
+
+                        System.out.println("---------------------------------------------------\n");
+
+                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
+                        System.out.println();
+
+                        continue;
+                    }
+
+                    else if (playedCard.getValue() == Value.TWO)
+                    {
+
+                        middleCards.add(playedCard);
+
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+
+                        System.out.println("---------------------------------------------------\n");
+
+                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
+                        System.out.println();
+
+                        continue;
+                    }
+
+                    else
+                    {
+                        // player puts the selected card in the middle
+                        middleCards.add(playedCard);
+
+                        // since the player needs to have 3 cards every time they draw a card in order
+                        // to find out how many cards they need to draw, we calculate it by taking the
+                        // the number of cards they currently have (either 0,1 or 2) and subtract it from 3.
+                        int howManyToDraw = 3 - players.get(whoseTurn).getPlayerCards().size();
+
+                        // add the drawn cards to the player's hand
+                        players.get(whoseTurn).addMultipleToPlayerCards(deck.draw(howManyToDraw));
+
+                    }
+
+                }
+                else if (players.get(whoseTurn).getPlayerCards().size() > 3)
                 {
 
                     playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
@@ -396,6 +460,10 @@ public class Palace
                     {
                         System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
                         System.out.println();
+
+                        middleCards.add(playedCard);
+
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
 
                         middleCards.clear();
 
@@ -406,31 +474,25 @@ public class Palace
 
                     else if (playedCard.getValue() == Value.TWO)
                     {
-                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
-                        System.out.println();
 
                         middleCards.add(playedCard);
 
                         players.get(whoseTurn).removeFromPlayerCards(selectedCard);
 
                         System.out.println("---------------------------------------------------\n");
+
+                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
+                        System.out.println();
+
                         continue;
                     }
 
                     else
                     {
 
-                        // player draws a card and adds it to their hand
-                        // player puts the selected card in the middle
-                        middleCards.add(players.get(whoseTurn).changeCards(selectedCard, deck.draw()));
+                        middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCard));
 
                     }
-
-                }
-                else if (players.get(whoseTurn).getPlayerCards().size() > 3)
-                {
-
-                    middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCard));
 
                 }
 
@@ -474,6 +536,8 @@ public class Palace
         while (!confirmation.equalsIgnoreCase("y") && !confirmation.equalsIgnoreCase("n"))
         {
             System.out.println("Please enter y for yes or n for n. Do you wish to play Palace again? ");
+
+            confirmation = kbd.nextLine();
 
         }
 
