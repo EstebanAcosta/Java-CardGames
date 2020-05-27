@@ -185,6 +185,7 @@ public class Garbage
         // determines if the player has not made uncovered any of their cards
         boolean noChange = false;
 
+        //continue playing the game until one of the players has reached the goal number of cards
         while (!goalCardReached(goalCards))
         {
             System.out.println("Middle Card:");
@@ -199,6 +200,7 @@ public class Garbage
             // Show the player's cards
             players.get(whoseTurn).showPlayerCards();
 
+            //if the middle card is a wild card
             if (middleCard.getValue() == Value.BLACK_JOKER || middleCard.getValue() == Value.RED_JOKER
             || middleCard.getValue() == Value.JACK)
             {
@@ -257,11 +259,16 @@ public class Garbage
                 System.out.println();
             }
 
+            //if the middle card's value is greater than the number of cards in display
+            //or if the middle card is a king, a queen or is a card in the player's hand that has already been flipped
             else if (middleCard.getValueOfCard() > players.get(whoseTurn).getNumPlayerCards()
             || middleCard.getValue() == Value.KING || middleCard.getValue() == Value.QUEEN
             || players.get(whoseTurn).getCard(middleCard.getValueOfCard()).isUnflipped() == false)
             {
 
+                //if the middle card isn't a king or queen
+                //and if the middle card happens to be associated with a card that has already been flipped
+                //and that card that is in that position is a wild card
                 if (middleCard.getValue() != Value.KING && middleCard.getValue() != Value.QUEEN && middleCard.getValueOfCard() <= players.get(whoseTurn).getNumPlayerCards()
                 && (players.get(whoseTurn).getCard(middleCard.getValueOfCard()).getValue() == Value.BLACK_JOKER
                 || players.get(whoseTurn).getCard(middleCard.getValueOfCard())
@@ -290,7 +297,8 @@ public class Garbage
                     System.out.println();
 
                 }
-
+                
+                //otherwise draw a card from the deck
                 else
                 {
                     // draw a card from the deck

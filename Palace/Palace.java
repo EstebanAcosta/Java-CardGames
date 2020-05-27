@@ -13,6 +13,10 @@ public class Palace
 {
     private ArrayList<Player> players = new ArrayList<Player>();
 
+    /***
+     * Add players to the game
+     * @param numPlayers
+     */
     public void addPlayers(int numPlayers)
     {
 
@@ -24,6 +28,9 @@ public class Palace
 
     }
 
+    /***
+     * Creates a list of size of number of players
+     */
     public void setUpNumOfPlayers()
     {
         Scanner kbd = new Scanner(System.in);
@@ -66,6 +73,9 @@ public class Palace
         System.out.println(numPlayers + " players have been added to the game\n");
     }
 
+    /***
+     * Gives each player 6 cards and sets up the first part of each player's palace
+     */
     public void setUpPlayers()
     {
         Scanner kbd = new Scanner(System.in);
@@ -149,6 +159,10 @@ public class Palace
 
     }
 
+    /**
+     * This will give the players the choice of putting 3 cards on their palace
+     * @param deck
+     */
     public void setUpPalace(Deck deck)
     {
 
@@ -170,7 +184,7 @@ public class Palace
             {
                 ArrayList<Card> savedChoices = new ArrayList<Card>();
 
-                // ask the user three times which card they wish to put on their palace
+                // ask the user three times which cards they wish to put on their palace
                 for (int i = 0; i < 3; i++)
                 {
                     System.out.println("Choose a card you would like to put on your palace? ");
@@ -268,12 +282,15 @@ public class Palace
         // randomly determine whose turn it will be
         int whoseTurn = rand.nextInt(players.size());
 
+        // continue playing the game until every single person is out
         while (areAllPlayersOut() == false)
         {
             if (middleCards.size() > 0)
             {
                 System.out.println("Middle Card: ");
                 System.out.println(middleCards.get(middleCards.size() - 1));
+                System.out.println();
+                System.out.println("# Of Middle Cards: " + middleCards.size());
                 System.out.println();
             }
             System.out.println("It's player " + players.get(whoseTurn).getPlayerId() + " " + players.get(whoseTurn).getName() + "'s turn");
@@ -319,16 +336,63 @@ public class Palace
 
                 Card playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
 
-                // while (playedCard.getValue() != Value.TWO && playedCard.getValue() != Value.TEN && playedCard.getValueOfCard() < middleCard.getValueOfCard())
-                // {
-                // System.out.println("Please choose a card that is greater than or equal to the middleCard");
-                // }
+                // continue prompting the user until they put a card that is either a two, a ten or a card whose value
+                // is greater than or equal to the card that is in the middle
+                while (middleCards.size() > 0 && isValid(playedCard, middleCards.get(middleCards.size() - 1)) == false)
+                {
+
+                    // print the player's hand
+                    players.get(whoseTurn).showPlayerCards();
+
+                    System.out.println();
+
+                    System.out.println("Please select a card that is greater than or equal to the middle card\n");
+
+                    System.out.println("Please put a number that is between 1 and " + players.get(whoseTurn).getPlayerCards().size());
+
+                    selectedCard = 0;
+                    // continue prompting the user until they enter a number between 1 and 3
+                    while (selectedCard < 1 || selectedCard > players.get(whoseTurn).getPlayerCards().size())
+                    {
+
+                        // get user input
+                        whichCard = kbd.nextLine();
+
+                        // continue prompting the user until they enter a number
+                        while (whichCard.matches("[0-9]+") == false)
+                        {
+                            System.out.println("Please enter a number");
+
+                            // get user input
+                            whichCard = kbd.nextLine();
+                        }
+
+                        // convert user input into an integer value
+                        selectedCard = Integer.parseInt(whichCard);
+
+                    }
+
+                    // get the selected card from the player's hand
+                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+                }
 
                 if (players.get(whoseTurn).getPlayerCards().size() == 3)
                 {
                     // player draws a card and adds it to their hand
                     // player puts the selected card in the middle
                     middleCards.add(players.get(whoseTurn).changeCards(selectedCard, deck.draw()));
+
+                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+
+                    if (playedCard.getValue() == Value.TEN)
+                    {
+                        middleCards.clear();
+                    }
+
+                    else if (playedCard.getValue() == Value.TWO)
+                    {
+
+                    }
 
                 }
                 else if (players.get(whoseTurn).getPlayerCards().size() > 3)
@@ -350,6 +414,17 @@ public class Palace
 
                 middleCards.clear();
 
+                System.out.println("Please enter n for next to move onto the next player");
+
+                String next = kbd.nextLine();
+
+                while (!next.equalsIgnoreCase("n"))
+                {
+                    System.out.println("Please enter n for next");
+
+                    next = kbd.nextLine();
+                }
+
             }
 
             // change turn
@@ -357,6 +432,26 @@ public class Palace
 
             System.out.println("__________________________________________________\n");
 
+        }
+
+        System.out.println("Would you like to play again ? y/n ");
+
+        String confirmation = kbd.nextLine();
+
+        while (!confirmation.equalsIgnoreCase("y") && !confirmation.equalsIgnoreCase("n"))
+        {
+            System.out.println("Please enter y for yes or n for n. Do you wish to play Palace again? ");
+
+        }
+
+        if (confirmation.equalsIgnoreCase("y"))
+        {
+            setUpNumOfPlayers();
+        }
+
+        else
+        {
+            System.out.println("Thank you for playing Palace");
         }
     }
 
@@ -382,6 +477,30 @@ public class Palace
         }
 
         return currentTurn;
+    }
+
+    /**
+     * If the selected card is greater than or equal to the middle card or is a two or ten,
+     * then that is a valid card to put down in the middle
+     * @param selectedCard
+     * @param middleCard
+     * @return
+     */
+    public boolean isValid(Card selectedCard, Card middleCard)
+    {
+
+        if (selectedCard.getValue() == Value.TWO || selectedCard.getValue() == Value.TEN)
+        {
+            return true;
+        }
+
+        else if (selectedCard.getValueOfCard() >= middleCard.getValueOfCard())
+        {
+            return true;
+        }
+
+        return false;
+
     }
 
     /**
