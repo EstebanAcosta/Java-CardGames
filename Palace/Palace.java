@@ -361,7 +361,7 @@ public class Palace
 
                 // continue prompting the user until they put a card that is either a two, a ten or a card whose value
                 // is greater than or equal to the card that is in the middle
-                while (middleCards.size() > 0 && isValid(selectedCard, middleCards.get(middleCards.size() - 1)) == false)
+                while (middleCards.size() > 0 && isValidSelection(selectedCard, middleCards.get(middleCards.size() - 1)) == false)
                 {
 
                     // print the player's hand
@@ -583,7 +583,7 @@ public class Palace
      * @param middleCard
      * @return
      */
-    public boolean isValid(Card selectedCard, Card middleCard)
+    public boolean isValidSelection(Card selectedCard, Card middleCard)
     {
 
         if (selectedCard.getValue() == Value.TWO || selectedCard.getValue() == Value.TEN)
