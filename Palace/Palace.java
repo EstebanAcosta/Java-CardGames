@@ -330,12 +330,12 @@ public class Palace
 
             String whichCard = "";
 
-            int selectedCard = 0;
+            int selectedCardPosition = 0;
 
             if (middleCards.size() == 0 || players.get(whoseTurn).canPlayHand(middleCards.get(middleCards.size() - 1)))
             {
                 // continue prompting the user until they enter a number between 1 and 3
-                while (selectedCard < 1 || selectedCard > players.get(whoseTurn).getPlayerCards().size())
+                while (selectedCardPosition < 1 || selectedCardPosition > players.get(whoseTurn).getPlayerCards().size())
                 {
 
                     System.out.println("Please put a number that is between 1 and " + players.get(whoseTurn).getPlayerCards().size());
@@ -353,15 +353,15 @@ public class Palace
                     }
 
                     // convert user input into an integer value
-                    selectedCard = Integer.parseInt(whichCard);
+                    selectedCardPosition = Integer.parseInt(whichCard);
 
                 }
 
-                Card playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+                Card selectedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCardPosition);
 
                 // continue prompting the user until they put a card that is either a two, a ten or a card whose value
                 // is greater than or equal to the card that is in the middle
-                while (middleCards.size() > 0 && isValid(playedCard, middleCards.get(middleCards.size() - 1)) == false)
+                while (middleCards.size() > 0 && isValid(selectedCard, middleCards.get(middleCards.size() - 1)) == false)
                 {
 
                     // print the player's hand
@@ -373,9 +373,9 @@ public class Palace
 
                     System.out.println("Please put a number that is between 1 and " + players.get(whoseTurn).getPlayerCards().size());
 
-                    selectedCard = 0;
+                    selectedCardPosition = 0;
                     // continue prompting the user until they enter a number between 1 and 3
-                    while (selectedCard < 1 || selectedCard > players.get(whoseTurn).getPlayerCards().size())
+                    while (selectedCardPosition < 1 || selectedCardPosition > players.get(whoseTurn).getPlayerCards().size())
                     {
 
                         // get user input
@@ -391,24 +391,24 @@ public class Palace
                         }
 
                         // convert user input into an integer value
-                        selectedCard = Integer.parseInt(whichCard);
+                        selectedCardPosition = Integer.parseInt(whichCard);
 
                     }
 
                     // get the selected card from the player's hand
-                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+                    selectedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCardPosition);
                 }
 
                 if (players.get(whoseTurn).getPlayerCards().size() <= 3)
                 {
 
-                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+                    selectedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCardPosition);
 
-                    if (playedCard.getValue() == Value.TEN)
+                    if (selectedCard.getValue() == Value.TEN)
                     {
-                        middleCards.add(playedCard);
+                        middleCards.add(selectedCard);
 
-                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition);
 
                         middleCards.clear();
 
@@ -420,12 +420,12 @@ public class Palace
                         continue;
                     }
 
-                    else if (playedCard.getValue() == Value.TWO)
+                    else if (selectedCard.getValue() == Value.TWO)
                     {
 
-                        middleCards.add(playedCard);
+                        middleCards.add(selectedCard);
 
-                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition);
 
                         System.out.println("---------------------------------------------------\n");
 
@@ -438,7 +438,7 @@ public class Palace
                     else
                     {
                         // player puts the selected card in the middle
-                        middleCards.add(playedCard);
+                        middleCards.add(selectedCard);
 
                         // since the player needs to have 3 cards every time they draw a card in order
                         // to find out how many cards they need to draw, we calculate it by taking the
@@ -454,16 +454,16 @@ public class Palace
                 else if (players.get(whoseTurn).getPlayerCards().size() > 3)
                 {
 
-                    playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
+                    selectedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCardPosition);
 
-                    if (playedCard.getValue() == Value.TEN)
+                    if (selectedCard.getValue() == Value.TEN)
                     {
                         System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
                         System.out.println();
 
-                        middleCards.add(playedCard);
+                        middleCards.add(selectedCard);
 
-                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition);
 
                         middleCards.clear();
 
@@ -472,12 +472,12 @@ public class Palace
                         continue;
                     }
 
-                    else if (playedCard.getValue() == Value.TWO)
+                    else if (selectedCard.getValue() == Value.TWO)
                     {
 
-                        middleCards.add(playedCard);
+                        middleCards.add(selectedCard);
 
-                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition);
 
                         System.out.println("---------------------------------------------------\n");
 
@@ -490,7 +490,7 @@ public class Palace
                     else
                     {
 
-                        middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCard));
+                        middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition));
 
                     }
 
