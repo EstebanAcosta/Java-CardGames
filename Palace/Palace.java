@@ -376,27 +376,60 @@ public class Palace
                     playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
                 }
 
-                if (players.get(whoseTurn).getPlayerCards().size() == 3)
+                if (players.get(whoseTurn).getPlayerCards().size() < 3)
                 {
-                    // player draws a card and adds it to their hand
-                    // player puts the selected card in the middle
-                    middleCards.add(players.get(whoseTurn).changeCards(selectedCard, deck.draw()));
+                    //since the player needs to have 3 cards every time they draw a card
+                    //to find out how many cards they need to draw, we calculate it by taking the
+                    //the number of cards they currently have (either 0,1 or 2) and subtract it from 3.
+                    int howManyToDraw = 3 - players.get(whoseTurn).getPlayerCards().size();
+                    
+                    //add the drawn cards to the player's deck
+                    players.get(whoseTurn).addMultipleToPlayerCards(deck.draw(howManyToDraw));
+                }
+
+                else if (players.get(whoseTurn).getPlayerCards().size() == 3)
+                {
 
                     playedCard = players.get(whoseTurn).getCardInPlayerCards(selectedCard);
 
                     if (playedCard.getValue() == Value.TEN)
                     {
+                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
+                        System.out.println();
+
                         middleCards.clear();
+
+                        System.out.println("---------------------------------------------------\n");
+
+                        continue;
                     }
 
                     else if (playedCard.getValue() == Value.TWO)
                     {
+                        System.out.println("It's still " + players.get(whoseTurn).getName() + " 's turn");
+                        System.out.println();
+
+                        middleCards.add(playedCard);
+
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCard);
+
+                        System.out.println("---------------------------------------------------\n");
+                        continue;
+                    }
+
+                    else
+                    {
+
+                        // player draws a card and adds it to their hand
+                        // player puts the selected card in the middle
+                        middleCards.add(players.get(whoseTurn).changeCards(selectedCard, deck.draw()));
 
                     }
 
                 }
                 else if (players.get(whoseTurn).getPlayerCards().size() > 3)
                 {
+
                     middleCards.add(players.get(whoseTurn).removeFromPlayerCards(selectedCard));
 
                 }
