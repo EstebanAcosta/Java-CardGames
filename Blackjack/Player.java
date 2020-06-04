@@ -77,7 +77,7 @@ public class Player
      * Determines if the player is out of the game
      * @param out
      */
-    public void setIsDealerStatus(boolean isDealer)
+    public void setDealerStatus(boolean isDealer)
     {
         this.isDealer = isDealer;
     }
@@ -119,22 +119,5 @@ public class Player
     }
 
     
-    /**
-     * Replace the player's card in that position with the new card
-     * @param newCard
-     * @return
-     */
-    public Card changeCards(int position, Card newCard)
-    {
-
-        position = position - 1;
-
-        Card oldCard = playerCards.get(position);
-
-        playerCards.set(position, newCard);
-
-        return oldCard;
-
-    }
 
 }
