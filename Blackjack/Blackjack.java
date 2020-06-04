@@ -9,6 +9,8 @@ public class Blackjack
 
     private ArrayList<Player> players = new ArrayList<Player>();
 
+    private Player house = new Player();
+
     /**
      * Adds that number of players to the list of players
      * @param numPlayers
@@ -83,15 +85,15 @@ public class Blackjack
 
             players.get(i).setName(name);
 
+            players.get(i).setOutStatus(false);
+
             System.out.println();
+
+            System.out.println("__________________________________________________\n");
 
         }
 
-        int whoIsDealer = rand.nextInt(players.size());
-
-        players.get(whoIsDealer).setDealerStatus(true);
-
-        System.out.println(players.get(whoIsDealer).getName() + " is the dealer");
+        house.setName("The House");
 
         System.out.println();
     }
@@ -110,17 +112,7 @@ public class Blackjack
 
             one.setFaceDown(false);
 
-            if (p.isDealer())
-            {
-
-                two.setFaceDown(true);
-
-            }
-            else
-            {
-
-                two.setFaceDown(false);
-            }
+            two.setFaceDown(false);
 
             p.addToPlayerCards(one);
 
@@ -129,89 +121,203 @@ public class Blackjack
             System.out.println("Two cards have been added to " + p.getName() + "'s hand\n");
         }
 
+        Card one = deck.draw();
+
+        Card two = deck.draw();
+
+        one.setFaceDown(true);
+
+        two.setFaceDown(false);
+
+        house.addToPlayerCards(one);
+
+        house.addToPlayerCards(two);
+
+        System.out.println("Two cards have been added to " + house.getName() + "'s hand\n");
+
+        System.out.println("__________________________________________________\n");
+
         startGame(deck);
+    }
+
+    public int setUpRounds()
+    {
+        Scanner kbd = new Scanner(System.in);
+
+        System.out.println("How many rounds would you like to play?\n ");
+
+        System.out.println("The limit is ten rounds\n");
+
+        String numberOfRounds = "";
+
+        // Convert the string input into an integer
+        int numRounds = 0;
+
+        // If the user puts a number greater than 4 or less than 2
+        // Continue prompting the user until they give
+        // a number between 2 and 4
+        while (numRounds < 1 || numRounds > 10)
+        {
+            System.out.println("Please keep the number of rounds between 1 and 10");
+
+            // get user input
+            numberOfRounds = kbd.nextLine();
+
+            // if user gives a non-numerical answer
+            // continue prompting user until they give a numeric answer
+            while (!numberOfRounds.matches("[0-9]+"))
+            {
+                System.out.println("Please enter a number");
+
+                // get user input
+                numberOfRounds = kbd.nextLine();
+            }
+
+            // convert the user input into an integer
+            numRounds = Integer.parseInt(numberOfRounds);
+        }
+
+        return numRounds;
+
     }
 
     public void startGame(Deck deck)
     {
 
+        int numRounds = setUpRounds();
+
+        int currentRound = 1;
+
+        System.out.println("There will be " + numRounds + " rounds\n");
+
         Scanner kbd = new Scanner(System.in);
 
         System.out.println("Welcome to Blackjack");
-        
+
         System.out.println("__________________________________________________\n");
 
-        Player dealer = null;
+        Random rand = new Random();
 
+        int whichPlayer = rand.nextInt(players.size());
+
+        while (currentRound <= numRounds)
+        {
+
+            System.out.println("ROUND " + currentRound + "\n");
+
+            while (allPlayersAreOut() == false)
+            {
+                while (players.get(whichPlayer).over21() == false)
+                {
+
+                    System.out.println(house.getName() + "'s hand:");
+
+                    house.showPlayerCards();
+
+                    System.out.println("---------------------------------------------------\n");
+
+                    System.out.println("Player " + players.get(whichPlayer).getName() + "'s hand:");
+
+                    players.get(whichPlayer).showPlayerCards();
+
+                    System.out.println("Would you like to hit or stand, " + players.get(whichPlayer).getName() + " ? Please write h for hit or s for stand");
+
+                    String nextPlay = kbd.nextLine();
+
+                    while (nextPlay.equalsIgnoreCase("h") == false && nextPlay.equalsIgnoreCase("s") == false)
+                    {
+                        System.out.println("Please write h for hit or s for stand");
+
+                        nextPlay = kbd.nextLine();
+                    }
+
+                    if (nextPlay.equalsIgnoreCase("h"))
+                    {
+                        players.get(whichPlayer).addToPlayerCards(deck.draw());
+
+                        if (players.get(whichPlayer).over21())
+                        {
+                            System.out.println(players.get(whichPlayer).getName() + " has busted\n");
+
+                            players.get(whichPlayer).setOutStatus(true);
+
+                            players.get(whichPlayer).showPlayerCards();
+
+                            System.out.println("__________________________________________________\n");
+                        }
+                    }
+
+                    else
+                    {
+                        System.out.println(players.get(whichPlayer).getName() + " stands. Onto the next player\n");
+
+                        players.get(whichPlayer).setOutStatus(true);
+
+                        break;
+
+                    }
+
+                }
+
+                whichPlayer = changeTurn(whichPlayer);
+
+            }
+
+            for (Player p : players)
+            {
+                p.setOutStatus(false);
+                
+                
+            }
+
+            currentRound++;
+            
+            deck = new Deck();
+            
+            
+            
+            System.out.println("________________________________________________________________________\n");
+
+        }
+
+    }
+
+    private boolean allPlayersAreOut()
+    {
         for (Player p : players)
         {
-            if (p.isDealer())
+            if (p.isOut() == false)
             {
-
-                dealer = p;
+                return false;
             }
+
         }
+        return true;
+    }
+    
 
-        int whichPlayer = 0;
-
-        while (whichPlayer < players.size())
+    /**
+     * Determine which player goes next
+     * @param currentTurn
+     * @return
+     */
+    public int changeTurn(int currentTurn)
+    {
+        // If it's the last person's turn then we need to reset whoseTurn to 0
+        // So we can start off with the first player in the list of players
+        if (currentTurn + 1 == players.size())
         {
 
-            if (players.get(whichPlayer).isDealer())
-            {
-                whichPlayer++;
-
-                continue;
-            }
-
-            while (players.get(whichPlayer).over21() == false)
-            {
-                           
-                System.out.println("Dealer " + dealer.getName() + "'s hand:");
-
-                dealer.showPlayerCards();
-
-                System.out.println("---------------------------------------------------\n");
-
-                System.out.println("Player " + players.get(whichPlayer).getName() + "'s hand:");
-
-                players.get(whichPlayer).showPlayerCards();
-                
-                System.out.println("Would you like to hit or stand, " + players.get(whichPlayer).getName() + " ? h or s");
-
-                String nextPlay = kbd.nextLine();
-
-                while (nextPlay.equalsIgnoreCase("h") == false && nextPlay.equalsIgnoreCase("s") == false)
-                {
-                    System.out.println("Please either write h for hit or s for stand");
-
-                    nextPlay = kbd.nextLine();
-                }
-
-                if (nextPlay.equalsIgnoreCase("h"))
-                {
-                    players.get(whichPlayer).addToPlayerCards(deck.draw());                  
-                    
-                    if(players.get(whichPlayer).over21())
-                    {
-                        System.out.println(players.get(whichPlayer).getName() + "  has busted\n");
-                    }
-                }
-                
-                else
-                {
-                    System.out.println(players.get(whichPlayer).getName() + " stands. Onto the next player\n");
-                    
-                    break;
-
-                }
-
-            }
-
-            whichPlayer++;
-
+            currentTurn = 0;
         }
 
+        // It's the next player's turn, add one more to whoseTurn
+        else
+        {
+            currentTurn++;
+        }
+
+        return currentTurn;
     }
 
     public static void main(String[] args)
