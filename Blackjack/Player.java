@@ -52,7 +52,6 @@ public class Player
         return this.playerCards.get(whichCard - 1);
     }
 
-
     /***
      * How many cards are in the player's hand
      * @return
@@ -92,7 +91,6 @@ public class Player
         return this.isDealer;
     }
 
-    
     /***
      * Prints the cards in the player's hand
      */
@@ -104,20 +102,38 @@ public class Player
 
         for (Card c : getPlayerCards())
         {
+            if (c.isFaceDown())
+            {
+                System.out.println("Card " + count + ": ( Card " + count + " )\n");
+            }
+            
+            else
+            {
+                System.out.println("Card " + count + ": (" + c + ")\n");
+            }
 
-            System.out.println("Card " + count + ": (" + c + ")\n");
             count++;
 
         }
 
     }
 
+    public boolean over21()
+    {
+        int sum = 0;
+
+        for (Card c : playerCards)
+        {
+            sum += c.getValueOfCard();
+        }
+
+        return (sum > 21 ? true : false);
+
+    }
 
     public void addToPlayerCards(Card thisCard)
     {
         this.playerCards.add(thisCard);
     }
-
-    
 
 }

@@ -28,6 +28,7 @@ public class Blackjack
     {
         Scanner kbd = new Scanner(System.in);
 
+        System.out.println("WELCOME TO BLACKJACK \n");
         System.out.println("How many players are going to play in the game?");
         System.out.println("(Mininumum # of players is 2 and Maximum # of players is 5) \n");
 
@@ -74,7 +75,7 @@ public class Blackjack
 
         for (int i = 0; i < players.size(); i++)
         {
-            System.out.println("What is the player's name ? ");
+            System.out.println("What is player " + (i + 1) + "'s name ? ");
 
             Player p = new Player(i + 1);
 
@@ -103,34 +104,29 @@ public class Blackjack
 
         for (Player p : players)
         {
+            Card one = deck.draw();
+
+            Card two = deck.draw();
+
+            one.setFaceDown(false);
+
             if (p.isDealer())
             {
-                Card faceDownCard = deck.draw();
 
-                Card notFaceDownCard = deck.draw();
+                two.setFaceDown(true);
 
-                faceDownCard.setFaceDown(true);
-
-                notFaceDownCard.setFaceDown(false);
-
-                p.addToPlayerCards(faceDownCard);
-
-                p.addToPlayerCards(notFaceDownCard);
             }
             else
             {
-                Card one = deck.draw();
 
-                Card two = deck.draw();
-
-                one.setFaceDown(true);
-
-                one.setFaceDown(true);
-
-                p.addToPlayerCards(one);
-
-                p.addToPlayerCards(two);
+                two.setFaceDown(false);
             }
+
+            p.addToPlayerCards(one);
+
+            p.addToPlayerCards(two);
+
+            System.out.println("Two cards have been added to " + p.getName() + "'s hand\n");
         }
 
         startGame(deck);
@@ -142,40 +138,80 @@ public class Blackjack
         Scanner kbd = new Scanner(System.in);
 
         System.out.println("Welcome to Blackjack");
+        
+        System.out.println("__________________________________________________\n");
 
-        while (over21() == false)
+        Player dealer = null;
+
+        for (Player p : players)
         {
-            
-        }
-    }
+            if (p.isDealer())
+            {
 
-    public boolean over21()
-    {
-        return false;
-    }
-
-    /**
-     * Determine which player goes next
-     * @param currentTurn
-     * @return
-     */
-    public int changeTurn(int currentTurn)
-    {
-        // If it's the last person's turn then we need to reset whoseTurn to 0
-        // So we can start off with the first player in the list of players
-        if (currentTurn + 1 == players.size())
-        {
-
-            currentTurn = 0;
+                dealer = p;
+            }
         }
 
-        // It's the next player's turn, add one more to whoseTurn
-        else
+        int whichPlayer = 0;
+
+        while (whichPlayer < players.size())
         {
-            currentTurn++;
+
+            if (players.get(whichPlayer).isDealer())
+            {
+                whichPlayer++;
+
+                continue;
+            }
+
+            while (players.get(whichPlayer).over21() == false)
+            {
+                           
+                System.out.println("Dealer " + dealer.getName() + "'s hand:");
+
+                dealer.showPlayerCards();
+
+                System.out.println("---------------------------------------------------\n");
+
+                System.out.println("Player " + players.get(whichPlayer).getName() + "'s hand:");
+
+                players.get(whichPlayer).showPlayerCards();
+                
+                System.out.println("Would you like to hit or stand, " + players.get(whichPlayer).getName() + " ? h or s");
+
+                String nextPlay = kbd.nextLine();
+
+                while (nextPlay.equalsIgnoreCase("h") == false && nextPlay.equalsIgnoreCase("s") == false)
+                {
+                    System.out.println("Please either write h for hit or s for stand");
+
+                    nextPlay = kbd.nextLine();
+                }
+
+                if (nextPlay.equalsIgnoreCase("h"))
+                {
+                    players.get(whichPlayer).addToPlayerCards(deck.draw());                  
+                    
+                    if(players.get(whichPlayer).over21())
+                    {
+                        System.out.println(players.get(whichPlayer).getName() + "  has busted\n");
+                    }
+                }
+                
+                else
+                {
+                    System.out.println(players.get(whichPlayer).getName() + " stands. Onto the next player\n");
+                    
+                    break;
+
+                }
+
+            }
+
+            whichPlayer++;
+
         }
 
-        return currentTurn;
     }
 
     public static void main(String[] args)
