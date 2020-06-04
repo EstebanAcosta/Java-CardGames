@@ -5,13 +5,13 @@ package Uno;
  */
 public class Card
 {
-    private Suit suit;
+    private Color color;
 
     private Value value;
 
     private boolean faceDown;
 
-    public Card(Suit suit, Value value)
+    public Card(Color suit, Value value)
     {
 
         setSuit(suit);
@@ -35,14 +35,14 @@ public class Card
         return this.value.getValue();
     }
 
-    public Suit getSuit()
+    public Color getColor()
     {
-        return suit;
+        return color;
     }
 
-    private void setSuit(Suit suit)
+    private void setSuit(Color color)
     {
-        this.suit = suit;
+        this.color = color;
     }
 
     public void setFaceDown(boolean faceDown)
@@ -59,9 +59,9 @@ public class Card
     public String toString()
     {
 
-        if (getSuit() != null)
+        if (getColor() != null)
         {
-            return getValue() + " of " + getSuit();
+            return getValue() + " of " + getColor();
         }
 
         else
@@ -93,6 +93,6 @@ public class Card
         Card c = (Card) o;
 
         // Compare the data members and return accordingly
-        return this.value == c.getValue() && this.suit == c.getSuit();
+        return this.value == c.getValue() && this.color == c.getColor();
     }
 }
