@@ -1,6 +1,8 @@
 package Uno;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 
 public class Player
 {
@@ -76,6 +78,66 @@ public class Player
     {
         return this.playerCards.size();
 
+    }
+
+    public void addToPlayerCards(Card thisCard)
+    {
+        this.playerCards.add(thisCard);
+    }
+    
+    public void addMultipleToPlayerPalace(ArrayList<Card> cards)
+    {
+        this.playerCards.addAll(cards);
+    }
+
+    public Card removeFromPlayerCards(int position)
+    {
+        return playerCards.remove(position - 1);
+    }
+
+    public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
+    {
+        int count = 0;
+
+        Iterator<Card> c = playerCards.iterator();
+
+        while (c.hasNext())
+        {
+            Card nextCard = c.next();
+
+            if (nextCard.equals(cards.get(count)))
+            {
+                c.remove();
+
+                count++;
+            }
+        }
+    }
+
+    public boolean canPlayHand(Card middleCard)
+    {
+        for (Card card : this.playerCards)
+        {
+            if (card.getSpecialValue() == SpecialValue.WILD || card.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR || card.getColor() == middleCard.getColor() || card.getValue() == middleCard.getValue())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+    public boolean hasWild()
+    {
+        for(Card c : playerCards)
+        {
+            if(c.isWild())
+            {
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /***

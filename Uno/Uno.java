@@ -68,6 +68,8 @@ public class Uno
 
         Deck deck = new Deck();
 
+        deck.shuffle();
+
         Scanner kbd = new Scanner(System.in);
 
         for (int i = 0; i < players.size(); i++)
@@ -105,51 +107,173 @@ public class Uno
 
         ArrayList<Card> middle = new ArrayList<Card>();
 
-        middle.add(deck.draw());
+        Card initialCard = deck.draw();
+
+        while (initialCard.getValue() == Value.DRAW_TWO || initialCard.getValue() == Value.REVERSE || initialCard.getValue() == Value.SKIP || initialCard.isWild())
+        {
+            initialCard = deck.draw();
+        }
+
+        middle.add(initialCard);
 
         while (allPlayersAreOut() == false)
         {
 
-            System.out.println("Middle Card: ");
+            System.out.println("\nMiddle Card: ");
 
             System.out.println(middle.get(middle.size() - 1));
-            
+
             System.out.println();
 
             System.out.println("It's " + players.get(whichPlayer).getName() + "'s turn:");
 
             players.get(whichPlayer).showPlayerCards();
 
-            System.out.println("Which card would you like put down in the middle ?");
-
-            int whichCard = 0;
-
-            String selectedCard = "";
-
-            while (whichCard < 2 || whichCard > 6)
+            if (middle.size() == 0 || players.get(whichPlayer).canPlayHand(middle.get(middle.size() - 1)))
             {
-                System.out.println("Please keep the selected card number between 2 and 6");
 
-                // get user input
-                selectedCard = kbd.nextLine();
+                System.out.println("Which card would you like put down in the middle ?");
 
-                // if user gives a non-numerical answer
-                // continue prompting user until they give a numeric answer
-                while (!selectedCard.matches("[0-9]+"))
+                int whichCardPosition = 0;
+
+                String selectedCard = "";
+
+                if (middle.size() > 0 && middle.get(middle.size() - 1).isWild() && middle.get(middle.size() - 1).getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
                 {
-                    System.out.println("Please enter a number");
+                    players.get(whichPlayer).addMultipleToPlayerPalace(deck.draw(4));
+                    
+                    whichPlayer = changeTurn(whichPlayer, true);
+
+                    continue;
+                }
+
+                else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.DRAW_TWO)
+                {
+                    players.get(whichPlayer).addMultipleToPlayerPalace(deck.draw(2));
+                    
+                    whichPlayer = changeTurn(whichPlayer, true);
+
+                    continue;
+                }
+
+                else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.REVERSE)
+                {
+
+                }
+
+                else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.SKIP)
+                {
+                    whichPlayer = changeTurn(whichPlayer, true);
+
+                    continue;
+                }
+
+                while (whichCardPosition < 1 || whichCardPosition > players.get(whichPlayer).getNumPlayerCards())
+                {
+                    System.out.println("Please keep the selected card number between 1 and " + players.get(whichPlayer).getNumPlayerCards());
 
                     // get user input
                     selectedCard = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!selectedCard.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get user input
+                        selectedCard = kbd.nextLine();
+                    }
+
+                    // convert the user input into an integer
+                    whichCardPosition = Integer.parseInt(selectedCard);
                 }
 
-                // convert the user input into an integer
-                whichCard = Integer.parseInt(selectedCard);
+                Card thisCard = players.get(whichPlayer).getCardInPlayerCards(whichCardPosition);
+
+                while (isValidSelection(thisCard, middle.get(middle.size() - 1)) == false)
+                {
+                    System.out.println("Please choose a card that is a wild card, has the same color or same number as the middle card\n");
+
+                    whichCardPosition = 0;
+
+                    while (whichCardPosition < 1 || whichCardPosition > players.get(whichPlayer).getNumPlayerCards())
+                    {
+
+                        System.out.println("Please keep the selected card number between 1 and " + players.get(whichPlayer).getNumPlayerCards());
+
+                        whichCardPosition = 0;
+
+                        // get user input
+                        selectedCard = kbd.nextLine();
+
+                        // if user gives a non-numerical answer
+                        // continue prompting user until they give a numeric answer
+                        while (!selectedCard.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number");
+
+                            // get user input
+                            selectedCard = kbd.nextLine();
+                        }
+
+                        // convert the user input into an integer
+                        whichCardPosition = Integer.parseInt(selectedCard);
+                    }
+
+                    thisCard = players.get(whichPlayer).getCardInPlayerCards(whichCardPosition);
+
+                }
+
+                if (thisCard.isWild())
+                {
+
+                    if (thisCard.getSpecialValue() == SpecialValue.WILD || thisCard.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
+                    {
+                        System.out.println("Please choose the color you want this card to be ? ");
+                        System.out.println("The card has to be blue, red , green, or yellow\n");
+                        System.out.println("Write b for blue, r for red, g for green, y for yellow");
+
+                        String newColor = kbd.nextLine();
+
+                        while (isValidColor(newColor) == false)
+                        {
+                            System.out.println("Please choose BLUE, RED, GREEN or YELLOW");
+
+                            newColor = kbd.nextLine();
+                        }
+
+                        thisCard.setColor(changeToEnum(newColor));
+                    }
+
+                }
+
+                players.get(whichPlayer).removeFromPlayerCards(whichCardPosition);
+
+                middle.add(thisCard);
+            }
+
+            else
+            {
+                System.out.println("You can't add a card. Draw a card");
+
+                players.get(whichPlayer).addToPlayerCards(deck.draw());
+
+                System.out.println("Please enter n for next to move onto the next player");
+
+                String next = kbd.nextLine();
+
+                while (!next.equalsIgnoreCase("n"))
+                {
+                    System.out.println("Please enter n for next");
+
+                    next = kbd.nextLine();
+                }
             }
 
             System.out.println("__________________________________________________\n");
 
-            whichPlayer = changeTurn(whichPlayer);
+            whichPlayer = changeTurn(whichPlayer, true);
 
         }
     }
@@ -172,7 +296,50 @@ public class Uno
         return true;
     }
 
-    public int changeTurn(int currentTurn)
+    public boolean isValidSelection(Card selectedCard, Card middleCard)
+    {
+
+        if (selectedCard.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR || selectedCard.getSpecialValue() == SpecialValue.WILD)
+        {
+            return true;
+        }
+
+        else if (selectedCard.getColor() == middleCard.getColor() || selectedCard.getValue() == middleCard.getValue())
+        {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    public boolean isValidColor(String color)
+    {
+
+        if (color.equalsIgnoreCase("g"))
+        {
+            return true;
+        }
+
+        else if (color.equalsIgnoreCase("b"))
+        {
+            return true;
+        }
+
+        else if (color.equalsIgnoreCase("y"))
+        {
+            return true;
+        }
+
+        else if (color.equalsIgnoreCase("r"))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public int changeTurn(int currentTurn, boolean forward)
     {
         // If it's the last person's turn then we need to reset whoseTurn to 0
         // So we can start off with the first player in the list of players
@@ -189,6 +356,30 @@ public class Uno
         }
 
         return currentTurn;
+    }
+
+    public Color changeToEnum(String color)
+    {
+
+        if (color.equalsIgnoreCase("g"))
+        {
+            return Color.GREEN;
+        }
+
+        else if (color.equalsIgnoreCase("b"))
+        {
+            return Color.BLUE;
+        }
+
+        else if (color.equalsIgnoreCase("y"))
+        {
+            return Color.YELLOW;
+        }
+        else
+        {
+            return Color.RED;
+        }
+
     }
 
     public static void main(String[] args)

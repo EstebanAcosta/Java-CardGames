@@ -56,7 +56,7 @@ public class Deck
     public Card draw()
     {
 
-        System.out.println("\n one card has been drawn from the deck");
+        System.out.println("\nOne card has been drawn from the deck");
         return deck.pop();
 
     }

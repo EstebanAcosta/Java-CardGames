@@ -11,12 +11,10 @@ public class Card
 
     private SpecialValue specialValue;
 
-    private boolean faceDown;
-
-    public Card(Color suit, Value value)
+    public Card(Color color, Value value)
     {
 
-        setSuit(suit);
+        setColor(color);
         setValue(value);
 
     }
@@ -47,28 +45,44 @@ public class Card
         this.value = value;
     }
 
+    public Color getColor()
+    {
+        return color;
+    }
+
+    public void setColor(Color color)
+    {
+        this.color = color;
+    }
+
+    public boolean isWild()
+    {
+        return (specialValue != null ? true : false);
+    }
+
     public int getValueOfCard()
     {
 
         return this.value.getValue();
     }
 
-    public Color getColor()
-    {
-        return color;
-    }
-
-    private void setSuit(Color color)
-    {
-        this.color = color;
-    }
-
     public String toString()
     {
 
+ 
         if (getColor() != null)
         {
-            return getColor() + " " + getValue();
+            
+            if(isWild())
+            {
+                return getColor() + " " + getSpecialValue();
+            }
+            
+            else
+            {
+                return getColor() + " " + getValue();
+
+            }
         }
 
         else
