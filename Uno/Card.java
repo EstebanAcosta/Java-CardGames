@@ -9,6 +9,8 @@ public class Card
 
     private Value value;
 
+    private SpecialValue specialValue;
+
     private boolean faceDown;
 
     public Card(Color suit, Value value)
@@ -16,6 +18,22 @@ public class Card
 
         setSuit(suit);
         setValue(value);
+
+    }
+
+    public Card(SpecialValue specialValue)
+    {
+        setSpecialValue(specialValue);
+    }
+
+    public SpecialValue getSpecialValue()
+    {
+        return this.specialValue;
+    }
+
+    public void setSpecialValue(SpecialValue sv)
+    {
+        this.specialValue = sv;
 
     }
 
@@ -45,28 +63,17 @@ public class Card
         this.color = color;
     }
 
-    public void setFaceDown(boolean faceDown)
-    {
-        this.faceDown = faceDown;
-    }
-
-    public boolean isFaceDown()
-    {
-
-        return faceDown;
-    }
-
     public String toString()
     {
 
         if (getColor() != null)
         {
-            return getValue() + " of " + getColor();
+            return getColor() + " " + getValue();
         }
 
         else
         {
-            return getValue() + "";
+            return getSpecialValue() + "";
         }
 
     }

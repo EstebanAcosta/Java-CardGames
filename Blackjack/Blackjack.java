@@ -266,16 +266,13 @@ public class Blackjack
             for (Player p : players)
             {
                 p.setOutStatus(false);
-                
-                
+
             }
 
             currentRound++;
-            
+
             deck = new Deck();
-            
-            
-            
+
             System.out.println("________________________________________________________________________\n");
 
         }
@@ -294,7 +291,6 @@ public class Blackjack
         }
         return true;
     }
-    
 
     /**
      * Determine which player goes next

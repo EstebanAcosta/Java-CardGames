@@ -10,6 +10,8 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
+    private boolean isOut;
+
     public Player(int id)
     {
         setPlayerId(id);
@@ -24,7 +26,6 @@ public class Player
     {
         this.name = name;
     }
-    
 
     public int getPlayerId()
     {
@@ -36,7 +37,6 @@ public class Player
         this.playerId = playerId;
     }
 
-
     public ArrayList<Card> getPlayerCards()
     {
         return playerCards;
@@ -45,6 +45,16 @@ public class Player
     public void setPlayerCards(ArrayList<Card> playerCards)
     {
         this.playerCards = playerCards;
+    }
+
+    public boolean isOut()
+    {
+        return this.isOut;
+    }
+
+    public void setOutStatus(boolean isOut)
+    {
+        this.isOut = isOut;
     }
 
     /***
@@ -58,7 +68,6 @@ public class Player
         return this.playerCards.get(whichCard - 1);
     }
 
-
     /***
      * How many cards are in the player's hand
      * @return
@@ -66,6 +75,26 @@ public class Player
     public int getNumPlayerCards()
     {
         return this.playerCards.size();
+
+    }
+
+    /***
+     * Prints the cards in the player's hand
+     */
+    public void showPlayerCards()
+    {
+        int count = 1;
+
+        System.out.println();
+
+        for (Card c : getPlayerCards())
+        {
+
+            System.out.println("Card " + count + ": (" + c + ")\n");
+
+            count++;
+
+        }
 
     }
 

@@ -1,7 +1,6 @@
 package Blackjack;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /***
  * @author estebanacosta

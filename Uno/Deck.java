@@ -1,11 +1,11 @@
 package Uno;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
+
 /***
- * 
  * @author estebanacosta
- *
  */
 
 public class Deck
@@ -41,7 +41,10 @@ public class Deck
         for (int i = 0; i < num; i++)
         {
             cards.add(deck.pop());
+
         }
+
+        System.out.println("\n" + num + " cards have been drawn from the deck");
 
         return cards;
     }
@@ -53,6 +56,7 @@ public class Deck
     public Card draw()
     {
 
+        System.out.println("\n one card has been drawn from the deck");
         return deck.pop();
 
     }
@@ -69,16 +73,34 @@ public class Deck
     {
         Stack<Card> deck = new Stack<Card>();
 
-        for (Color color : Color.values())
+        for (int i = 0; i < 2; i++)
         {
-            for (Value value : Value.values())
+            for (Color color : Color.values())
             {
+                for (Value value : Value.values())
+                {
+                    if (value == Value.ZERO)
+                    {
+                        continue;
+                    }
 
                     deck.add(new Card(color, value));
-             
+
+                }
             }
         }
-        
+
+        for (Color color : Color.values())
+        {
+
+            deck.add(new Card(SpecialValue.WILD));
+
+            deck.add(new Card(SpecialValue.WILD_DRAW_FOUR));
+
+            deck.add(new Card(color, Value.ZERO));
+
+        }
+
         this.deck = deck;
     }
 
@@ -90,7 +112,7 @@ public class Deck
         int numberOfCardsInSuit = 1;
         for (Card c : deck)
         {
-            if (numberOfCardsInSuit % 13 == 0)
+            if (numberOfCardsInSuit % 12 == 0)
             {
                 Deck += c.toString() + "\n\n";
                 numberOfCardsInSuit = 0;
