@@ -3,7 +3,6 @@ package Uno;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-
 public class Player
 {
     private String name;
@@ -84,7 +83,7 @@ public class Player
     {
         this.playerCards.add(thisCard);
     }
-    
+
     public void addMultipleToPlayerPalace(ArrayList<Card> cards)
     {
         this.playerCards.addAll(cards);
@@ -126,17 +125,44 @@ public class Player
 
         return false;
     }
-    
-    public boolean hasWild()
+
+    public boolean hasDrawTwo()
     {
-        for(Card c : playerCards)
+        for (Card c : playerCards)
         {
-            if(c.isWild())
+            if (c.getValue() == Value.DRAW_TWO)
             {
                 return true;
             }
         }
-        
+
+        return false;
+
+    }
+
+    public boolean hasDrawFour()
+    {
+        for (Card c : playerCards)
+        {
+            if (c.isWild() && c.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean hasWild()
+    {
+        for (Card c : playerCards)
+        {
+            if (c.isWild())
+            {
+                return true;
+            }
+        }
+
         return false;
     }
 
