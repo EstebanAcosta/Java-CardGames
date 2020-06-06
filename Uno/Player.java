@@ -13,9 +13,18 @@ public class Player
 
     private boolean isOut;
 
+    private boolean pickedUpCards;
+
+    private boolean gotSkipped;
+
     public Player(int id)
     {
         setPlayerId(id);
+    }
+
+    public Player()
+    {
+
     }
 
     public String getName()
@@ -58,6 +67,26 @@ public class Player
         this.isOut = isOut;
     }
 
+    public void pickedUpCardsStatus(boolean pickedUpCards)
+    {
+        this.pickedUpCards = pickedUpCards;
+    }
+
+    public boolean hasPickedUpMultipleCards()
+    {
+        return this.pickedUpCards;
+    }
+
+    public void gotSkippedStatus(boolean gotSkipped)
+    {
+        this.gotSkipped = gotSkipped;
+    }
+
+    public boolean gotSkipped()
+    {
+        return this.gotSkipped;
+    }
+
     /***
      * Returns the card in the player's hand
      * @param whichCard
@@ -84,7 +113,7 @@ public class Player
         this.playerCards.add(thisCard);
     }
 
-    public void addMultipleToPlayerPalace(ArrayList<Card> cards)
+    public void addMultipleToPlayerCards(ArrayList<Card> cards)
     {
         this.playerCards.addAll(cards);
     }

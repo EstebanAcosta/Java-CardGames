@@ -138,31 +138,47 @@ public class Uno
 
                 String selectedCard = "";
 
+                // if there is more than one card in the middle, and the middle card is a draw four
                 if (middle.size() > 0 && middle.get(middle.size() - 1).isWild() && middle.get(middle.size() - 1).getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
                 {
-                    players.get(whichPlayer).addMultipleToPlayerPalace(deck.draw(4));
-                    
+                    // draw four cards from the deck and add them to the player's hand
+                    players.get(whichPlayer).addMultipleToPlayerCards(deck.draw(4));
+
+                    // make sure that this player status on picking up cards is set to true
+                    players.get(whichPlayer).pickedUpCardsStatus(true);
+
+                    // change turns
                     whichPlayer = changeTurn(whichPlayer, true);
 
                     continue;
                 }
+                // if there is more than one card in the middle, and the middle card is a draw two
 
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.DRAW_TWO)
                 {
-                    players.get(whichPlayer).addMultipleToPlayerPalace(deck.draw(2));
-                    
+                    // draw two cards from the deck and add them to the player's hand
+                    players.get(whichPlayer).addMultipleToPlayerCards(deck.draw(2));
+
+                    // make sure that this player status on picking up cards is set to true
+                    players.get(whichPlayer).pickedUpCardsStatus(true);
+
+                    // change turns
+
                     whichPlayer = changeTurn(whichPlayer, true);
 
                     continue;
                 }
-
+                
+                //if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.REVERSE)
                 {
 
                 }
 
+                //if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.SKIP)
                 {
+                    //move on to the next player
                     whichPlayer = changeTurn(whichPlayer, true);
 
                     continue;
@@ -380,6 +396,22 @@ public class Uno
             return Color.RED;
         }
 
+    }
+
+    public int getPreviousPlayer(int currentTurn)
+    {
+        int previousTurn = 0;
+        if(currentTurn == 0)
+        {
+            previousTurn = players.size() - 1;
+        }
+        
+        else {
+            
+            previousTurn = currentTurn - 1;
+        }
+        
+        return previousTurn;
     }
 
     public static void main(String[] args)
