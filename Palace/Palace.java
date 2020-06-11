@@ -440,6 +440,8 @@ public class Palace
                         // player puts the selected card in the middle
                         middleCards.add(selectedCard);
 
+                        players.get(whoseTurn).removeFromPlayerCards(selectedCardPosition);
+
                         // since the player needs to have 3 cards every time they draw a card in order
                         // to find out how many cards they need to draw, we calculate it by taking the
                         // the number of cards they currently have (either 0,1 or 2) and subtract it from 3.
