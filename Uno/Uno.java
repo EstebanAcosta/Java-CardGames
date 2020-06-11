@@ -84,6 +84,10 @@ public class Uno
 
             players.get(i).setOutStatus(false);
 
+            players.get(i).gotSkippedStatus(false);
+
+            players.get(i).pickedUpCardsStatus(false);
+
             players.get(i).setPlayerCards(deck.draw(7));
 
             System.out.println();
@@ -138,6 +142,8 @@ public class Uno
 
                 String selectedCard = "";
 
+                int prevPlayer = getPreviousPlayer(whichPlayer);
+
                 // if there is more than one card in the middle, and the middle card is a draw four
                 if (middle.size() > 0 && middle.get(middle.size() - 1).isWild() && middle.get(middle.size() - 1).getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
                 {
@@ -168,17 +174,17 @@ public class Uno
 
                     continue;
                 }
-                
-                //if there is more than one in the middle and the middle card is a reverse
+
+                // if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.REVERSE)
                 {
 
                 }
 
-                //if there is more than one in the middle and the middle card is a reverse
+                // if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.SKIP)
                 {
-                    //move on to the next player
+                    // move on to the next player
                     whichPlayer = changeTurn(whichPlayer, true);
 
                     continue;
@@ -401,16 +407,17 @@ public class Uno
     public int getPreviousPlayer(int currentTurn)
     {
         int previousTurn = 0;
-        if(currentTurn == 0)
+        if (currentTurn == 0)
         {
             previousTurn = players.size() - 1;
         }
-        
-        else {
-            
+
+        else
+        {
+
             previousTurn = currentTurn - 1;
         }
-        
+
         return previousTurn;
     }
 

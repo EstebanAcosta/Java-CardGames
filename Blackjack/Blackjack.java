@@ -196,29 +196,71 @@ public class Blackjack
 
         System.out.println("__________________________________________________\n");
 
-        Random rand = new Random();
+        // randomly select a player
+        int whichPlayer = 0;
 
-        int whichPlayer = rand.nextInt(players.size());
-
+        // continue looping until the current is over
         while (currentRound <= numRounds)
         {
 
             System.out.println("ROUND " + currentRound + "\n");
 
+            // continue looping until all players have either busted, stood or made 21
             while (allPlayersAreOut() == false)
             {
+                // continue looping until this player busts
                 while (players.get(whichPlayer).over21() == false)
                 {
 
+                    System.out.println("---------------------------------------------------\n");
+                    
+                    // print the house's name
                     System.out.println(house.getName() + "'s hand:");
-
+                    
+                    //show the house's hand
                     house.showPlayerCards();
 
                     System.out.println("---------------------------------------------------\n");
 
-                    System.out.println("Player " + players.get(whichPlayer).getName() + "'s hand:");
+                    System.out.println("Player " + players.get(whichPlayer).getName() + "'s hand:                           Current Score: " + players.get(whichPlayer).getTotalSumOfCards());
 
                     players.get(whichPlayer).showPlayerCards();
+
+                    if (players.get(whichPlayer).getTotalSumOfCards() == 21)
+                    {
+                        System.out.println("Congrats. You made 21.");
+
+                        players.get(whichPlayer).setOutStatus(true);
+
+                        players.get(whichPlayer).showPlayerCards();
+
+                        players.get(whichPlayer).setHasBusted(false);
+
+                        if (whichPlayer + 1 == players.size())
+                        {
+                            System.out.println("Please enter n for the results ");
+
+                        }
+
+                        else
+                        {
+                            System.out.println("Please enter n for the next player's turn: ");
+
+                        }
+
+                        String next = kbd.nextLine();
+
+                        while (!next.equalsIgnoreCase("n"))
+                        {
+                            System.out.println("Please try again. Please enter n for next");
+
+                            next = kbd.nextLine();
+                        }
+
+                        System.out.println("__________________________________________________\n");
+
+                        break;
+                    }
 
                     System.out.println("Would you like to hit or stand, " + players.get(whichPlayer).getName() + " ? Please write h for hit or s for stand");
 
@@ -237,21 +279,59 @@ public class Blackjack
 
                         if (players.get(whichPlayer).over21())
                         {
-                            System.out.println(players.get(whichPlayer).getName() + " has busted\n");
+                            System.out.println("\n" + players.get(whichPlayer).getName() + " HAS BUSTED\n");
 
                             players.get(whichPlayer).setOutStatus(true);
 
+                            players.get(whichPlayer).setHasBusted(true);
+
                             players.get(whichPlayer).showPlayerCards();
+
+                            if (whichPlayer + 1 == players.size())
+                            {
+                                System.out.println("Please enter n for the results ");
+
+                            }
+
+                            else
+                            {
+                                System.out.println("Please enter n for the next player's turn: ");
+
+                            }
+
+                            String next = kbd.nextLine();
+
+                            while (!next.equalsIgnoreCase("n"))
+                            {
+                                System.out.println("Please try again. Please enter n for next");
+
+                                next = kbd.nextLine();
+                            }
 
                             System.out.println("__________________________________________________\n");
                         }
+
                     }
 
                     else
                     {
-                        System.out.println(players.get(whichPlayer).getName() + " stands. Onto the next player\n");
+
+                        if (whichPlayer + 1 == players.size())
+                        {
+                            System.out.println("Time for the results ");
+
+                        }
+
+                        else
+                        {
+                            System.out.println(players.get(whichPlayer).getName() + " stands. Onto the next player\n");
+                        }
 
                         players.get(whichPlayer).setOutStatus(true);
+
+                        players.get(whichPlayer).setHasBusted(false);
+
+                        System.out.println("__________________________________________________\n");
 
                         break;
 
@@ -259,19 +339,105 @@ public class Blackjack
 
                 }
 
+                // it's the next player's turn
                 whichPlayer = changeTurn(whichPlayer);
 
             }
+            System.out.println("__________________________________________________________________________________________\n");
 
+            System.out.println("Now it's the House's turn to flip their card\n ");
+
+            // go through the house's cards and flip their unflipped card
+            for (Card c : house.getPlayerCards())
+            {
+                if (c.isFaceDown())
+                {
+                    c.setFaceDown(false);
+                }
+
+            }
+
+            // display the house's cards to the screen
+            house.showPlayerCards();
+
+            // make the house draw a card until their total sum
+            while (house.getTotalSumOfCards() < 17)
+            {
+                house.addToPlayerCards(deck.draw());
+
+            }
+
+            // if the house is over 21
+            if (house.over21())
+            {
+                System.out.println("The House has busted\n");
+
+                // all players have won the game
+                for (Player p : players)
+                {
+                    System.out.println(p.getName() + " is the winner of this round \n");
+                }
+            }
+
+            else
+            {
+                System.out.println("The House total sum is : " + house.getTotalSumOfCards() + "\n");
+
+                for (Player p : players)
+                {
+                    if (p.HasBusted() == false && (p.getTotalSumOfCards() >= house.getTotalSumOfCards() || p.getTotalSumOfCards() == 21))
+                    {
+                        System.out.println(p.getName() + " is the winner of this round \n");
+                    }
+                }
+            }
+
+            System.out.println("Please enter n for the next round: ");
+
+            String next = kbd.nextLine();
+
+            while (!next.equalsIgnoreCase("n"))
+            {
+                System.out.println("Please try again. Please enter n for next");
+
+                next = kbd.nextLine();
+            }
+
+            // make sure to reset the out status for all players for the following round
             for (Player p : players)
             {
                 p.setOutStatus(false);
 
+                p.getPlayerCards().clear();
+
             }
 
+            house.getPlayerCards().clear();
+
+            // add one more to the round
             currentRound++;
 
+            // start with a fresh deck
             deck = new Deck();
+
+            for (Player p : players)
+            {
+                p.addToPlayerCards(deck.draw());
+
+                p.addToPlayerCards(deck.draw());
+            }
+
+            Card one = deck.draw();
+
+            one.setFaceDown(true);
+
+            Card two = deck.draw();
+
+            two.setFaceDown(false);
+
+            house.addToPlayerCards(one);
+
+            house.addToPlayerCards(two);
 
             System.out.println("________________________________________________________________________\n");
 

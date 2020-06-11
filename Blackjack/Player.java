@@ -14,6 +14,8 @@ public class Player
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
     private boolean isOut;
+    
+    private boolean hasBusted;
 
     public Player(int id)
     {
@@ -90,7 +92,7 @@ public class Player
     {
         this.isOut = isOut;
     }
-
+    
     /***
      * Prints the cards in the player's hand
      */
@@ -129,7 +131,7 @@ public class Player
             if (c.getValue() == Value.ACE)
             {
                 // and if adding 11 to the running sum will go over 21, add 1 to the running sum
-                if (sum + 11 > 21)
+                if (sum + 11 >= 21)
                 {
                     sum += 1;
                 }
@@ -158,6 +160,16 @@ public class Player
 
         return (getTotalSumOfCards() > 21 ? true : false);
 
+    }
+
+    public boolean HasBusted()
+    {
+        return hasBusted;
+    }
+
+    public void setHasBusted(boolean hasBusted)
+    {
+        this.hasBusted = hasBusted;
     }
 
 }
