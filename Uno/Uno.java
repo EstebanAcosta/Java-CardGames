@@ -156,17 +156,8 @@ public class Uno
                     // make sure that this player status on picking up cards is set to true
                     players.get(whichPlayer).pickedUpCardsStatus(true);
 
-                    if (normalDirection)
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, true);
-                    }
-
-                    else
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, false);
-                    }
+                    // change turns
+                    whichPlayer = changeTurn(whichPlayer, normalDirection);
 
                     continue;
                 }
@@ -180,17 +171,8 @@ public class Uno
                     // make sure that this player status on picking up cards is set to true
                     players.get(whichPlayer).pickedUpCardsStatus(true);
 
-                    if (normalDirection)
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, true);
-                    }
-
-                    else
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, false);
-                    }
+                    // change turns
+                    whichPlayer = changeTurn(whichPlayer, normalDirection);
 
                     continue;
                 }
@@ -202,17 +184,8 @@ public class Uno
                     // flip the boolean value every time a player puts down a reverse card
                     normalDirection = !normalDirection;
 
-                    if (normalDirection)
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, true);
-                    }
-
-                    else
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, false);
-                    }
+                    // change turns
+                    whichPlayer = changeTurn(whichPlayer, normalDirection);
 
                     continue;
                 }
@@ -220,17 +193,8 @@ public class Uno
                 // if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.SKIP)
                 {
-                    if (normalDirection)
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, true);
-                    }
-
-                    else
-                    {
-                        // change turns
-                        whichPlayer = changeTurn(whichPlayer, false);
-                    }
+                    // change turns
+                    whichPlayer = changeTurn(whichPlayer, normalDirection);
 
                     continue;
                 }
@@ -352,7 +316,7 @@ public class Uno
 
             System.out.println("__________________________________________________\n");
 
-            whichPlayer = changeTurn(whichPlayer, true);
+            whichPlayer = changeTurn(whichPlayer, normalDirection);
 
         }
     }
