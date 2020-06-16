@@ -150,21 +150,69 @@ public class Uno
                 // if there is more than one card in the middle, and the middle card is a draw four
                 if (middle.size() > 0 && middle.get(middle.size() - 1).isWild() && middle.get(middle.size() - 1).getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
                 {
-                    // draw four cards from the deck and add them to the player's hand
-                    players.get(whichPlayer).addMultipleToPlayerCards(deck.draw(4));
 
-                    // make sure that this player status on picking up cards is set to true
-                    players.get(whichPlayer).pickedUpCardsStatus(true);
+                    if (players.get(whichPlayer).hasDrawFour())
+                    {
+                        int cardPosition = 0;
 
-                    // change turns
-                    whichPlayer = changeTurn(whichPlayer, normalDirection);
+                        int count = 0;
 
-                    continue;
+                        for (Card cards : players.get(whichPlayer).getPlayerCards())
+                        {
+                            
+                            count++;
+                            
+                            if(cards.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
+                            {
+                                cardPosition = count;
+                            }
+
+                        }
+                        middle.add(players.get(whichPlayer).getCardInPlayerCards(cardPosition));
+
+                        players.get(whichPlayer).removeFromPlayerCards(cardPosition);
+                    }
+
+                    else
+                    {
+                        // draw four cards from the deck and add them to the player's hand
+                        players.get(whichPlayer).addMultipleToPlayerCards(deck.draw(4));
+
+                        // make sure that this player status on picking up cards is set to true
+                        players.get(whichPlayer).pickedUpCardsStatus(true);
+
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, normalDirection);
+
+                        continue;
+                    }
+
                 }
                 // if there is more than one card in the middle, and the middle card is a draw two
 
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.DRAW_TWO)
                 {
+                    if (players.get(whichPlayer).hasDrawFour())
+                    {
+                        int cardPosition = 0;
+
+                        int count = 0;
+
+                        for (Card cards : players.get(whichPlayer).getPlayerCards())
+                        {
+                            
+                            count++;
+                            
+                            if(cards.getValue() == Value.DRAW_TWO)
+                            {
+                                cardPosition = count;
+                            }
+
+                        }
+                        middle.add(players.get(whichPlayer).getCardInPlayerCards(cardPosition));
+
+                        players.get(whichPlayer).removeFromPlayerCards(cardPosition);
+                    }
                     // draw two cards from the deck and add them to the player's hand
                     players.get(whichPlayer).addMultipleToPlayerCards(deck.draw(2));
 
