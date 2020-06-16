@@ -113,6 +113,9 @@ public class Uno
 
         Card initialCard = deck.draw();
 
+        // this will keep track if this is moving in the normal direction
+        boolean normalDirection = true;
+
         while (initialCard.getValue() == Value.DRAW_TWO || initialCard.getValue() == Value.REVERSE || initialCard.getValue() == Value.SKIP || initialCard.isWild())
         {
             initialCard = deck.draw();
@@ -153,8 +156,17 @@ public class Uno
                     // make sure that this player status on picking up cards is set to true
                     players.get(whichPlayer).pickedUpCardsStatus(true);
 
-                    // change turns
-                    whichPlayer = changeTurn(whichPlayer, true);
+                    if (normalDirection)
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, true);
+                    }
+
+                    else
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, false);
+                    }
 
                     continue;
                 }
@@ -168,9 +180,17 @@ public class Uno
                     // make sure that this player status on picking up cards is set to true
                     players.get(whichPlayer).pickedUpCardsStatus(true);
 
-                    // change turns
+                    if (normalDirection)
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, true);
+                    }
 
-                    whichPlayer = changeTurn(whichPlayer, true);
+                    else
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, false);
+                    }
 
                     continue;
                 }
@@ -179,17 +199,45 @@ public class Uno
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.REVERSE)
                 {
 
+                    // flip the boolean value every time a player puts down a reverse card
+                    normalDirection = !normalDirection;
+
+                    if (normalDirection)
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, true);
+                    }
+
+                    else
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, false);
+                    }
+
+                    continue;
                 }
 
                 // if there is more than one in the middle and the middle card is a reverse
                 else if (middle.size() > 0 && middle.get(middle.size() - 1).getValue() == Value.SKIP)
                 {
-                    // move on to the next player
-                    whichPlayer = changeTurn(whichPlayer, true);
+                    if (normalDirection)
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, true);
+                    }
+
+                    else
+                    {
+                        // change turns
+                        whichPlayer = changeTurn(whichPlayer, false);
+                    }
 
                     continue;
                 }
 
+                /**
+                 * Continue prompting the user until they put down a card that is in between 1 and the number of cards in their hand
+                 */
                 while (whichCardPosition < 1 || whichCardPosition > players.get(whichPlayer).getNumPlayerCards())
                 {
                     System.out.println("Please keep the selected card number between 1 and " + players.get(whichPlayer).getNumPlayerCards());
@@ -281,16 +329,25 @@ public class Uno
 
                 players.get(whichPlayer).addToPlayerCards(deck.draw());
 
-                System.out.println("Please enter n for next to move onto the next player");
-
-                String next = kbd.nextLine();
-
-                while (!next.equalsIgnoreCase("n"))
+                if (players.get(whichPlayer).canPlayHand(middle.get(middle.size() - 1)))
                 {
-                    System.out.println("Please enter n for next");
-
-                    next = kbd.nextLine();
+                    continue;
                 }
+
+                else
+                {
+                    System.out.println("Please enter n for next to move onto the next player");
+
+                    String next = kbd.nextLine();
+
+                    while (!next.equalsIgnoreCase("n"))
+                    {
+                        System.out.println("Please enter n for next");
+
+                        next = kbd.nextLine();
+                    }
+                }
+
             }
 
             System.out.println("__________________________________________________\n");
@@ -363,18 +420,41 @@ public class Uno
 
     public int changeTurn(int currentTurn, boolean forward)
     {
-        // If it's the last person's turn then we need to reset whoseTurn to 0
-        // So we can start off with the first player in the list of players
-        if (currentTurn + 1 == players.size())
-        {
 
-            currentTurn = 0;
+        if (forward)
+        {
+            // If it's the last person's turn then we need to reset whoseTurn to 0
+            // So we can start off with the first player in the list of players
+            if (currentTurn + 1 == players.size())
+            {
+
+                currentTurn = 0;
+            }
+
+            // It's the next player's turn, add one more to whoseTurn
+            else
+            {
+                currentTurn++;
+            }
+
         }
 
-        // It's the next player's turn, add one more to whoseTurn
         else
         {
-            currentTurn++;
+            // If it's the last person's turn then we need to reset whoseTurn to 0
+            // So we can start off with the first player in the list of players
+            if (currentTurn == 0)
+            {
+
+                currentTurn = players.size() - 1;
+            }
+
+            // It's the next player's turn, add one more to whoseTurn
+            else
+            {
+                currentTurn--;
+            }
+
         }
 
         return currentTurn;

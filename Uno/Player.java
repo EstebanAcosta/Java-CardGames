@@ -146,7 +146,7 @@ public class Player
     {
         for (Card card : this.playerCards)
         {
-            if (card.getSpecialValue() == SpecialValue.WILD || card.getSpecialValue() == SpecialValue.WILD_DRAW_FOUR || card.getColor() == middleCard.getColor() || card.getValue() == middleCard.getValue())
+            if (card.isWild() || card.getColor() == middleCard.getColor() || card.getValue() == middleCard.getValue())
             {
                 return true;
             }
