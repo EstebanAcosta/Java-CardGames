@@ -24,6 +24,8 @@ public class Garbage
 
     public void setUpNumOfPlayers()
     {
+        System.out.println("Welcome To Garbage \n");
+        
         Scanner kbd = new Scanner(System.in);
 
         System.out.println("How many players are going to play in the game?");
