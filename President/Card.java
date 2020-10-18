@@ -1,16 +1,13 @@
 package President;
+
 /***
- * 
  * @author estebanacosta
- *
  */
 public class Card
 {
     private Suit suit;
 
     private Value value;
-
-    private boolean unflipped;
 
     public Card(Suit suit, Value value)
     {
@@ -20,19 +17,14 @@ public class Card
 
     }
 
-    public Card(Value redJoker)
-    {
-        setValue(redJoker);
-    }
-
     public Value getValue()
     {
         return value;
     }
 
-    private void setValue(Value redJoker)
+    private void setValue(Value value)
     {
-        this.value = redJoker;
+        this.value = value;
     }
 
     public int getValueOfCard()
@@ -49,17 +41,6 @@ public class Card
     private void setSuit(Suit suit)
     {
         this.suit = suit;
-    }
-
-    public void setUnflipped(boolean unflipped)
-    {
-        this.unflipped = unflipped;
-    }
-
-    public boolean isUnflipped()
-    {
-
-        return unflipped;
     }
 
     public String toString()
