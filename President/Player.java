@@ -2,6 +2,7 @@ package President;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 /***
  * @author estebanacosta
  */
@@ -124,7 +125,7 @@ public class Player
     {
         this.playerId = playerId;
     }
-    
+
     public Card removeOneFromPlayerCards(int position)
     {
         return playerCards.remove(position);
@@ -169,15 +170,7 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            System.out.print(" ( " + playerCards.get(i) + " ) ");
-
-            if ((i + 1) % 5 == 0 && i > 0)
-            {
-
-                System.out.println();
-                System.out.println();
-
-            }
+            System.out.print((i + 1) + ": " + playerCards.get(i) + "\n");
 
         }
 
