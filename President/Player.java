@@ -13,6 +13,16 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
+    private boolean isPresident;
+
+    private boolean isVicePresident;
+
+    private boolean isScum;
+
+    private boolean isViceScum;
+
+    private boolean isOut;
+
     public Player(int id)
     {
         setPlayerId(id);
@@ -28,19 +38,69 @@ public class Player
         this.name = name;
     }
 
+    public boolean isVicePresident()
+    {
+        return isVicePresident;
+    }
+
+    public void setVicePresident(boolean isVicePresident)
+    {
+        this.isVicePresident = isVicePresident;
+    }
+
+    public boolean isPresident()
+    {
+        return isPresident;
+    }
+
+    public void setPresident(boolean isPresident)
+    {
+        this.isPresident = isPresident;
+    }
+
+    public boolean isViceScum()
+    {
+        return isViceScum;
+    }
+
+    public void setViceScum(boolean isViceScum)
+    {
+        this.isViceScum = isViceScum;
+    }
+
+    public boolean isScum()
+    {
+        return isScum;
+    }
+
+    public void setScum(boolean isScum)
+    {
+        this.isScum = isScum;
+    }
+
+    public boolean isOut()
+    {
+        return isOut;
+    }
+
+    public void setOut(boolean isOut)
+    {
+        this.isOut = isOut;
+    }
+
     public ArrayList<Card> getPlayerHand()
     {
         return playerCards;
     }
 
-    public void addMultipleToPlayerHand(ArrayList<Card> remaininingCards)
+    public void addMultipleToPlayerHand(ArrayList<Card> playerCards)
     {
-        this.playerCards = remaininingCards;
+        this.playerCards.addAll(playerCards);
     }
 
-    public void addOneToPlayerHand(Card thisCard)
+    public void addOneToPlayerHand(Card oneCard)
     {
-        this.playerCards.add(thisCard);
+        this.playerCards.add(oneCard);
     }
 
     public Card getCard(int whichCard)
@@ -63,6 +123,19 @@ public class Player
     public void setPlayerId(int playerId)
     {
         this.playerId = playerId;
+    }
+
+    public boolean containsThisCard(Card thisCard)
+    {
+        for (Card c : playerCards)
+        {
+            if (c.getSuit() == thisCard.getSuit() && c.getValue() == thisCard.getValue())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void showPlayerCards()

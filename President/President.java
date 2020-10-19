@@ -45,7 +45,7 @@ public class President
         // If the user puts a number greater than 6 or less than 4
         // Continue prompting the user until they give
         // a number between 2 and 4
-        while (numPlayers < 4 || numPlayers > 6)
+        while (numPlayers < 4 || numPlayers > 7)
         {
             System.out.println("Please keep the number of players between 4 and 6");
 
@@ -82,8 +82,6 @@ public class President
         // shuffle the game deck
         deck.shuffle();
 
-        System.out.println(deck.getSize());
-
         // calculate how many cards we are supposed to distribute to each player
         int howManyCardsToEachPlayer = deck.getSize() / players.size();
 
@@ -104,9 +102,7 @@ public class President
 
         }
 
-        System.out.println("remain " + deck.getSize() % players.size());
-
-        // loop through the list of players and give each player a name and their 10
+        // loop through the list of players and give each player a name and their 
         // cards
         for (int i = 0; i < players.size(); i++)
         {
@@ -114,24 +110,146 @@ public class President
 
             String playerName = kbd.nextLine();
 
-            // give each player their name
+            // ask each player for their name
             players.get(i).setName(playerName);
 
+            // draw a predetermined number of cards from the deck
             ArrayList<Card> cardsPerPerson = deck.draw(howManyCardsToEachPlayer);
 
+            // give this player the predetermined number of cards
             players.get(i).addMultipleToPlayerHand(cardsPerPerson);
+            
+            //make sure that each status of the player is set to false
+            //their out status at the beginning of each round should be set to false 
+            players.get(i).setOut(false);
+            
+            //their president status at the beginning of the first round should be set to false 
+            players.get(i).setPresident(false);
+            
+            //their vice president status at the beginning of the first round should be set to false 
+            players.get(i).setVicePresident(false);
+            
+            //their scum status at the beginning of the first round should be set to false 
+            players.get(i).setScum(false);
+            
+            //their vice scum status at the beginning of the first round should be set to false 
+            players.get(i).setViceScum(false);
 
             System.out.println(players.get(i).getName() + " has " + players.get(i).getNumOfPlayerCards() + " cards");
-            
+
             System.out.println("__________________________________________________\n");
 
         }
     }
 
+    public void setUpGame()
+    {
+        Scanner kbd = new Scanner(System.in);
+
+        System.out.println("What is the number of rounds you want?\n");
+        System.out.println("The min # is 1 and the max # is 10");
+        String numRounds = kbd.nextLine();
+
+        // if user gives a non-numerical answer
+        // continue prompting user until they give a numeric answer
+        while (!numRounds.matches("[0-9]+"))
+        {
+            System.out.println("Please enter a number for the number of rounds in this new game");
+
+            numRounds = kbd.nextLine();
+        }
+
+        // convert input into an integer
+        int numberOfRounds = Integer.parseInt(numRounds);
+
+        // Continue promoting the user until they provide
+        // a number between 0 and 5
+        while (numberOfRounds > 10 || numberOfRounds < 1)
+        {
+            System.out.println("Please enter a number that is between 1 and 10");
+
+            // get user input
+            numRounds = kbd.nextLine();
+
+            // continue prompting user until the user gives a number
+            while (!numRounds.matches("[0-9]+"))
+            {
+                System.out.println("Please enter a number for the number of rounds in this new game");
+
+                numRounds = kbd.nextLine();
+            }
+            // convert the user input into an integer
+            numberOfRounds = Integer.parseInt(numRounds);
+        }
+    }
+
+    public void startGame()
+    {
+        
+        ArrayList<Card> middleCards = new ArrayList<Card>();
+        
+        Card firstCard = new Card(Suit.CLUBS,Value.THREE);
+        
+        int whoseTurn = 0;
+
+        for(Player p : players)
+        {
+            if(p.containsThisCard(firstCard))
+            {
+                whoseTurn = p.getPlayerId();
+                
+                break;
+            }
+        }
+        
+        
+        while()
+        {
+            
+        }
+    }
+
+    public int changeTurn(int currentTurn)
+    {
+        // If it's the last person's turn then we need to reset whoseTurn to 0
+        // So we can start off with the first player in the list of players
+        if (currentTurn + 1 == players.size())
+        {
+
+            currentTurn = 0;
+        }
+
+        // It's the next player's turn, add one more to whoseTurn
+        else
+        {
+            currentTurn++;
+        }
+
+        return currentTurn;
+    }
+
+    public boolean isEveryoneOut()
+    {
+        for(Player p : players)
+        {
+            if(p.isOut() == false)
+            {
+               return false; 
+            }
+        }
+        
+        return true;
+    }
     public static void main(String[] args)
     {
         President pres = new President();
+
         pres.setUpNumOfPlayers();
+
         pres.setUpPlayers();
+
+        pres.setUpGame();
+
+        pres.startGame();
     }
 }
