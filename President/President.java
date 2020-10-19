@@ -102,7 +102,7 @@ public class President
 
         }
 
-        // loop through the list of players and give each player a name and their 
+        // loop through the list of players and give each player a name and their
         // cards
         for (int i = 0; i < players.size(); i++)
         {
@@ -118,21 +118,21 @@ public class President
 
             // give this player the predetermined number of cards
             players.get(i).addMultipleToPlayerHand(cardsPerPerson);
-            
-            //make sure that each status of the player is set to false
-            //their out status at the beginning of each round should be set to false 
+
+            // make sure that each status of the player is set to false
+            // their out status at the beginning of each round should be set to false
             players.get(i).setOut(false);
-            
-            //their president status at the beginning of the first round should be set to false 
+
+            // their president status at the beginning of the first round should be set to false
             players.get(i).setPresident(false);
-            
-            //their vice president status at the beginning of the first round should be set to false 
+
+            // their vice president status at the beginning of the first round should be set to false
             players.get(i).setVicePresident(false);
-            
-            //their scum status at the beginning of the first round should be set to false 
+
+            // their scum status at the beginning of the first round should be set to false
             players.get(i).setScum(false);
-            
-            //their vice scum status at the beginning of the first round should be set to false 
+
+            // their vice scum status at the beginning of the first round should be set to false
             players.get(i).setViceScum(false);
 
             System.out.println(players.get(i).getName() + " has " + players.get(i).getNumOfPlayerCards() + " cards");
@@ -181,32 +181,62 @@ public class President
             // convert the user input into an integer
             numberOfRounds = Integer.parseInt(numRounds);
         }
+
+        startGame(numberOfRounds);
     }
 
-    public void startGame()
+    public void startGame(int numRounds)
     {
-        
+
         ArrayList<Card> middleCards = new ArrayList<Card>();
-        
-        Card firstCard = new Card(Suit.CLUBS,Value.THREE);
-        
+
+        Card threeOfClubs = new Card(Suit.CLUBS, Value.THREE);
+
         int whoseTurn = 0;
 
-        for(Player p : players)
+        // loop through the players participating in the game
+        for (int j = 0; j < players.size(); j++)
         {
-            if(p.containsThisCard(firstCard))
+            // if this player has the three of clubs
+            if (players.get(j).containsThisCard(threeOfClubs))
             {
-                whoseTurn = p.getPlayerId();
-                
+                // this person will be the first player to put down a card
+                whoseTurn = j;
+
+                // loop through the player's hand
+                for (int i = 0; i < players.get(j).getPlayerHand().size(); i++)
+                {
+                    // if the player's card is equal to the one we are looking for (in this case a three of clubs)
+                    if (players.get(j).getCard(i).equals(threeOfClubs))
+                    {
+
+                        // remove the card from the person's hand and place it in the middle of table
+                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i));
+
+                    }
+                }
+
                 break;
             }
         }
-        
-        
-        while()
+
+        while (numRounds > 0)
         {
-            
+            while (isEveryoneOut() == false)
+            {
+
+                System.out.println(middleCards.get(middleCards.size() - 1));
+
+                players.get(whoseTurn).showPlayerCards();
+
+                whoseTurn = changeTurn(whoseTurn);
+
+                break;
+            }
+
+            break;
         }
+
     }
 
     public int changeTurn(int currentTurn)
@@ -230,16 +260,17 @@ public class President
 
     public boolean isEveryoneOut()
     {
-        for(Player p : players)
+        for (Player p : players)
         {
-            if(p.isOut() == false)
+            if (p.isOut() == false)
             {
-               return false; 
+                return false;
             }
         }
-        
+
         return true;
     }
+
     public static void main(String[] args)
     {
         President pres = new President();
@@ -249,7 +280,5 @@ public class President
         pres.setUpPlayers();
 
         pres.setUpGame();
-
-        pres.startGame();
     }
 }

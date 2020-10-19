@@ -1,7 +1,7 @@
 package President;
 
 import java.util.ArrayList;
-
+import java.util.Iterator;
 /***
  * @author estebanacosta
  */
@@ -106,7 +106,7 @@ public class Player
     public Card getCard(int whichCard)
     {
 
-        return this.playerCards.get(whichCard - 1);
+        return this.playerCards.get(whichCard);
     }
 
     public int getNumOfPlayerCards()
@@ -123,6 +123,30 @@ public class Player
     public void setPlayerId(int playerId)
     {
         this.playerId = playerId;
+    }
+    
+    public Card removeOneFromPlayerCards(int position)
+    {
+        return playerCards.remove(position);
+    }
+
+    public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
+    {
+        int count = 0;
+
+        Iterator<Card> c = playerCards.iterator();
+
+        while (c.hasNext())
+        {
+            Card nextCard = c.next();
+
+            if (nextCard.equals(cards.get(count)))
+            {
+                c.remove();
+
+                count++;
+            }
+        }
     }
 
     public boolean containsThisCard(Card thisCard)

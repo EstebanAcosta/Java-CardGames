@@ -43,6 +43,30 @@ public class Card
         this.suit = suit;
     }
 
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (o == null)
+        {
+            return false;
+        }
+
+        if (o == this)
+        {
+            return true;
+        }
+
+        if (!getClass().equals(o.getClass()))
+        {
+            return false;
+        }
+
+        Card c = (Card) o;
+
+        return this.getSuit() == c.getSuit() && this.getValue() == c.getValue();
+    }
+    
     public String toString()
     {
 
