@@ -166,11 +166,12 @@ public class Player
     public void showPlayerCards()
     {
 
-        System.out.println(getName() + "'s Hand: \n");
+        System.out.println("\n" + getName() + "'s Hand: \n");
+
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            System.out.print((i + 1) + ": " + playerCards.get(i) + "\n");
+            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " )\n");
 
         }
 

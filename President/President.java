@@ -182,11 +182,15 @@ public class President
             numberOfRounds = Integer.parseInt(numRounds);
         }
 
+        System.out.println("__________________________________________________\n");
+
         startGame(numberOfRounds);
     }
 
     public void startGame(int numRounds)
     {
+
+        Scanner kbd = new Scanner(System.in);
 
         ArrayList<Card> middleCards = new ArrayList<Card>();
 
@@ -220,16 +224,64 @@ public class President
             }
         }
 
+        whoseTurn = changeTurn(whoseTurn);
+
         while (numRounds > 0)
         {
             while (isEveryoneOut() == false)
             {
 
+                System.out.println("Middle Card:");
+
                 System.out.println(middleCards.get(middleCards.size() - 1));
+
+//                System.out.println("---------------------------------------------------\n");
 
                 players.get(whoseTurn).showPlayerCards();
 
+                System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
+
+                String selectedCard = kbd.nextLine();
+
+                // if user gives a non-numerical answer
+                // continue prompting user until they give a numeric answer
+                while (!selectedCard.matches("[0-9]+"))
+                {
+                    System.out.println("Please enter a number for the card you wish to put down in this game");
+
+                    selectedCard = kbd.nextLine();
+                }
+
+                // Convert the string input into an integer
+                int whichCard = Integer.parseInt(selectedCard);
+
+                // If the user puts a number greater than the number of cards in the player's hand or less than 1
+                // Continue prompting the user until they give
+                // a number between 1 and the # of cards in the player's hand
+                while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                {
+                    System.out.println("Please choose a card that's within the range of between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                    // get user input
+                    selectedCard = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!selectedCard.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get user input
+                        selectedCard = kbd.nextLine();
+                    }
+
+                    // convert the user input into an integer
+                    whichCard = Integer.parseInt(selectedCard);
+                }
+
                 whoseTurn = changeTurn(whoseTurn);
+
+                System.out.println("__________________________________________________\n");
 
                 break;
             }
