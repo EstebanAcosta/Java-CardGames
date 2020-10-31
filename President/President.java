@@ -224,10 +224,13 @@ public class President
             }
         }
 
+        //since the player that has a three of clubs put down their card in the middle, it's the next player's turn
         whoseTurn = changeTurn(whoseTurn);
 
+        //continue playing the game until there are no more rounds left
         while (numRounds > 0)
         {
+            //continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
 
@@ -237,10 +240,12 @@ public class President
 
 //                System.out.println("---------------------------------------------------\n");
 
+                //show this player's hand
                 players.get(whoseTurn).showPlayerCards();
 
                 System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
+                //ask the player which card they want to put down
                 String selectedCard = kbd.nextLine();
 
                 // if user gives a non-numerical answer
@@ -278,12 +283,15 @@ public class President
                     // convert the user input into an integer
                     whichCard = Integer.parseInt(selectedCard);
                 }
+                
+                //remove the selected card from the player's hand and put it down in the middle
+                middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
 
+                //change turns
                 whoseTurn = changeTurn(whoseTurn);
 
                 System.out.println("__________________________________________________\n");
 
-                break;
             }
 
             break;
