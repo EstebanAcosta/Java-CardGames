@@ -184,5 +184,17 @@ public class Player
     {
         return this.playerCards.get(whichCard - 1);
     }
+    
+    public boolean canPlayACard()
+    {
+        for(Card c : playerCards)
+        {
+            if(c.getValue() == Value.TWO)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

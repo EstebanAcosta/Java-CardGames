@@ -320,10 +320,66 @@ public class President
 
                 }
                 
+   
                
-
                 // remove the selected card from the player's hand and put it down in the middle
                 middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
+                
+                
+                //if the card that's been placed down is a two, clear the middle cards
+                if(thisCard.getValue() == Value.TWO)
+                {
+                    middleCards.clear();
+                    
+                    // show this player's hand
+                    players.get(whoseTurn).showPlayerCards();
+                    
+                    //now the player can put down another card
+                    System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
+
+                    // ask the player which card they want to put down
+                     selectedCard = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!selectedCard.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number for the card you wish to put down in this game");
+
+                        selectedCard = kbd.nextLine();
+                    }
+
+                    // Convert the string input into an integer
+                    whichCard = Integer.parseInt(selectedCard);
+
+                    // If the user puts a number greater than the number of cards in the player's hand or less than 1
+                    // Continue prompting the user until they give
+                    // a number between 1 and the # of cards in the player's hand
+                    while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                    {
+                        System.out.println("Please choose a card that's within the range of between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                        // get user input
+                        selectedCard = kbd.nextLine();
+
+                        // if user gives a non-numerical answer
+                        // continue prompting user until they give a numeric answer
+                        while (!selectedCard.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number");
+
+                            // get user input
+                            selectedCard = kbd.nextLine();
+                        }
+
+                        // convert the user input into an integer
+                        whichCard = Integer.parseInt(selectedCard);
+                    }
+                    
+                    // remove the selected card from the player's hand and put it down in the middle
+                    middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
+
+                }
 
                 // change turns
                 whoseTurn = changeTurn(whoseTurn);
