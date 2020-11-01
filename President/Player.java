@@ -150,6 +150,11 @@ public class Player
         }
     }
 
+    /***
+     * Determines if this player has a specific card in their hand
+     * @param thisCard
+     * @return
+     */
     public boolean containsThisCard(Card thisCard)
     {
         for (Card c : playerCards)
@@ -163,6 +168,9 @@ public class Player
         return false;
     }
 
+    /***
+     * Shows 
+     */
     public void showPlayerCards()
     {
 
@@ -180,16 +188,26 @@ public class Player
 
     }
 
+    /****
+     * Returns that selected card from their hand
+     * @param whichCard
+     * @return
+     */
     public Card getCardInPlayerCards(int whichCard)
     {
         return this.playerCards.get(whichCard - 1);
     }
-    
-    public boolean canPlayACard()
+
+    /***
+     * Determines if this player can play a card from their hand
+     * @param middleCard
+     * @return
+     */
+    public boolean canPlayACard(Card middleCard)
     {
-        for(Card c : playerCards)
+        for (Card c : playerCards)
         {
-            if(c.getValue() == Value.TWO)
+            if (c.getValue() == Value.TWO || c.getValueOfCard() > middleCard.getValueOfCard())
             {
                 return true;
             }

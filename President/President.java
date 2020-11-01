@@ -230,6 +230,15 @@ public class President
         // continue playing the game until there are no more rounds left
         while (numRounds > 0)
         {
+
+            boolean putDownSingle = false;
+
+            boolean putDownDouble = false;
+
+            boolean putDownTriple = false;
+
+            boolean putDownQuadruple = false;
+            
             // continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
@@ -239,51 +248,6 @@ public class President
                 System.out.println(middleCards.get(middleCards.size() - 1));
 
                 // System.out.println("---------------------------------------------------\n");
-
-                System.out.println("How many cards do you wish to put down at the same time?\n");
-                System.out.println("1. Singles");
-                System.out.println("2. Doubles");
-                System.out.println("3. Triples");
-                System.out.println("4. Quadruples");
-
-                // ask the player which card they want to put down
-                String howManyCardsOfSameRank = kbd.nextLine();
-
-                // if user gives a non-numerical answer
-                // continue prompting user until they give a numeric answer
-                while (!howManyCardsOfSameRank.matches("[0-9]+"))
-                {
-                    System.out.println("Please enter a number for the number of cards of the same rank you want to put down");
-
-                    howManyCardsOfSameRank = kbd.nextLine();
-                }
-
-                // Convert the string input into an integer
-                int manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
-
-                // If the user puts a number greater than 4 or less than 1
-                // Continue prompting the user until they give
-                // a number between 1 and the # of cards in the player's hand
-                while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4)
-                {
-                    System.out.println("Please choose a card that's within the range of between 1 and 4");
-
-                    // get user input
-                    howManyCardsOfSameRank = kbd.nextLine();
-
-                    // if user gives a non-numerical answer
-                    // continue prompting user until they give a numeric answer
-                    while (!howManyCardsOfSameRank.matches("[0-9]+"))
-                    {
-                        System.out.println("Please enter a number");
-
-                        // get user input
-                        howManyCardsOfSameRank = kbd.nextLine();
-                    }
-
-                    // convert the user input into an integer
-                    manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
-                }
 
                 // show this player's hand
                 players.get(whoseTurn).showPlayerCards();
@@ -376,6 +340,51 @@ public class President
                     // show this player's hand
                     players.get(whoseTurn).showPlayerCards();
 
+                    System.out.println("How many cards do you wish to put down at the same time?\n");
+                    System.out.println("1. Singles");
+                    System.out.println("2. Doubles");
+                    System.out.println("3. Triples");
+                    System.out.println("4. Quadruples");
+
+                    // ask the player which card they want to put down
+                    String howManyCardsOfSameRank = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!howManyCardsOfSameRank.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number for the number of cards of the same rank you want to put down");
+
+                        howManyCardsOfSameRank = kbd.nextLine();
+                    }
+
+                    // Convert the string input into an integer
+                    int manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
+
+                    // If the user puts a number greater than 4 or less than 1
+                    // Continue prompting the user until they give
+                    // a number between 1 and the # of cards in the player's hand
+                    while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4)
+                    {
+                        System.out.println("Please choose a card that's within the range of between 1 and 4");
+
+                        // get user input
+                        howManyCardsOfSameRank = kbd.nextLine();
+
+                        // if user gives a non-numerical answer
+                        // continue prompting user until they give a numeric answer
+                        while (!howManyCardsOfSameRank.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number");
+
+                            // get user input
+                            howManyCardsOfSameRank = kbd.nextLine();
+                        }
+
+                        // convert the user input into an integer
+                        manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
+                    }
+
                     // now the player can put down another card
                     System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
@@ -433,13 +442,6 @@ public class President
             numRounds--;
 
         }
-
-    }
-
-    public boolean canPutDownThatNumberOfCardsOfSameRank(int numCardOfSameRank)
-    {
-
-        return false;
 
     }
 
