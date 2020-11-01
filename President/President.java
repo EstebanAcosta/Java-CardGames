@@ -215,7 +215,7 @@ public class President
                     {
 
                         // remove the card from the person's hand and place it in the middle of table
-                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i));
+                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i + 1));
 
                     }
                 }
@@ -224,13 +224,13 @@ public class President
             }
         }
 
-        //since the player that has a three of clubs put down their card in the middle, it's the next player's turn
+        // since the player that has a three of clubs put down their card in the middle, it's the next player's turn
         whoseTurn = changeTurn(whoseTurn);
 
-        //continue playing the game until there are no more rounds left
+        // continue playing the game until there are no more rounds left
         while (numRounds > 0)
         {
-            //continue playing this round until everyone is out
+            // continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
 
@@ -238,14 +238,14 @@ public class President
 
                 System.out.println(middleCards.get(middleCards.size() - 1));
 
-//                System.out.println("---------------------------------------------------\n");
+                // System.out.println("---------------------------------------------------\n");
 
-                //show this player's hand
+                // show this player's hand
                 players.get(whoseTurn).showPlayerCards();
 
                 System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
-                //ask the player which card they want to put down
+                // ask the player which card they want to put down
                 String selectedCard = kbd.nextLine();
 
                 // if user gives a non-numerical answer
@@ -283,19 +283,70 @@ public class President
                     // convert the user input into an integer
                     whichCard = Integer.parseInt(selectedCard);
                 }
+
+                Card thisCard = players.get(whoseTurn).getCardInPlayerCards(whichCard);
+
+                while (isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false)
+                {
+                    System.out.println("Please choose a card that is higher than the middle card or a two");
+
+                    whichCard = 0;
+
+                    while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                    {
+
+                        System.out.println("Please keep the selected card number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                        whichCard = 0;
+
+                        // get user input
+                        selectedCard = kbd.nextLine();
+
+                        // if user gives a non-numerical answer
+                        // continue prompting user until they give a numeric answer
+                        while (!selectedCard.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number");
+
+                            // get user input
+                            selectedCard = kbd.nextLine();
+                        }
+
+                        // convert the user input into an integer
+                        whichCard = Integer.parseInt(selectedCard);
+                    }
+
+                    thisCard = players.get(whoseTurn).getCardInPlayerCards(whichCard);
+
+                }
                 
-                //remove the selected card from the player's hand and put it down in the middle
+               
+
+                // remove the selected card from the player's hand and put it down in the middle
                 middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
 
-                //change turns
+                // change turns
                 whoseTurn = changeTurn(whoseTurn);
 
                 System.out.println("__________________________________________________\n");
 
             }
 
-            break;
+            numRounds--;
+
         }
+
+    }
+
+    public boolean isValidSelection(Card selectedCard, Card middleCard)
+    {
+
+        if (selectedCard.getValue() == Value.TWO || selectedCard.getValueOfCard() > middleCard.getValueOfCard())
+        {
+            return true;
+        }
+
+        return false;
 
     }
 

@@ -128,7 +128,7 @@ public class Player
 
     public Card removeOneFromPlayerCards(int position)
     {
-        return playerCards.remove(position);
+        return playerCards.remove(position - 1);
     }
 
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
@@ -178,6 +178,11 @@ public class Player
         System.out.println();
         System.out.println();
 
+    }
+
+    public Card getCardInPlayerCards(int whichCard)
+    {
+        return this.playerCards.get(whichCard - 1);
     }
 
 }
