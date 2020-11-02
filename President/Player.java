@@ -198,7 +198,7 @@ public class Player
      * @param numTimesSameRankAppears
      * @return
      */
-    public boolean hasManyOfSameRankCards(int howManyCardsToPutDown)
+    public boolean hasManyCardsOfSameRank(int howManyCardsToPutDown)
     {
         // take a card from the cards in the player's hand
         for (int i = 0; i < playerCards.size(); i++)

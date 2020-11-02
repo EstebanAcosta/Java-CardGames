@@ -195,6 +195,9 @@ public class President
         ArrayList<Card> middleCards = new ArrayList<Card>();
 
         Card threeOfClubs = new Card(Suit.CLUBS, Value.THREE);
+        
+        int rounds = 1;
+
 
         int whoseTurn = 0;
 
@@ -228,7 +231,7 @@ public class President
         whoseTurn = changeTurn(whoseTurn);
 
         // continue playing the game until there are no more rounds left
-        while (numRounds > 0)
+        while (numRounds == rounds)
         {
 
             boolean putDownSingle = true;
@@ -243,6 +246,29 @@ public class President
             while (isEveryoneOut() == false)
             {
 
+                System.out.println("Round " + rounds);
+                if (putDownSingle)
+                {
+                    System.out.println("RULE: YOU CAN ONLY PUT DOWN ONE CARD OF THE SAME RANK\n");
+                }
+
+                else if (putDownDouble)
+                {
+                    System.out.println("RULE: YOU CAN ONLY PUT DOWN TWO CARDS OF THE SAME RANK\n");
+
+                }
+
+                else if (putDownTriple)
+                {
+                    System.out.println("RULE: YOU CAN ONLY PUT DOWN THREE CARDS OF THE SAME RANK\n");
+
+                }
+
+                else
+                {
+                    System.out.println("RULE: YOU CAN ONLY PUT DOWN FOUR CARDS OF THE SAME RANK\n");
+
+                }
                 System.out.println("Middle Card:");
 
                 System.out.println(middleCards.get(middleCards.size() - 1));
@@ -364,12 +390,12 @@ public class President
                     // If the user puts a number greater than 4 or less than 1
                     // Continue prompting the user until they give
                     // a number between 1 and the # of cards in the player's hand
-                    while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4 || players.get(whoseTurn).hasManyOfSameRankCards(manyCardsOfSameRank) == false)
+                    while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4 || players.get(whoseTurn).hasManyCardsOfSameRank(manyCardsOfSameRank) == false)
                     {
 
                         // Displays the correct error message depending on what the user selected
                         // if the user wanted to try put down a certain number of cards of the same rank that they don't have in their hand, this message will be displayed
-                        if (players.get(whoseTurn).hasManyOfSameRankCards(manyCardsOfSameRank) == false)
+                        if (players.get(whoseTurn).hasManyCardsOfSameRank(manyCardsOfSameRank) == false)
                         {
                             if (manyCardsOfSameRank == 2)
                             {
@@ -499,8 +525,8 @@ public class President
                 System.out.println("__________________________________________________\n");
 
             }
-
-            numRounds--;
+            
+            rounds++;
 
         }
 
