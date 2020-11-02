@@ -189,6 +189,39 @@ public class Player
     }
 
     /***
+     * Shows the player's hand but now shows how many times each rank appears in their hand
+     */
+    public void showPlayerCardsWithNumTimesTheyAppear()
+    {
+        System.out.println("\n" + getName() + "'s Hand: \n");
+
+        for (int i = 0; i < playerCards.size(); i++)
+        {
+
+            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " ) " + playerCards.get(i).getValue() + " appears " + howManyCardsThisRankAppears(i) + "X\n");
+
+        }
+
+        System.out.println();
+        System.out.println();
+
+    }
+
+    public int howManyCardsThisRankAppears(int cardPosition)
+    {
+        int count = 0;
+
+        for (int i = 0; i < playerCards.size(); i++)
+        {
+            if (playerCards.get(cardPosition).getValue() == playerCards.get(i).getValue())
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /***
      * Checks to see if the user has two or more of the same card in their hand.
      * for example, if the user wants to to be able to put down two cards of the same rank down in the middle
      * This method checks to see if a certain rank appears twice. If a certain rank appears twice or whatever
@@ -238,6 +271,26 @@ public class Player
     public Card getCardInPlayerCards(int whichCard)
     {
         return this.playerCards.get(whichCard - 1);
+    }
+
+    /***
+     * Determines if the player can play on their turn. Checks if any of their cards is bigger than the middle card, if they have a two,
+     * or if they have multiple cards of the same rank
+     * @param middleCard
+     * @return
+     */
+    public boolean canPlayACard(Card middleCard)
+    {
+        for (Card c : playerCards)
+        {
+            if (c.getValue() == Value.TWO || c.getValueOfCard() > middleCard.getValueOfCard())
+            {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 
 }

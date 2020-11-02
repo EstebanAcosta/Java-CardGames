@@ -364,7 +364,7 @@ public class President
                     middleCards.clear();
 
                     // show this player's hand
-                    players.get(whoseTurn).showPlayerCards();
+                    players.get(whoseTurn).showPlayerCardsWithNumTimesTheyAppear();
 
                     System.out.println("How many cards do you wish to put down at the same time?\n");
                     System.out.println("1. Singles");
