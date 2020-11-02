@@ -238,7 +238,7 @@ public class President
             boolean putDownTriple = false;
 
             boolean putDownQuadruple = false;
-            
+
             // continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
@@ -346,7 +346,7 @@ public class President
                     System.out.println("3. Triples");
                     System.out.println("4. Quadruples");
 
-                    // ask the player which card they want to put down
+                    // ask the player how many cards they want to put down on their turn
                     String howManyCardsOfSameRank = kbd.nextLine();
 
                     // if user gives a non-numerical answer
@@ -364,9 +364,38 @@ public class President
                     // If the user puts a number greater than 4 or less than 1
                     // Continue prompting the user until they give
                     // a number between 1 and the # of cards in the player's hand
-                    while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4)
+                    while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4 || players.get(whoseTurn).hasManyOfSameRankCards(manyCardsOfSameRank) == false)
                     {
-                        System.out.println("Please choose a card that's within the range of between 1 and 4");
+
+                        // Displays the correct error message depending on what the user selected
+                        // if the user wanted to try put down a certain number of cards of the same rank that they don't have in their hand, this message will be displayed
+                        if (players.get(whoseTurn).hasManyOfSameRankCards(manyCardsOfSameRank) == false)
+                        {
+                            if (manyCardsOfSameRank == 2)
+                            {
+                                System.out.println("You do not have two cards of the same rank. Choose a different option.");
+
+                            }
+
+                            else if (manyCardsOfSameRank == 3)
+                            {
+                                System.out.println("You do not have three cards of the same rank. Choose a different option.");
+
+                            }
+
+                            else
+                            {
+                                System.out.println("You do not have four cards of the same rank. Choose a different option.");
+
+                            }
+
+                        }
+
+                        // if the user tried to put down more than 4 cards of the same rank or less than one card of the same rank, this message will be displayed
+                        if (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4)
+                        {
+                            System.out.println("Please choose a card that's within the range of between 1 and 4");
+                        }
 
                         // get user input
                         howManyCardsOfSameRank = kbd.nextLine();
@@ -385,7 +414,7 @@ public class President
                         manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
                     }
 
-                    if(manyCardsOfSameRank == 2)
+                    if (manyCardsOfSameRank == 2)
                     {
                         putDownSingle = false;
 
@@ -395,8 +424,8 @@ public class President
 
                         putDownQuadruple = false;
                     }
-                    
-                    else if(manyCardsOfSameRank == 3)
+
+                    else if (manyCardsOfSameRank == 3)
                     {
                         putDownSingle = false;
 
@@ -406,8 +435,8 @@ public class President
 
                         putDownQuadruple = false;
                     }
-                    
-                    else if(manyCardsOfSameRank == 4)
+
+                    else if (manyCardsOfSameRank == 4)
                     {
                         putDownSingle = false;
 

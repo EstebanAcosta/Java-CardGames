@@ -240,21 +240,4 @@ public class Player
         return this.playerCards.get(whichCard - 1);
     }
 
-    /***
-     * Determines if this player can play a card from their hand
-     * @param middleCard
-     * @return
-     */
-    public boolean canPlayACard(Card middleCard)
-    {
-        for (Card c : playerCards)
-        {
-            if (c.getValue() == Value.TWO || c.getValueOfCard() > middleCard.getValueOfCard())
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
