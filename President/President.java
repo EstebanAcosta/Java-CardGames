@@ -231,7 +231,7 @@ public class President
         while (numRounds > 0)
         {
 
-            boolean putDownSingle = false;
+            boolean putDownSingle = true;
 
             boolean putDownDouble = false;
 
@@ -385,6 +385,38 @@ public class President
                         manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
                     }
 
+                    if(manyCardsOfSameRank == 2)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = true;
+
+                        putDownTriple = false;
+
+                        putDownQuadruple = false;
+                    }
+                    
+                    else if(manyCardsOfSameRank == 3)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = false;
+
+                        putDownTriple = true;
+
+                        putDownQuadruple = false;
+                    }
+                    
+                    else if(manyCardsOfSameRank == 4)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = false;
+
+                        putDownTriple = false;
+
+                        putDownQuadruple = true;
+                    }
                     // now the player can put down another card
                     System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 

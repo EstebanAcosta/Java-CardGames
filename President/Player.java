@@ -169,7 +169,7 @@ public class Player
     }
 
     /***
-     * Shows 
+     * Shows the player's hand
      */
     public void showPlayerCards()
     {
@@ -185,6 +185,48 @@ public class Player
 
         System.out.println();
         System.out.println();
+
+    }
+
+    /***
+     * Checks to see if the user has two or more of the same card in their hand.
+     * for example, if the user wants to to be able to put down two cards of the same rank down in the middle
+     * This method checks to see if a certain rank appears twice. If a certain rank appears twice or whatever
+     * number of times the user wants then the method will return true and if no rank appears twice or whatever
+     * number of times the user specified then then the method will return false. This will help the game
+     * determine whether or not the user can put down two cards or more cards of the same rank down
+     * @param numTimesSameRankAppears
+     * @return
+     */
+    public boolean hasManyOfSameRankCards(int howManyCardsToPutDown)
+    {
+        // take a card from the cards in the player's hand
+        for (int i = 0; i < playerCards.size(); i++)
+        {
+            // store that card's rank
+            int rank = playerCards.get(i).getValueOfCard();
+
+            // have a variable to check to see how many times that card appears in the player's hand
+            int numTimesRankAppears = 0;
+
+            // loop through the player's hand
+            for (int j = 0; j < playerCards.size(); j++)
+            {
+                // check if the randomly selected card's rank is equal to the rank of the card
+                if (rank == playerCards.get(j).getValueOfCard())
+                {
+                    // add one to count
+                    numTimesRankAppears++;
+                }
+            }
+
+            if (numTimesRankAppears >= howManyCardsToPutDown)
+            {
+                return true;
+            }
+        }
+
+        return false;
 
     }
 
