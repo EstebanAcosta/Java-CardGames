@@ -198,7 +198,7 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " ) " + playerCards.get(i).getValue() + " appears " + howManyCardsThisRankAppears(i) + "X\n");
+            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " ) " + playerCards.get(i).getValue() + " appears " + howManyTimesThisRankAppears(i) + "x\n");
 
         }
 
@@ -207,7 +207,7 @@ public class Player
 
     }
 
-    public int howManyCardsThisRankAppears(int cardPosition)
+    public int howManyTimesThisRankAppears(int cardPosition)
     {
         int count = 0;
 

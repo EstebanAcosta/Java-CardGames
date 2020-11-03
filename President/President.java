@@ -195,9 +195,8 @@ public class President
         ArrayList<Card> middleCards = new ArrayList<Card>();
 
         Card threeOfClubs = new Card(Suit.CLUBS, Value.THREE);
-        
-        int rounds = 1;
 
+        int rounds = 1;
 
         int whoseTurn = 0;
 
@@ -388,6 +387,7 @@ public class President
                     int manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
 
                     // If the user puts a number greater than 4 or less than 1
+                    // or if user does not have their selcted number of cards of the same rank
                     // Continue prompting the user until they give
                     // a number between 1 and the # of cards in the player's hand
                     while (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4 || players.get(whoseTurn).hasManyCardsOfSameRank(manyCardsOfSameRank) == false)
@@ -420,7 +420,7 @@ public class President
                         // if the user tried to put down more than 4 cards of the same rank or less than one card of the same rank, this message will be displayed
                         if (manyCardsOfSameRank < 1 || manyCardsOfSameRank > 4)
                         {
-                            System.out.println("Please choose a card that's within the range of between 1 and 4");
+                            System.out.println("Please choose a card that's within the range of 1 and 4");
                         }
 
                         // get user input
@@ -472,6 +472,7 @@ public class President
 
                         putDownQuadruple = true;
                     }
+
                     // now the player can put down another card
                     System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
@@ -491,11 +492,26 @@ public class President
                     whichCard = Integer.parseInt(selectedCard);
 
                     // If the user puts a number greater than the number of cards in the player's hand or less than 1
+                    // Or if the user selects a card whose rank doesn't appear the number of times the user selected in the previous prompt
+                    //(ex. if the user selected they wanted to put down two cards of the same rank in the middle, they need to select a card whose rank appears at least twice in their hand)
                     // Continue prompting the user until they give
                     // a number between 1 and the # of cards in the player's hand
-                    while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                    while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards() || players.get(whoseTurn).howManyTimesThisRankAppears(whichCard - 1) < manyCardsOfSameRank)
                     {
-                        System.out.println("Please choose a card that's within the range of between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+                        
+                        //Warning messages depending on the mistake the user made
+                        //If the user chose a card whose rank appears less than the specificed number of times, this message will be displayed
+                        if(players.get(whoseTurn).howManyTimesThisRankAppears(whichCard - 1) < manyCardsOfSameRank)
+                        {
+                            System.out.println("Please choose a card whose rank appears equal to or more than " + manyCardsOfSameRank);
+                        }
+                        
+                        //if the user chose a card that's not in the range of cards they have in their hand, this message will be displayed
+                        if(whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                        {
+                            System.out.println("Please choose a card that's within the range of between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+ 
+                        }
 
                         // get user input
                         selectedCard = kbd.nextLine();
@@ -525,7 +541,7 @@ public class President
                 System.out.println("__________________________________________________\n");
 
             }
-            
+
             rounds++;
 
         }
