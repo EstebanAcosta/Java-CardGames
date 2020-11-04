@@ -531,8 +531,75 @@ public class President
                         whichCard = Integer.parseInt(selectedCard);
                     }
 
-                    // remove the selected card from the player's hand and put it down in the middle
-                    middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
+                    if (manyCardsOfSameRank == 2)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = true;
+
+                        putDownTriple = false;
+
+                        putDownQuadruple = false;
+                    }
+
+                    else if (manyCardsOfSameRank == 3)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = false;
+
+                        putDownTriple = true;
+
+                        putDownQuadruple = false;
+                    }
+
+                    else if (manyCardsOfSameRank == 4)
+                    {
+                        putDownSingle = false;
+
+                        putDownDouble = false;
+
+                        putDownTriple = false;
+
+                        putDownQuadruple = true;
+                    }
+
+                    Value rank = players.get(whoseTurn).getCard(whichCard).getValue();
+
+                    if (putDownSingle)
+                    {
+                        // remove the selected card from the player's hand and put it down in the middle
+                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
+                    }
+
+                    else if (putDownDouble)
+                    {
+
+                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                        {
+
+                        }
+
+                    }
+
+                    else if (putDownTriple)
+                    {
+
+                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                        {
+
+                        }
+
+                    }
+
+                    else
+                    {
+                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                        {
+
+                        }
+
+                    }
 
                 }
 
