@@ -440,7 +440,22 @@ public class President
                         manyCardsOfSameRank = Integer.parseInt(howManyCardsOfSameRank);
                     }
 
-                    if (manyCardsOfSameRank == 2)
+                    // if the user wanted to put down two cards in the middle, make sure every boolean variable is false for the upcoming turns
+                    // but the one that controls how many singles can be put down
+                    if (manyCardsOfSameRank == 1)
+                    {
+                        putDownSingle = true;
+
+                        putDownDouble = false;
+
+                        putDownTriple = false;
+
+                        putDownQuadruple = false;
+
+                    }
+                    // if the user wanted to put down two cards in the middle, make sure every boolean variable is false for the upcoming turns
+                    // but the one that controls how many doubles can be put down
+                    else if (manyCardsOfSameRank == 2)
                     {
                         putDownSingle = false;
 
@@ -451,6 +466,8 @@ public class President
                         putDownQuadruple = false;
                     }
 
+                    // if the user wanted to put down three cards in the middle, make sure every boolean variable is false for the upcoming turns
+                    // but the one that controls how many triples can be put down
                     else if (manyCardsOfSameRank == 3)
                     {
                         putDownSingle = false;
@@ -461,6 +478,9 @@ public class President
 
                         putDownQuadruple = false;
                     }
+
+                    // if the user wanted to put down four cards in the middle, make sure every boolean variable is false for the upcoming turns
+                    // but the one that controls how many quadruples can be put down
 
                     else if (manyCardsOfSameRank == 4)
                     {
@@ -531,40 +551,18 @@ public class President
                         whichCard = Integer.parseInt(selectedCard);
                     }
 
-                    if (manyCardsOfSameRank == 2)
-                    {
-                        putDownSingle = false;
-
-                        putDownDouble = true;
-
-                        putDownTriple = false;
-
-                        putDownQuadruple = false;
-                    }
-
-                    else if (manyCardsOfSameRank == 3)
-                    {
-                        putDownSingle = false;
-
-                        putDownDouble = false;
-
-                        putDownTriple = true;
-
-                        putDownQuadruple = false;
-                    }
-
-                    else if (manyCardsOfSameRank == 4)
-                    {
-                        putDownSingle = false;
-
-                        putDownDouble = false;
-
-                        putDownTriple = false;
-
-                        putDownQuadruple = true;
-                    }
-
                     Value rank = players.get(whoseTurn).getCard(whichCard).getValue();
+
+                    ArrayList<Card> cardsToPutDown = new ArrayList<Card>();
+
+                    for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                    {
+                        if (players.get(whoseTurn).getCard(i).getValue() == rank)
+                        {
+                            cardsToPutDown.add(players.get(whoseTurn).getCard(i));
+                        }
+
+                    }
 
                     if (putDownSingle)
                     {
@@ -572,34 +570,33 @@ public class President
                         middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
                     }
 
-                    else if (putDownDouble)
-                    {
-
-                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
-                        {
-
-                        }
-
-                    }
-
-                    else if (putDownTriple)
-                    {
-
-                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
-                        {
-
-                        }
-
-                    }
-
                     else
                     {
                         for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+
+                        {
+                            System.out.println( (i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
+
+                        }
+
+                        if (putDownDouble)
+                        {
+
+                        }
+
+                        else if (putDownTriple)
+                        {
+
+                        }
+
+                        else if (putDownQuadruple)
                         {
 
                         }
 
                     }
+
+                    players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
 
                 }
 
