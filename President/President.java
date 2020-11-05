@@ -196,7 +196,7 @@ public class President
 
         Card threeOfClubs = new Card(Suit.CLUBS, Value.THREE);
 
-        int rounds = 1;
+        int rounds = 0;
 
         int whoseTurn = 0;
 
@@ -569,14 +569,59 @@ public class President
                         // remove the selected card from the player's hand and put it down in the middle
                         middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
                     }
+                    
+                    else if(putDownDouble)
+                    {
+                        
+                    }
 
                     else
                     {
                         for (int i = 0; i < cardsToPutDown.size(); i++)
 
                         {
-                            System.out.println( (i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
+                            System.out.println((i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
 
+                        }
+
+                        System.out.println("Which card of the same rank do you wish do you wish to put down?");
+
+                        String whichCardOfSameRank = kbd.nextLine();
+
+                        // if user gives a non-numerical answer
+                        // continue prompting user until they give a numeric answer
+                        while (!whichCardOfSameRank.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number for the card of the same rank you want to put down");
+
+                            whichCardOfSameRank = kbd.nextLine();
+                        }
+
+                        // Convert the string input into an integer
+                        int selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
+
+                        // If the user puts a number greater than 6 or less than 4
+                        // Continue prompting the user until they give
+                        // a number between 2 and 4
+                        while (selectedCardOfSameRank < 1 || selectedCardOfSameRank > manyCardsOfSameRank)
+                        {
+                            System.out.println("Please keep the number of players between 1 and " + manyCardsOfSameRank);
+
+                            // get user input
+                            whichCardOfSameRank = kbd.nextLine();
+
+                            // if user gives a non-numerical answer
+                            // continue prompting user until they give a numeric answer
+                            while (!whichCardOfSameRank.matches("[0-9]+"))
+                            {
+                                System.out.println("Please enter a number");
+
+                                // get user input
+                                whichCardOfSameRank = kbd.nextLine();
+                            }
+
+                            // convert the user input into an integer
+                            selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
                         }
 
                         if (putDownDouble)
