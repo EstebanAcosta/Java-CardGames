@@ -230,7 +230,7 @@ public class President
         whoseTurn = changeTurn(whoseTurn);
 
         // continue playing the game until there are no more rounds left
-        while (numRounds == rounds)
+        while (numRounds != rounds)
         {
 
             boolean putDownSingle = true;
@@ -572,7 +572,7 @@ public class President
 
                     else
                     {
-                        for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                        for (int i = 0; i < cardsToPutDown.size(); i++)
 
                         {
                             System.out.println( (i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
@@ -595,8 +595,6 @@ public class President
                         }
 
                     }
-
-                    players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
 
                 }
 
