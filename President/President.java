@@ -270,7 +270,11 @@ public class President
                 }
                 System.out.println("Middle Card:");
 
-                System.out.println(middleCards.get(middleCards.size() - 1));
+                if (middleCards.size() > 0)
+                {
+                    System.out.println(middleCards.get(middleCards.size() - 1));
+
+                }
 
                 // System.out.println("---------------------------------------------------\n");
 
@@ -564,12 +568,25 @@ public class President
 
                     }
 
+                    // if user wants to put down just one card down in the middle
                     if (putDownSingle)
                     {
                         // remove the selected card from the player's hand and put it down in the middle
                         middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
                     }
 
+                    // if the user wants to put down two cards or three in the middle and there happens to be exactly two or three
+                    // cards of the same rank then instead of asking the user which of those two cards they
+                    // wish to put down, put them down for the user
+                    else if (cardsToPutDown.size() == 2 || cardsToPutDown.size() == 3)
+                    {
+                        middleCards.addAll(cardsToPutDown);
+
+                        players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
+                    }
+
+                    // if they user wants to put down four cards at the same time
+                    // they will clear the deck and it will be their turn again
                     else if (putDownQuadruple)
                     {
 
@@ -578,76 +595,74 @@ public class President
 
                         // get rid of all those cards from the player's hand
                         players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
-                        
-                        
-                        //since four cards have been placed down in the middle
-                        //the middle cards can be cleared
+
+                        // since four cards have been placed down in the middle
+                        // the middle cards can be cleared
                         middleCards.clear();
+
+                        // this will allow the user to put down more cards
+                        continue;
 
                     }
 
+                    // if the user decides they want to put down two or three cards of the same rank down and
+                    // there are three or four of those cards in their hand respectively
                     else
                     {
+                        // loop through the cards of the same rank
                         for (int i = 0; i < cardsToPutDown.size(); i++)
 
                         {
+                            // print them out
                             System.out.println((i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
 
                         }
 
-                        System.out.println("Which card of the same rank do you wish do you wish to put down?");
-
-                        String whichCardOfSameRank = kbd.nextLine();
-
-                        // if user gives a non-numerical answer
-                        // continue prompting user until they give a numeric answer
-                        while (!whichCardOfSameRank.matches("[0-9]+"))
+                        // now loop as many times as how many cards of the same rank the user wants to put down
+                        while (manyCardsOfSameRank > 0)
                         {
-                            System.out.println("Please enter a number for the card of the same rank you want to put down");
 
-                            whichCardOfSameRank = kbd.nextLine();
-                        }
+                            System.out.println("Which card of the same rank do you wish do you wish to put down?");
 
-                        // Convert the string input into an integer
-                        int selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
-
-                        // If the user puts a number greater than 6 or less than 4
-                        // Continue prompting the user until they give
-                        // a number between 2 and 4
-                        while (selectedCardOfSameRank < 1 || selectedCardOfSameRank > manyCardsOfSameRank)
-                        {
-                            System.out.println("Please keep the number of players between 1 and " + manyCardsOfSameRank);
-
-                            // get user input
-                            whichCardOfSameRank = kbd.nextLine();
+                            String whichCardOfSameRank = kbd.nextLine();
 
                             // if user gives a non-numerical answer
                             // continue prompting user until they give a numeric answer
                             while (!whichCardOfSameRank.matches("[0-9]+"))
                             {
-                                System.out.println("Please enter a number");
+                                System.out.println("Please enter a number for the card of the same rank you want to put down");
 
-                                // get user input
                                 whichCardOfSameRank = kbd.nextLine();
                             }
 
-                            // convert the user input into an integer
-                            selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
-                        }
+                            // Convert the string input into an integer
+                            int selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
 
-                        if (putDownDouble)
-                        {
+                            // If the user puts a number greater than 6 or less than 4
+                            // Continue prompting the user until they give
+                            // a number between 2 and 4
+                            while (selectedCardOfSameRank < 1 || selectedCardOfSameRank > cardsToPutDown.size())
+                            {
+                                System.out.println("Please keep the number of players between 1 and " + cardsToPutDown.size());
 
-                        }
+                                // get user input
+                                whichCardOfSameRank = kbd.nextLine();
 
-                        else if (putDownTriple)
-                        {
+                                // if user gives a non-numerical answer
+                                // continue prompting user until they give a numeric answer
+                                while (!whichCardOfSameRank.matches("[0-9]+"))
+                                {
+                                    System.out.println("Please enter a number");
 
-                        }
+                                    // get user input
+                                    whichCardOfSameRank = kbd.nextLine();
+                                }
 
-                        else if (putDownQuadruple)
-                        {
+                                // convert the user input into an integer
+                                selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
+                            }
 
+                            manyCardsOfSameRank--;
                         }
 
                     }
