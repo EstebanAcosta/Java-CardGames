@@ -569,10 +569,21 @@ public class President
                         // remove the selected card from the player's hand and put it down in the middle
                         middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
                     }
-                    
-                    else if(putDownDouble)
+
+                    else if (putDownQuadruple)
                     {
+
+                        // add all the cards of the same rank and put it in the middle
+                        middleCards.addAll(cardsToPutDown);
+
+                        // get rid of all those cards from the player's hand
+                        players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
                         
+                        
+                        //since four cards have been placed down in the middle
+                        //the middle cards can be cleared
+                        middleCards.clear();
+
                     }
 
                     else
