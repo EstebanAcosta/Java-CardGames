@@ -556,22 +556,19 @@ public class President
                     }
 
                     ArrayList<Card> cardsToPutDown = new ArrayList<Card>();
-                    
+
                     System.out.println(players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue());
 
                     for (int i = 1; i < players.get(whoseTurn).getNumOfPlayerCards() + 1; i++)
                     {
                         if (players.get(whoseTurn).getCardInPlayerCards(i).getValue() == players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue())
                         {
-                            System.out.println(players.get(whoseTurn).getCardInPlayerCards(i));
 
                             cardsToPutDown.add(players.get(whoseTurn).getCardInPlayerCards(i));
                         }
 
                     }
 
-                    System.out.println();
-                    
                     // if user wants to put down just one card down in the middle
                     if (putDownSingle)
                     {

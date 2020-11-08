@@ -135,7 +135,7 @@ public class Player
         {
             Card nextCard = c.next();
 
-            if (nextCard.equals(cards.get(count)))
+            if (count < cards.size() && nextCard.equals(cards.get(count)))
             {
                 c.remove();
 
