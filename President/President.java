@@ -210,14 +210,14 @@ public class President
                 whoseTurn = j;
 
                 // loop through the player's hand
-                for (int i = 0; i < players.get(j).getPlayerHand().size(); i++)
+                for (int i = 1; i < players.get(j).getPlayerHand().size() + 1; i++)
                 {
                     // if the player's card is equal to the one we are looking for (in this case a three of clubs)
-                    if (players.get(j).getCard(i).equals(threeOfClubs))
+                    if (players.get(j).getCardInPlayerCards(i).equals(threeOfClubs))
                     {
 
                         // remove the card from the person's hand and place it in the middle of table
-                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i + 1));
+                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i));
 
                     }
                 }
@@ -362,7 +362,7 @@ public class President
                 middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
 
                 // if the card that's been placed down is a two, clear the middle cards
-                if (thisCard.getValue() == Value.TWO)
+                if (thisCard.getValue() == Value.TWO || middleCards.size() == 0)
                 {
                     middleCards.clear();
 
@@ -555,19 +555,23 @@ public class President
                         whichCard = Integer.parseInt(selectedCard);
                     }
 
-                    Value rank = players.get(whoseTurn).getCard(whichCard).getValue();
-
                     ArrayList<Card> cardsToPutDown = new ArrayList<Card>();
+                    
+                    System.out.println(players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue());
 
-                    for (int i = 0; i < players.get(whoseTurn).getNumOfPlayerCards(); i++)
+                    for (int i = 1; i < players.get(whoseTurn).getNumOfPlayerCards() + 1; i++)
                     {
-                        if (players.get(whoseTurn).getCard(i).getValue() == rank)
+                        if (players.get(whoseTurn).getCardInPlayerCards(i).getValue() == players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue())
                         {
-                            cardsToPutDown.add(players.get(whoseTurn).getCard(i));
+                            System.out.println(players.get(whoseTurn).getCardInPlayerCards(i));
+
+                            cardsToPutDown.add(players.get(whoseTurn).getCardInPlayerCards(i));
                         }
 
                     }
 
+                    System.out.println();
+                    
                     // if user wants to put down just one card down in the middle
                     if (putDownSingle)
                     {
@@ -610,11 +614,11 @@ public class President
                     else
                     {
                         // loop through the cards of the same rank
-                        for (int i = 0; i < cardsToPutDown.size(); i++)
+                        for (int i = 1; i < cardsToPutDown.size() + 1; i++)
 
                         {
                             // print them out
-                            System.out.println((i + 1) + "(" + players.get(whoseTurn).getCard(i) + ") ");
+                            System.out.println((i) + ": (" + players.get(whoseTurn).getCardInPlayerCards(i) + ") ");
 
                         }
 

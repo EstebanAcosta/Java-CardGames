@@ -103,13 +103,7 @@ public class Player
     {
         this.playerCards.add(oneCard);
     }
-
-    public Card getCard(int whichCard)
-    {
-
-        return this.playerCards.get(whichCard);
-    }
-
+    
     public int getNumOfPlayerCards()
     {
         return this.playerCards.size();
@@ -146,6 +140,8 @@ public class Player
                 c.remove();
 
                 count++;
+                
+                System.out.println(count);
             }
         }
     }
