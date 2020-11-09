@@ -401,23 +401,8 @@ public class President
                         // if the user wanted to try put down a certain number of cards of the same rank that they don't have in their hand, this message will be displayed
                         if (players.get(whoseTurn).hasManyCardsOfSameRank(manyCardsOfSameRank) == false)
                         {
-                            if (manyCardsOfSameRank == 2)
-                            {
-                                System.out.println("You do not have two cards of the same rank. Choose a different option.");
 
-                            }
-
-                            else if (manyCardsOfSameRank == 3)
-                            {
-                                System.out.println("You do not have three cards of the same rank. Choose a different option.");
-
-                            }
-
-                            else
-                            {
-                                System.out.println("You do not have four cards of the same rank. Choose a different option.");
-
-                            }
+                            System.out.println("You do not have " + manyCardsOfSameRank + " cards of the same rank. Choose a different option.");
 
                         }
 
@@ -662,6 +647,26 @@ public class President
                                 // convert the user input into an integer
                                 selectedCardOfSameRank = Integer.parseInt(whichCardOfSameRank);
                             }
+
+                            int count = 1;
+
+                            // after the player has selected their card
+                            // loop through the player's hand
+                            for (Card c : players.get(whoseTurn).getPlayerHand())
+                            {
+                                // if the card the player has selected is equal to the one they just passed in their hand
+                                if (c.equals(cardsToPutDown.get(selectedCardOfSameRank)))
+                                {
+                                    // break
+                                    break;
+                                }
+
+                                // keep track of the position of each card in the player's hand
+                                count++;
+                            }
+
+                            // remove the player's selected card and add it to the middle
+                            middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(count));
 
                             manyCardsOfSameRank--;
                         }
