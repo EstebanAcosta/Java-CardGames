@@ -542,8 +542,6 @@ public class President
 
                     ArrayList<Card> cardsToPutDown = new ArrayList<Card>();
 
-                    System.out.println(players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue());
-
                     for (int i = 1; i < players.get(whoseTurn).getNumOfPlayerCards() + 1; i++)
                     {
                         if (players.get(whoseTurn).getCardInPlayerCards(i).getValue() == players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue())
@@ -564,7 +562,7 @@ public class President
                     // if the user wants to put down two cards or three in the middle and there happens to be exactly two or three
                     // cards of the same rank then instead of asking the user which of those two cards they
                     // wish to put down, put them down for the user
-                    else if (cardsToPutDown.size() == 2 || cardsToPutDown.size() == 3)
+                    else if (putDownDouble == true && cardsToPutDown.size() == 2 || putDownTriple  == true && cardsToPutDown.size() == 3)
                     {
                         middleCards.addAll(cardsToPutDown);
 
@@ -600,7 +598,7 @@ public class President
 
                         {
                             // print them out
-                            System.out.println((i) + ": (" + players.get(whoseTurn).getCardInPlayerCards(i) + ") ");
+                            System.out.println((i) + ": (" + cardsToPutDown.get(i) + ") ");
 
                         }
 
@@ -629,7 +627,7 @@ public class President
                             // a number between 2 and 4
                             while (selectedCardOfSameRank < 1 || selectedCardOfSameRank > cardsToPutDown.size())
                             {
-                                System.out.println("Please keep the number of players between 1 and " + cardsToPutDown.size());
+                                System.out.println("Please keep the number of cards between 1 and " + cardsToPutDown.size());
 
                                 // get user input
                                 whichCardOfSameRank = kbd.nextLine();

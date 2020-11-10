@@ -140,8 +140,6 @@ public class Player
                 c.remove();
 
                 count++;
-                
-                System.out.println(count);
             }
         }
     }
