@@ -243,7 +243,7 @@ public class President
 
                 System.out.println("Round " + rounds);
 
-                System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + ( howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle");
+                System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + " " + ( howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle\n");
 
                 System.out.println("Middle Card:");
 
@@ -546,11 +546,11 @@ public class President
                     else
                     {
                         // loop through the cards of the same rank
-                        for (int i = 1; i < cardsToPutDown.size() + 1; i++)
+                        for (int i = 0; i < cardsToPutDown.size(); i++)
 
                         {
                             // print them out
-                            System.out.println((i) + ": (" + cardsToPutDown.get(i) + ") ");
+                            System.out.println((i + 1) + ": (" + cardsToPutDown.get(i) + ") ");
 
                         }
 
