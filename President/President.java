@@ -241,11 +241,14 @@ public class President
 
             boolean putDownQuadruple = false;
 
+            int howManyHavePassed = 0;
+
             // continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
 
                 System.out.println("Round " + rounds);
+
                 if (putDownSingle)
                 {
                     System.out.println("RULE: YOU CAN ONLY PUT DOWN ONE CARD OF THE SAME RANK\n");
@@ -269,7 +272,8 @@ public class President
 
                 }
                 System.out.println("Middle Card:");
-
+                
+                //if there is at least one card in the middle, print out what's on the top
                 if (middleCards.size() > 0)
                 {
                     System.out.println(middleCards.get(middleCards.size() - 1));
@@ -280,6 +284,31 @@ public class President
 
                 // show this player's hand
                 players.get(whoseTurn).showPlayerCards();
+
+                // if there is more than one card in the middle and if the player can't put down a card that is higher than the card that's in the middle
+                //ask the user to pass
+                if (middleCards.size() > 0 && players.get(whoseTurn).canPlayACard(middleCards.get(middleCards.size() - 1)) == false)
+                {
+                    System.out.println("You cannot play a card from your hand. You must pass. Please enter p to pass");
+
+                    String pass = kbd.nextLine();
+
+                    while (pass.equalsIgnoreCase("p") == false)
+                    {
+                        System.out.println("Please enter p to pass");
+
+                        pass = kbd.nextLine();
+                    }
+
+                    howManyHavePassed++;
+
+                    // change turns
+                    whoseTurn = changeTurn(whoseTurn);
+
+                    System.out.println("__________________________________________________\n");
+
+                    continue;
+                }
 
                 System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
@@ -562,7 +591,7 @@ public class President
                     // if the user wants to put down two cards or three in the middle and there happens to be exactly two or three
                     // cards of the same rank then instead of asking the user which of those two cards they
                     // wish to put down, put them down for the user
-                    else if (putDownDouble == true && cardsToPutDown.size() == 2 || putDownTriple  == true && cardsToPutDown.size() == 3)
+                    else if (putDownDouble == true && cardsToPutDown.size() == 2 || putDownTriple == true && cardsToPutDown.size() == 3)
                     {
                         middleCards.addAll(cardsToPutDown);
 
