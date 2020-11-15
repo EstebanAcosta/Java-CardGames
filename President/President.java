@@ -257,7 +257,7 @@ public class President
                 // System.out.println("---------------------------------------------------\n");
 
                 // show this player's hand
-                players.get(whoseTurn).showPlayerCards();
+                players.get(whoseTurn).showPlayerCardsWithNumTimesTheyAppear();
 
                 // if there is more than one card in the middle and if the player can't put down a card that is higher than the card that's in the middle
                 // ask the user to pass
@@ -274,7 +274,7 @@ public class President
                         pass = kbd.nextLine();
                     }
 
-                    // add one to this variable if this player has passrf
+                    // add one to this variable if this player has passed
                     howManyHavePassed++;
 
                     // if all four players have passed then the played who placed the last card before everyone passed
@@ -343,7 +343,7 @@ public class President
 
                 Card thisCard = players.get(whoseTurn).getCardInPlayerCards(whichCard);
 
-                while (isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false)
+                while (isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false || players.get(whoseTurn).hasManyCardsOfSameRank(howManyCardsOfSameRankToPutDown) == false)
                 {
                     System.out.println("Please choose a card that is higher than the middle card or a two");
 
