@@ -243,7 +243,7 @@ public class President
 
                 System.out.println("Round " + rounds);
 
-                System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + " " + ( howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle\n");
+                System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + " " + (howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle\n");
 
                 System.out.println("Middle Card:");
 
@@ -274,7 +274,20 @@ public class President
                         pass = kbd.nextLine();
                     }
 
+                    // add one to this variable if this player has passrf
                     howManyHavePassed++;
+
+                    // if all four players have passed then the played who placed the last card before everyone passed
+                    // gets to put another card down
+                    if (howManyHavePassed == 4)
+                    {
+                        // since no one was able to beat the card in the middle, the cards get cleared
+                        middleCards.clear();
+
+                        System.out.println(players.get(whoseTurn).getName() + " gets to put down another card \n");
+
+                        continue;
+                    }
 
                     // change turns
                     whoseTurn = changeTurn(whoseTurn);
@@ -283,6 +296,9 @@ public class President
 
                     continue;
                 }
+
+                //since this player can put down a card higher than the card in the middle or a two, reset this variable
+                howManyHavePassed = 0;
 
                 System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
 
