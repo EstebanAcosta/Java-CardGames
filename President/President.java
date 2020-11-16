@@ -248,9 +248,18 @@ public class President
                 System.out.println("Middle Card:");
 
                 // if there is at least one card in the middle, print out what's on the top
+                // If it's the player's turn and they're only allowed to put down 1 card at a time
+                // Show only the top card of the middle, if the they're only allowed to put down
+                // 2 cards, show the top two cards of the middle and if they're only allowed to put down
+                // three cards, show the top three cards of the middle
                 if (middleCards.size() > 0)
                 {
-                    System.out.println(middleCards.get(middleCards.size() - 1));
+
+                    for (int i = 0; i < howManyCardsOfSameRankToPutDown; i++)
+                    {
+                        System.out.println(middleCards.get(middleCards.size() - 1 - i));
+
+                    }
 
                 }
 
@@ -297,7 +306,7 @@ public class President
                     continue;
                 }
 
-                //since this player can put down a card higher than the card in the middle or a two, reset this variable
+                // since this player can put down a card higher than the card in the middle or a two, reset this variable
                 howManyHavePassed = 0;
 
                 System.out.println("Which of these " + players.get(whoseTurn).getNumOfPlayerCards() + " cards do you wish to choose ?");
