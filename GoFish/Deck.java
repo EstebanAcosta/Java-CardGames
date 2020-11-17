@@ -72,20 +72,11 @@ public class Deck
         {
             for (Value value : Value.values())
             {
-                if (value == Value.RED_JOKER || value == Value.BLACK_JOKER)
-                {
-                    continue;
-                }
 
-                else
-                {
-                    deck.add(new Card(suit, value));
-                }
+                deck.add(new Card(suit, value));
+
             }
         }
-
-        deck.add(new Card(Value.RED_JOKER));
-        deck.add(new Card(Value.BLACK_JOKER));
 
         this.deck = deck;
     }
