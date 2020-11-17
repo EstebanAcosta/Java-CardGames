@@ -275,20 +275,34 @@ public class Player
      * Determines if the player can play on their turn. Checks if any of their cards is bigger than the middle card, if they have a two,
      * or if they have multiple cards of the same rank
      * @param middleCard
+     * @param howManyCardsOfSameRankToPutDown
      * @return
      */
-    public boolean canPlayACard(Card middleCard)
+    public boolean canPlayACard(Card middleCard, int howManyCardsOfSameRankToPutDown)
     {
 
+        int count = 0;
         // loop through the player's hand
         for (Card c : playerCards)
         {
-            // if the player has a two in their hand or has at least one card that's higher in value than the top card
-            if (c.getValue() == Value.TWO || c.getValueOfCard() > middleCard.getValueOfCard())
+            // if the player has a two in their hand
+            if (c.getValue() == Value.TWO)
             {
-                // set the boolean to true
+
                 return true;
+
             }
+            // or has at least one card that's higher in value than the top card
+            else if (c.getValueOfCard() > middleCard.getValueOfCard())
+            {
+                if (howManyTimesThisRankAppears(count) >= howManyCardsOfSameRankToPutDown)
+                {
+                    return true;
+                }
+
+            }
+
+            count++;
 
         }
 
