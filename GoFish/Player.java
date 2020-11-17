@@ -1,9 +1,10 @@
 package GoFish;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+
 /***
- * 
  * @author estebanacosta
- *
  */
 public class Player
 {
@@ -20,6 +21,15 @@ public class Player
         setPlayerId(id);
     }
 
+    public int getPlayerId()
+    {
+        return playerId;
+    }
+
+    public void setPlayerId(int playerId)
+    {
+        this.playerId = playerId;
+    }
     public String getName()
     {
         return name;
@@ -62,14 +72,39 @@ public class Player
         return goalCards;
     }
 
-    public int getPlayerId()
+    public void addMultipleToPlayerHand(ArrayList<Card> playerCards)
     {
-        return playerId;
+        this.playerCards.addAll(playerCards);
     }
 
-    public void setPlayerId(int playerId)
+    public void addOneToPlayerHand(Card oneCard)
     {
-        this.playerId = playerId;
+        this.playerCards.add(oneCard);
+    }
+
+
+    public Card removeOneFromPlayerHand(int position)
+    {
+        return playerCards.remove(position - 1);
+    }
+
+    public void removeMultipleFromHand(ArrayList<Card> cards)
+    {
+        int count = 0;
+
+        Iterator<Card> c = playerCards.iterator();
+
+        while (c.hasNext())
+        {
+            Card nextCard = c.next();
+
+            if (count < cards.size() && nextCard.equals(cards.get(count)))
+            {
+                c.remove();
+
+                count++;
+            }
+        }
     }
 
     /**
@@ -112,7 +147,6 @@ public class Player
 
         System.out.println();
 
-
         return switchable;
     }
 
@@ -141,29 +175,9 @@ public class Player
             }
 
         }
-        
+
         System.out.println();
         System.out.println();
-
-    }
-
-    /**
-     * Replace the player's card in that position with the new card
-     * @param newCard
-     * @return
-     */
-    public Card changeCards(int position, Card newCard)
-    {
-
-        position = position - 1;
-        
-        Card oldCard = playerCards.get(position);
-
-        playerCards.set(position, newCard);
-
-        playerCards.get(position).setUnflipped(false);
-
-        return oldCard;
 
     }
 
