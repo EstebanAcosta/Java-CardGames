@@ -70,6 +70,7 @@ public class GoFish
         // shuffle the game deck
         deck.shuffle();
 
+        //give each player a certain number of cards depending on how many players there are in the game
         if (players.size() < 4)
         {
             for (Player p : players)
@@ -86,8 +87,7 @@ public class GoFish
             }
         }
 
-        // loop through the list of players and give each player a name and their
-        // cards
+        // loop through the list of players and ask each player for a name a
         for (int i = 0; i < players.size(); i++)
         {
             System.out.println("What is player " + (i + 1) + "'s name:");
@@ -98,7 +98,7 @@ public class GoFish
             // store their name
             players.get(i).setName(playerName);
 
-            System.out.println(players.get(i).getName() + " has " + players.get(i).getNumOfPlayerCards() + " cards");
+            System.out.println(players.get(i).getName() + " has " + players.get(i).getNumPlayerCards() + " cards");
 
             System.out.println("__________________________________________________\n");
         }
