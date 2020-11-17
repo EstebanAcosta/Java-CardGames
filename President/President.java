@@ -302,7 +302,7 @@ public class President
 
                     // if all three players have passed then the played who placed the last card before everyone passed
                     // gets to put another card down
-                    if (howManyHavePassed == 3)
+                    if (howManyHavePassed == players.size() - 1)
                     {
                         // since no one was able to beat the card in the middle, the cards get cleared
                         middleCards.clear();
