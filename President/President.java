@@ -350,11 +350,23 @@ public class President
                     whichCard = Integer.parseInt(selectedCard);
                 }
 
+                //Store the basic data this selected card has in a card object
                 Card thisCard = players.get(whoseTurn).getCardInPlayerCards(whichCard);
 
-                while (isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false || players.get(whoseTurn).hasManyCardsOfSameRank(howManyCardsOfSameRankToPutDown) == false)
+                //continue looping until the player has selected a card they can put in the middle
+                while (isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false || players.get(whoseTurn).howManyTimesThisRankAppears(whichCard - 1) < howManyCardsOfSameRankToPutDown)
                 {
-                    System.out.println("Please choose a card that is higher than the middle card or a two");
+                    
+                    if(isValidSelection(thisCard, middleCards.get(middleCards.size() - 1)) == false)
+                    {
+                        System.out.println("Please choose a card that is higher than the middle card or a two");
+                    }
+                    
+                    if(players.get(whoseTurn).howManyTimesThisRankAppears(whichCard - 1) < howManyCardsOfSameRankToPutDown)
+                    {
+                        System.out.println("Please choose a card whose rank appears more than or equal to " + howManyCardsOfSameRankToPutDown + " times");
+                    }
+                
 
                     whichCard = 0;
 
