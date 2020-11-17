@@ -103,7 +103,7 @@ public class Player
     {
         this.playerCards.add(oneCard);
     }
-    
+
     public int getNumOfPlayerCards()
     {
         return this.playerCards.size();
@@ -247,8 +247,12 @@ public class Player
                 }
             }
 
+            // if the card of that specific rank appears that same number of times or more
+            // then
             if (numTimesRankAppears >= howManyCardsToPutDown)
             {
+                // that must mean that at least one of the cards in the player's hand appears more than
+                // or equal that set number of times
                 return true;
             }
         }
@@ -275,10 +279,14 @@ public class Player
      */
     public boolean canPlayACard(Card middleCard)
     {
+
+        // loop through the player's hand
         for (Card c : playerCards)
         {
+            // if the player has a two in their hand or has at least one card that's higher in value than the top card
             if (c.getValue() == Value.TWO || c.getValueOfCard() > middleCard.getValueOfCard())
             {
+                // set the boolean to true
                 return true;
             }
 
