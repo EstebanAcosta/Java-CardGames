@@ -235,7 +235,7 @@ public class President
 
             int howManyCardsOfSameRankToPutDown = 1;
 
-            int howManyHavePassed = 1;
+            int howManyHavePassed = 0;
 
             int manyCardsOfSameRank = 1;
 
@@ -300,9 +300,9 @@ public class President
                     // add one to this variable if this player has passed
                     howManyHavePassed++;
 
-                    // if all four players have passed then the played who placed the last card before everyone passed
+                    // if all three players have passed then the played who placed the last card before everyone passed
                     // gets to put another card down
-                    if (howManyHavePassed == 4)
+                    if (howManyHavePassed == 3)
                     {
                         // since no one was able to beat the card in the middle, the cards get cleared
                         middleCards.clear();
