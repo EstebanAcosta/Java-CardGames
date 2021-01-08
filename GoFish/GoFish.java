@@ -162,7 +162,7 @@ public class GoFish
 
         Scanner kbd = new Scanner(System.in);
 
-        while (true)
+        while (isSomeoneOut() == false)
         {
 
             boolean askForMore = true;
@@ -172,7 +172,7 @@ public class GoFish
 
                 players.get(whoseTurn).showPlayerCards();
 
-                System.out.println("Which player do you want to ask for a card? \n");
+                System.out.println("Which player do you want to ask for a card," + players.get(whoseTurn).getName() + "? \n");
 
                 int count = 1;
 
@@ -195,9 +195,8 @@ public class GoFish
                     System.out.println("Please enter a number for which player you want to ask a card");
 
                     whichPlayerToAsk = kbd.nextLine();
-                    
+
                 }
-                
 
                 // convert input into an integer
                 int thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
@@ -206,13 +205,13 @@ public class GoFish
                 // a number between 1 and the max number of players in the game
                 while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 || thisPlayerIWantToAsk == players.get(whoseTurn).getPlayerId())
                 {
-                    
-                    if(thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 )
+
+                    if (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1)
                     {
                         System.out.println("Please enter a number that is between 1 and " + players.size());
 
                     }
-                    
+
                     else
                     {
                         System.out.println("You cannot choose yourself. Please choose another player for cards.");
@@ -233,7 +232,7 @@ public class GoFish
                 }
 
                 System.out.println();
-                
+
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
@@ -242,6 +241,7 @@ public class GoFish
 
                 ArrayList<Value> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
+                // shpw all the ranks the current player has in their hand
                 for (Value rank : currentPlayersRanks)
                 {
                     System.out.println(count + ": " + rank);
@@ -290,31 +290,72 @@ public class GoFish
                 ArrayList<Value> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
 
                 // see if the current player's rank is in the selected player's ranks
+                // if the selected player has the card the current player is looking for
                 if (selectedPlayersRanks.contains(rankIWant))
                 {
+                    // display a message showing that the selected player has that rank
                     System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " has a " + rankIWant);
 
+                    // and make sure that this is set to true so the current player can keep asking for more cards
                     askForMore = true;
+
+                    for (int i = 0; i < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size(); i++)
+                    {
+                        if (players.get(thisPlayerIWantToAsk - 1).getPlayerCards().get(i).getValue() == rankIWant)
+                        {
+                            players.get(whoseTurn).addOneToPlayerHand(players.get(thisPlayerIWantToAsk - 1).removeOneFromPlayerHand(i + 1));
+                        }
+                    }
                 }
 
+                // if the selected doesn't have the card
                 else
                 {
-
+                    // display a message showing that the selected player doesn't have that rank
                     System.out.println("GO FISH!!!\n");
 
                     System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant);
 
+                    // make sure that this is set to false so the current plaer can't ask for more cards
                     askForMore = false;
+
+                    // pick up a card from the middle
+                    players.get(whoseTurn).addOneToPlayerHand(deck.draw());
+
+                    System.out.println("------------------------------------------------------------------------");
+
+                    System.out.println("\nPress any key to continue");
+
+                    String next = kbd.nextLine();
                 }
 
-                System.out.println("____________________________________________________________\n");
+                System.out.println("------------------------------------------------------------------------");
 
             }
+
+            System.out.println("____________________________________________________________________________\n");
 
             whoseTurn = changeTurn(whoseTurn);
 
         }
 
+    }
+
+    /***
+     * Determine if at least one player doesn't have any cards in their hand
+     * @return
+     */
+    public boolean isSomeoneOut()
+    {
+        for (Player p : players)
+        {
+            if (p.getNumPlayerCards() == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /***
