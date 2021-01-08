@@ -211,10 +211,17 @@ public class GoFish
             }
 
             System.out.println("__________________________________________________\n");
-            
+
             System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
-            
-            players.get(whoseTurn);
+
+            count = 1;
+
+            for (Value rank : players.get(whoseTurn).getAllRanksPlayerHas())
+            {
+                System.out.println(count + ": " + rank);
+
+                count++;
+            }
 
             whoseTurn = changeTurn(whoseTurn);
 

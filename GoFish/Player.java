@@ -14,6 +14,8 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
+    private ArrayList<Value> ranks = new ArrayList<Value>();
+
     private int goalCards;
 
     public Player(int id)
@@ -107,35 +109,27 @@ public class Player
         }
     }
 
-    public void showAllRanksPlayerHas()
+    public ArrayList<Value> getAllRanksPlayerHas()
     {
-        System.out.println(getName() + "'s Hand: \n");
-        
         ArrayList<Value> ranks = new ArrayList<Value>();
-        
+
         for (int i = 0; i < playerCards.size(); i++)
         {
-            if(!ranks.contains(playerCards.get(i).getValue()))
+            if (!ranks.contains(playerCards.get(i).getValue()))
             {
                 ranks.add(playerCards.get(i).getValue());
             }
-            
-        }
-        
-        int count = 1;
-        
-        for(Value rank : ranks)
-        {
-            System.out.println(count + ": ");
+
         }
 
+        return ranks;
     }
 
     public void showPlayerCards()
     {
 
         System.out.println(getName() + "'s Hand: \n");
-        
+
         for (int i = 0; i < playerCards.size(); i++)
         {
             System.out.print(" ( " + playerCards.get(i) + " ) ");
