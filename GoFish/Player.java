@@ -30,6 +30,7 @@ public class Player
     {
         this.playerId = playerId;
     }
+
     public String getName()
     {
         return name;
@@ -82,7 +83,6 @@ public class Player
         this.playerCards.add(oneCard);
     }
 
-
     public Card removeOneFromPlayerHand(int position)
     {
         return playerCards.remove(position - 1);
@@ -107,64 +107,38 @@ public class Player
         }
     }
 
-    /**
-     * If all of the player's cards have been uncovered, then that means the player
-     * has reached their goal
-     * @return
-     */
-    public boolean hasReachedPersonalGoalCards()
+    public void showAllRanksPlayerHas()
     {
-
-        for (Card c : playerCards)
+        System.out.println(getName() + "'s Hand: \n");
+        
+        ArrayList<Value> ranks = new ArrayList<Value>();
+        
+        for (int i = 0; i < playerCards.size(); i++)
         {
-            if (c.isUnflipped())
+            if(!ranks.contains(playerCards.get(i).getValue()))
             {
-                return false;
+                ranks.add(playerCards.get(i).getValue());
             }
+            
         }
-
-        return true;
-    }
-
-    public ArrayList<Integer> showAvailableCardsToSwitch()
-    {
+        
         int count = 1;
-
-        ArrayList<Integer> switchable = new ArrayList<Integer>();
-
-        for (Card c : getPlayerCards())
+        
+        for(Value rank : ranks)
         {
-            if (c.isUnflipped())
-            {
-                System.out.print("Card " + count + " ");
-                switchable.add(count);
-
-            }
-
-            count++;
-
+            System.out.println(count + ": ");
         }
 
-        System.out.println();
-
-        return switchable;
     }
 
     public void showPlayerCards()
     {
 
         System.out.println(getName() + "'s Hand: \n");
+        
         for (int i = 0; i < playerCards.size(); i++)
         {
-
-            if (playerCards.get(i).isUnflipped())
-            {
-                System.out.print(" ( CARD " + (i + 1) + " )");
-            }
-            else
-            {
-                System.out.print(" ( " + playerCards.get(i) + " ) ");
-            }
+            System.out.print(" ( " + playerCards.get(i) + " ) ");
 
             if ((i + 1) % 5 == 0 && i > 0)
             {

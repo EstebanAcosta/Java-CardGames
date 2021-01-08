@@ -10,8 +10,6 @@ public class Card
 
     private Value value;
 
-    private boolean unflipped;
-
     public Card(Suit suit, Value value)
     {
 
@@ -49,17 +47,6 @@ public class Card
     private void setSuit(Suit suit)
     {
         this.suit = suit;
-    }
-
-    public void setUnflipped(boolean unflipped)
-    {
-        this.unflipped = unflipped;
-    }
-
-    public boolean isUnflipped()
-    {
-
-        return unflipped;
     }
 
     public String toString()
