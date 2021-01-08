@@ -178,9 +178,14 @@ public class GoFish
 
                 for (Player p : players)
                 {
-                    System.out.println(count + ": " + p.getName());
+                    if (!p.equals(players.get(whoseTurn)))
+                    {
+                        System.out.println(count + ": " + p.getName());
+
+                    }
 
                     count++;
+
                 }
 
                 String whichPlayerToAsk = kbd.nextLine();
@@ -285,7 +290,7 @@ public class GoFish
 
                     System.out.println("GO FISH!!!\n");
 
-                    System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant );
+                    System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant);
 
                     askForMore = false;
                 }
