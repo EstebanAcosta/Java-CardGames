@@ -195,7 +195,12 @@ public class GoFish
                     System.out.println("Please enter a number for which player you want to ask a card");
 
                     whichPlayerToAsk = kbd.nextLine();
+                    
+                    System.out.println("axeee");
+                    
+                    System.out.println("ssdsds");
                 }
+                
 
                 // convert input into an integer
                 int thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
