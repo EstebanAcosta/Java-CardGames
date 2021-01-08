@@ -196,9 +196,6 @@ public class GoFish
 
                     whichPlayerToAsk = kbd.nextLine();
                     
-                    System.out.println("axeee");
-                    
-                    System.out.println("ssdsds");
                 }
                 
 
@@ -207,9 +204,19 @@ public class GoFish
 
                 // Continue promoting the player until they provide
                 // a number between 1 and the max number of players in the game
-                while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1)
+                while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 || thisPlayerIWantToAsk == players.get(whoseTurn).getPlayerId())
                 {
-                    System.out.println("Please enter a number that is between 1 and " + players.size());
+                    
+                    if(thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 )
+                    {
+                        System.out.println("Please enter a number that is between 1 and " + players.size());
+
+                    }
+                    
+                    else
+                    {
+                        System.out.println("You cannot choose yourself. Please choose another player for cards.");
+                    }
 
                     // get player input
                     whichPlayerToAsk = kbd.nextLine();
@@ -225,8 +232,8 @@ public class GoFish
                     thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
                 }
 
-                System.out.println("__________________________________________________\n");
-
+                System.out.println();
+                
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
@@ -306,7 +313,6 @@ public class GoFish
 
             whoseTurn = changeTurn(whoseTurn);
 
-            break;
         }
 
     }
