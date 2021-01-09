@@ -1,7 +1,9 @@
 package GoFish;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
 
 /***
  * @author estebanacosta
@@ -14,9 +16,7 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private ArrayList<Value> ranks = new ArrayList<Value>();
-
-    private int goalCards;
+    private Hashtable<Integer,ArrayList<Card>> books = new Hashtable<Integer, ArrayList<Card>>();
 
     public Player(int id)
     {
@@ -65,16 +65,6 @@ public class Player
 
     }
 
-    public void setPlayerGoalCards(int goalCards)
-    {
-        this.goalCards = goalCards;
-    }
-
-    public int getPlayerGoalCards()
-    {
-        return goalCards;
-    }
-
     public void addMultipleToPlayerHand(ArrayList<Card> playerCards)
     {
         this.playerCards.addAll(playerCards);
@@ -108,7 +98,47 @@ public class Player
             }
         }
     }
+    
+    /***
+     * Every time a player has a book that book will be added to the list of books
+     * @param book
+     */
+    public void addBooks(ArrayList<Card> book)
+    {
+        books.put(book.get(0).getValueOfCard(), book);
+    }
+    
+    public Hashtable<Integer,ArrayList<Card>> getListOfBooks()
+    {
+        return this.books;
+    }
+    
+    /***
+     * Prints all of this player's books
+     */
+    public void showListOfBooks()
+    {
+        System.out.println(getName() + "'s list of books: \n");
+        
+        for(Map.Entry<Integer, ArrayList<Card>> entry : books.entrySet()) 
+        {
+            System.out.print(entry.getKey() + ": ");
+            
+            for(Card c : entry.getValue())
+            {
+                System.out.print(c + " ");
+            }
+            
+            System.out.println();
+            System.out.println();
+        }
+            
+    }
 
+    /***
+     * Calculates how many ranks the player has in their hand
+     * @return
+     */
     public ArrayList<Value> getAllRanksPlayerHas()
     {
         ArrayList<Value> ranks = new ArrayList<Value>();
@@ -125,6 +155,9 @@ public class Player
         return ranks;
     }
 
+    /***
+     * Shows all the cards the player has in their hand
+     */
     public void showPlayerCards()
     {
 

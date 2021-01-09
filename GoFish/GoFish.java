@@ -162,182 +162,208 @@ public class GoFish
 
         Scanner kbd = new Scanner(System.in);
 
-        while (isSomeoneOut() == false)
-        {
+        int currentRound = 0;
 
-            boolean askForMore = true;
-
-            while (askForMore)
+        while(currentRound < numOfRounds) {
+            while (isSomeoneOut() == false && deck.getSize() > 0)
             {
 
-                players.get(whoseTurn).showPlayerCards();
+                boolean askForMore = true;
 
-                System.out.println("Which player do you want to ask for a card," + players.get(whoseTurn).getName() + "? \n");
-
-                int count = 1;
-
-                for (Player p : players)
+                while (askForMore)
                 {
-                    if (!p.equals(players.get(whoseTurn)))
+
+                    players.get(whoseTurn).showPlayerCards();
+
+                    System.out.println("Which player do you want to ask for a card," + players.get(whoseTurn).getName() + "? \n");
+
+                    int count = 1;
+
+                    for (Player p : players)
                     {
-                        System.out.println(count + ": " + p.getName());
+                        if (!p.equals(players.get(whoseTurn)))
+                        {
+                            System.out.println(count + ": " + p.getName());
+
+                        }
+
+                        count++;
 
                     }
 
-                    count++;
+                    String whichPlayerToAsk = kbd.nextLine();
 
-                }
-
-                String whichPlayerToAsk = kbd.nextLine();
-
-                while (!whichPlayerToAsk.matches("[0-9]+"))
-                {
-                    System.out.println("Please enter a number for which player you want to ask a card");
-
-                    whichPlayerToAsk = kbd.nextLine();
-
-                }
-
-                // convert input into an integer
-                int thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
-
-                // Continue promoting the player until they provide
-                // a number between 1 and the max number of players in the game
-                while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 || thisPlayerIWantToAsk == players.get(whoseTurn).getPlayerId())
-                {
-
-                    if (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1)
-                    {
-                        System.out.println("Please enter a number that is between 1 and " + players.size());
-
-                    }
-
-                    else
-                    {
-                        System.out.println("You cannot choose yourself. Please choose another player for cards.");
-                    }
-
-                    // get player input
-                    whichPlayerToAsk = kbd.nextLine();
-
-                    // continue prompting player until the player gives a number
                     while (!whichPlayerToAsk.matches("[0-9]+"))
                     {
                         System.out.println("Please enter a number for which player you want to ask a card");
 
                         whichPlayerToAsk = kbd.nextLine();
+
                     }
-                    // convert the player input into an integer
-                    thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
-                }
 
-                System.out.println();
+                    // convert input into an integer
+                    int thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
 
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    // Continue promoting the player until they provide
+                    // a number between 1 and the max number of players in the game
+                    while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 || thisPlayerIWantToAsk == players.get(whoseTurn).getPlayerId())
+                    {
 
-                System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
+                        if (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1)
+                        {
+                            System.out.println("Please enter a number that is between 1 and " + players.size());
 
-                count = 1;
+                        }
 
-                ArrayList<Value> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
+                        else
+                        {
+                            System.out.println("You cannot choose yourself. Please choose another player for cards.");
+                        }
 
-                // shpw all the ranks the current player has in their hand
-                for (Value rank : currentPlayersRanks)
-                {
-                    System.out.println(count + ": " + rank);
+                        // get player input
+                        whichPlayerToAsk = kbd.nextLine();
 
-                    count++;
-                }
+                        // continue prompting player until the player gives a number
+                        while (!whichPlayerToAsk.matches("[0-9]+"))
+                        {
+                            System.out.println("Please enter a number for which player you want to ask a card");
 
-                String whichRankToAsk = kbd.nextLine();
+                            whichPlayerToAsk = kbd.nextLine();
+                        }
+                        // convert the player input into an integer
+                        thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
+                    }
 
-                while (!whichRankToAsk.matches("[0-9]+"))
-                {
-                    System.out.println("Please enter a number for which rank you want");
+                    System.out.println();
 
-                    whichRankToAsk = kbd.nextLine();
-                }
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                // convert input into an integer
-                int thisRankIWant = Integer.parseInt(whichRankToAsk);
+                    System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
 
-                // Continue promoting the player until they provide
-                // a number between 1 and the number of ranks
-                while (thisRankIWant > players.get(whoseTurn).getAllRanksPlayerHas().size() || thisRankIWant < 1)
-                {
-                    System.out.println("Please enter a number that is between 1 and " + players.get(whoseTurn).getAllRanksPlayerHas().size());
+                    count = 1;
 
-                    // get player input
-                    whichRankToAsk = kbd.nextLine();
+                    ArrayList<Value> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
-                    // continue prompting player until the player gives a number
+                    // Show all the ranks the current player has in their hand
+                    for (Value rank : currentPlayersRanks)
+                    {
+                        System.out.println(count + ": " + rank);
+
+                        count++;
+                    }
+
+                    String whichRankToAsk = kbd.nextLine();
+
                     while (!whichRankToAsk.matches("[0-9]+"))
                     {
                         System.out.println("Please enter a number for which rank you want");
 
                         whichRankToAsk = kbd.nextLine();
                     }
-                    // convert the player input into an integer
-                    thisRankIWant = Integer.parseInt(whichRankToAsk);
-                }
 
-                players.get(thisPlayerIWantToAsk - 1).showPlayerCards();
+                    // convert input into an integer
+                    int thisRankIWant = Integer.parseInt(whichRankToAsk);
 
-                // the current player's rank that the player selected
-                Value rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
-
-                // an array list of all the ranks that the selected player has in their hand
-                ArrayList<Value> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
-
-                // see if the current player's rank is in the selected player's ranks
-                // if the selected player has the card the current player is looking for
-                if (selectedPlayersRanks.contains(rankIWant))
-                {
-                    // display a message showing that the selected player has that rank
-                    System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " has a " + rankIWant);
-
-                    // and make sure that this is set to true so the current player can keep asking for more cards
-                    askForMore = true;
-
-                    for (int i = 0; i < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size(); i++)
+                    // Continue promoting the player until they provide
+                    // a number between 1 and the number of ranks
+                    while (thisRankIWant > players.get(whoseTurn).getAllRanksPlayerHas().size() || thisRankIWant < 1)
                     {
-                        if (players.get(thisPlayerIWantToAsk - 1).getPlayerCards().get(i).getValue() == rankIWant)
+                        System.out.println("Please enter a number that is between 1 and " + players.get(whoseTurn).getAllRanksPlayerHas().size());
+
+                        // get player input
+                        whichRankToAsk = kbd.nextLine();
+
+                        // continue prompting player until the player gives a number
+                        while (!whichRankToAsk.matches("[0-9]+"))
                         {
-                            players.get(whoseTurn).addOneToPlayerHand(players.get(thisPlayerIWantToAsk - 1).removeOneFromPlayerHand(i + 1));
+                            System.out.println("Please enter a number for which rank you want");
+
+                            whichRankToAsk = kbd.nextLine();
                         }
+                        // convert the player input into an integer
+                        thisRankIWant = Integer.parseInt(whichRankToAsk);
                     }
-                }
 
-                // if the selected doesn't have the card
-                else
-                {
-                    // display a message showing that the selected player doesn't have that rank
-                    System.out.println("GO FISH!!!\n");
+                    players.get(thisPlayerIWantToAsk - 1).showPlayerCards();
 
-                    System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant);
+                    // the current player's rank that the player selected
+                    Value rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
 
-                    // make sure that this is set to false so the current plaer can't ask for more cards
-                    askForMore = false;
+                    // an array list of all the ranks that the selected player has in their hand
+                    ArrayList<Value> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
 
-                    // pick up a card from the middle
-                    players.get(whoseTurn).addOneToPlayerHand(deck.draw());
+                    // see if the current player's rank is in the selected player's ranks
+                    // if the selected player has the card the current player is looking for
+                    if (selectedPlayersRanks.contains(rankIWant))
+                    {
+                        // display a message showing that the selected player has that rank
+                        System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " has a " + rankIWant);
+
+                        // and make sure that this is set to true so the current player can keep asking for more cards
+                        askForMore = true;
+
+                        //loop through the selected player's hand
+                        for (int i = 0; i < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size(); i++)
+                        {
+                            //if the card's rank in the selected player's hand is what the current player is looking for
+                            if (players.get(thisPlayerIWantToAsk - 1).getPlayerCards().get(i).getValue() == rankIWant)
+                            {
+                                //remove the card from the selected player's hand and put it in the current player's hand
+                                players.get(whoseTurn).addOneToPlayerHand(players.get(thisPlayerIWantToAsk - 1).removeOneFromPlayerHand(i + 1));
+                            }
+                        }
+
+                    }
+
+                    // if the selected player doesn't have the card the current player is looking for
+                    else
+                    {
+                        // display a message showing that the selected player doesn't have that rank
+                        System.out.println("GO FISH!!!\n");
+
+                        System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant);
+
+                        // make sure that this is set to false so the current player can't ask for more cards
+                        askForMore = false;
+
+                        // current player has to now pick up a card from the middle
+                        players.get(whoseTurn).addOneToPlayerHand(deck.draw());
+
+                        System.out.println("------------------------------------------------------------------------");
+
+                        System.out.println("\nPress any key to continue");
+
+                        String next = kbd.nextLine();
+                    }
 
                     System.out.println("------------------------------------------------------------------------");
 
-                    System.out.println("\nPress any key to continue");
-
-                    String next = kbd.nextLine();
                 }
 
-                System.out.println("------------------------------------------------------------------------");
+                System.out.println("____________________________________________________________________________\n");
+
+                whoseTurn = changeTurn(whoseTurn);
 
             }
+        }
 
-            System.out.println("____________________________________________________________________________\n");
 
-            whoseTurn = changeTurn(whoseTurn);
+        //select a random player to be the winner
+        Player winner = players.get(0);
+
+        //loop through the players
+        for(Player p : players)
+        {
+            //if this player has more books than the winner, make that player the winner
+            //otherwise continue looping
+            if(p.getListOfBooks().size() > winner.getListOfBooks().size())
+            {
+                winner = p; 
+            }
 
         }
+
+        System.out.println("The winner for round " + + " is player # " + winner.getPlayerId() + " " winner.getName());
 
     }
 
