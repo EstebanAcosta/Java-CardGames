@@ -164,7 +164,8 @@ public class GoFish
 
         int currentRound = 0;
 
-        while(currentRound < numOfRounds) {
+        while (currentRound < numOfRounds)
+        {
             while (isSomeoneOut() == false && deck.getSize() > 0)
             {
 
@@ -302,14 +303,22 @@ public class GoFish
                         // and make sure that this is set to true so the current player can keep asking for more cards
                         askForMore = true;
 
-                        //loop through the selected player's hand
+                        // loop through the selected player's hand
                         for (int i = 0; i < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size(); i++)
                         {
-                            //if the card's rank in the selected player's hand is what the current player is looking for
+                            // if the card's rank in the selected player's hand is what the current player is looking for
                             if (players.get(thisPlayerIWantToAsk - 1).getPlayerCards().get(i).getValue() == rankIWant)
                             {
-                                //remove the card from the selected player's hand and put it in the current player's hand
+                                // remove the card from the selected player's hand and put it in the current player's hand
                                 players.get(whoseTurn).addOneToPlayerHand(players.get(thisPlayerIWantToAsk - 1).removeOneFromPlayerHand(i + 1));
+                            }
+                        }
+
+                        for (Card c : players.get(whoseTurn).getPlayerCards())
+                        {
+                            if (true)
+                            {
+
                             }
                         }
 
@@ -347,23 +356,22 @@ public class GoFish
             }
         }
 
-
-        //select a random player to be the winner
+        // select a random player to be the winner
         Player winner = players.get(0);
 
-        //loop through the players
-        for(Player p : players)
+        // loop through the players
+        for (Player p : players)
         {
-            //if this player has more books than the winner, make that player the winner
-            //otherwise continue looping
-            if(p.getListOfBooks().size() > winner.getListOfBooks().size())
+            // if this player has more books than the winner, make that player the winner
+            // otherwise continue looping
+            if (p.getListOfBooks().size() > winner.getListOfBooks().size())
             {
-                winner = p; 
+                winner = p;
             }
 
         }
 
-        System.out.println("The winner for round " + + " is player # " + winner.getPlayerId() + " " winner.getName());
+        System.out.println("The winner for round " + currentRound + " is player # " + winner.getPlayerId() + " " + winner.getName());
 
     }
 
