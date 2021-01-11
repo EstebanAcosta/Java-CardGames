@@ -16,7 +16,7 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private Hashtable<Integer,ArrayList<Card>> books = new Hashtable<Integer, ArrayList<Card>>();
+    private Hashtable<Integer, ArrayList<Card>> books = new Hashtable<Integer, ArrayList<Card>>();
 
     public Player(int id)
     {
@@ -98,7 +98,7 @@ public class Player
             }
         }
     }
-    
+
     /***
      * Every time a player has a book that book will be added to the list of books
      * @param book
@@ -107,32 +107,32 @@ public class Player
     {
         books.put(book.get(0).getValueOfCard(), book);
     }
-    
-    public Hashtable<Integer,ArrayList<Card>> getListOfBooks()
+
+    public Hashtable<Integer, ArrayList<Card>> getListOfBooks()
     {
         return this.books;
     }
-    
+
     /***
      * Prints all of this player's books
      */
     public void showListOfBooks()
     {
         System.out.println(getName() + "'s list of books: \n");
-        
-        for(Map.Entry<Integer, ArrayList<Card>> entry : books.entrySet()) 
+
+        for (Map.Entry<Integer, ArrayList<Card>> entry : books.entrySet())
         {
             System.out.print(entry.getKey() + ": ");
-            
-            for(Card c : entry.getValue())
+
+            for (Card c : entry.getValue())
             {
                 System.out.print(c + " ");
             }
-            
+
             System.out.println();
             System.out.println();
         }
-            
+
     }
 
     /***
@@ -153,6 +153,38 @@ public class Player
         }
 
         return ranks;
+    }
+
+    /***
+     * Calculates how many times a certain rank appears in the player's hand
+     * @param cardPosition
+     * @return
+     */
+    public Hashtable<Value, Integer> howManyTimesThisRankAppears()
+    {
+        int count = 0;
+
+        ArrayList<Value> ranks = getAllRanksPlayerHas();
+
+        Hashtable<Value, Integer> timesRankAppears = new Hashtable<Value, Integer>();
+
+        for (Value rank : ranks)
+        {
+            for (int i = 0; i < playerCards.size(); i++)
+            {
+                if (playerCards.get(i).getValue() == rank)
+                {
+                    count++;
+                }
+            }
+
+            timesRankAppears.put(rank, count);
+
+            count = 0;
+
+        }
+        
+        return timesRankAppears;
     }
 
     /***

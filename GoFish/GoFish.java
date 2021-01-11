@@ -1,6 +1,9 @@
 package GoFish;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -28,7 +31,6 @@ public class GoFish
 
         String numberOfPlayers = "";
 
-        // Convert the string input into an integer
         int numPlayers = 0;
 
         // If the player puts a number greater than 4 or less than 2
@@ -51,7 +53,7 @@ public class GoFish
                 numberOfPlayers = kbd.nextLine();
             }
 
-            // convert the player input into an integer
+            // convert the string input into an integer
             numPlayers = Integer.parseInt(numberOfPlayers);
         }
 
@@ -72,6 +74,7 @@ public class GoFish
         deck.shuffle();
 
         // give each player a certain number of cards depending on how many players there are in the game
+        // if there are less than four players, each player gets seven cards
         if (players.size() < 4)
         {
             for (Player p : players)
@@ -80,6 +83,7 @@ public class GoFish
             }
         }
 
+        // if there are more than or equal to four players, each player gets five cards
         else
         {
             for (Player p : players)
@@ -88,7 +92,7 @@ public class GoFish
             }
         }
 
-        // loop through the list of players and ask each player for a name a
+        // loop through the list of players and ask each player for a name
         for (int i = 0; i < players.size(); i++)
         {
             System.out.println("What is player " + (i + 1) + "'s name:");
@@ -164,24 +168,32 @@ public class GoFish
 
         int currentRound = 0;
 
+        // continue looping until there are no more rounds
         while (currentRound < numOfRounds)
         {
+            // continue looping until someone has no more cards in their hand or there are no more cards in the middle
             while (isSomeoneOut() == false && deck.getSize() > 0)
             {
 
                 boolean askForMore = true;
 
+                // continue looping until the current player can't ask for more cards because
+                // another player doesn't have the card they're looking for
                 while (askForMore)
                 {
 
+                    System.out.println(players.get(whoseTurn).getName() + " has " + (players.get(whoseTurn).getListOfBooks().size() > 1 ? "books" : " book ") + " so far\n");
+                    // show the current player's card
                     players.get(whoseTurn).showPlayerCards();
 
                     System.out.println("Which player do you want to ask for a card," + players.get(whoseTurn).getName() + "? \n");
 
                     int count = 1;
 
+                    // show all the players that the current player can ask for a card
                     for (Player p : players)
                     {
+                        // Don't include the current player in the list of options
                         if (!p.equals(players.get(whoseTurn)))
                         {
                             System.out.println(count + ": " + p.getName());
@@ -192,8 +204,10 @@ public class GoFish
 
                     }
 
+                    // get user input on which player they wish to ask
                     String whichPlayerToAsk = kbd.nextLine();
 
+                    // continue looping until they finally enter a numerical response
                     while (!whichPlayerToAsk.matches("[0-9]+"))
                     {
                         System.out.println("Please enter a number for which player you want to ask a card");
@@ -237,8 +251,6 @@ public class GoFish
 
                     System.out.println();
 
-                    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
                     System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
 
                     count = 1;
@@ -253,8 +265,10 @@ public class GoFish
                         count++;
                     }
 
+                    // get user input for which rank they want to ask the other player
                     String whichRankToAsk = kbd.nextLine();
 
+                    // continue looping until user inputs a numerical answer
                     while (!whichRankToAsk.matches("[0-9]+"))
                     {
                         System.out.println("Please enter a number for which rank you want");
@@ -285,8 +299,6 @@ public class GoFish
                         thisRankIWant = Integer.parseInt(whichRankToAsk);
                     }
 
-                    players.get(thisPlayerIWantToAsk - 1).showPlayerCards();
-
                     // the current player's rank that the player selected
                     Value rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
 
@@ -314,11 +326,30 @@ public class GoFish
                             }
                         }
 
-                        for (Card c : players.get(whoseTurn).getPlayerCards())
-                        {
-                            if (true)
-                            {
+                        // make a hash table of all the ranks and how many times they appear in the player's hand
+                        Hashtable<Value, Integer> timesRankAppears = players.get(whoseTurn).howManyTimesThisRankAppears();
 
+                        ArrayList<Card> book = new ArrayList<Card>();
+
+                        // loop through the hash table
+                        for (Entry<Value, Integer> entry : timesRankAppears.entrySet())
+                        {
+                            // if a certain rank appears four times in a hash table
+                            if (entry.getValue() == 4)
+                            {
+                                // loop through the player's card
+                                for (int i = 0; i < players.get(whoseTurn).getPlayerCards().size(); i++)
+                                {
+                                    // find each card that has this rank
+                                    if (players.get(whoseTurn).getCard(i + 1).getValue() == entry.getKey())
+                                    {
+                                        // add it to their book and remove it from their hand
+                                        book.add(players.get(whoseTurn).removeOneFromPlayerHand(i + 1));
+                                    }
+
+                                }
+
+                                players.get(whoseTurn).addBooks(book);
                             }
                         }
 
@@ -340,9 +371,9 @@ public class GoFish
 
                         System.out.println("------------------------------------------------------------------------");
 
-                        System.out.println("\nPress any key to continue");
+                        System.out.println("\nPress enter to continue");
 
-                        String next = kbd.nextLine();
+                        kbd.nextLine();
                     }
 
                     System.out.println("------------------------------------------------------------------------");
@@ -354,25 +385,27 @@ public class GoFish
                 whoseTurn = changeTurn(whoseTurn);
 
             }
-        }
 
-        // select a random player to be the winner
-        Player winner = players.get(0);
+            // select a random player to be the winner
+            Player winner = players.get(0);
 
-        // loop through the players
-        for (Player p : players)
-        {
-            // if this player has more books than the winner, make that player the winner
-            // otherwise continue looping
-            if (p.getListOfBooks().size() > winner.getListOfBooks().size())
+            // loop through the players
+            for (Player p : players)
             {
-                winner = p;
+                // if this player has more books than the winner, make that player the winner
+                // otherwise continue looping
+                if (p.getListOfBooks().size() > winner.getListOfBooks().size())
+                {
+                    winner = p;
+                }
+
             }
 
+            System.out.println("The winner for round " + currentRound + " is player # " + winner.getPlayerId() + " " + winner.getName());
+
+            currentRound++;
+
         }
-
-        System.out.println("The winner for round " + currentRound + " is player # " + winner.getPlayerId() + " " + winner.getName());
-
     }
 
     /***
