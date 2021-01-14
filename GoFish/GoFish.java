@@ -2,6 +2,7 @@ package GoFish;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -337,17 +338,31 @@ public class GoFish
                             // if a certain rank appears four times in a hash table
                             if (entry.getValue() == 4)
                             {
-                                // loop through the player's card
-                                for (int i = 0; i < players.get(whoseTurn).getPlayerCards().size(); i++)
-                                {
-                                    // find each card that has this rank
-                                    if (players.get(whoseTurn).getCard(i + 1).getValue() == entry.getKey())
-                                    {
-                                        // add it to their book and remove it from their hand
-                                        book.add(players.get(whoseTurn).removeOneFromPlayerHand(i + 1));
-                                    }
+                                int position = 0;
 
+                                Iterator<Card> cards = players.get(whoseTurn).getPlayerCards().iterator();
+
+                                while (cards.hasNext())
+                                {
+                                    Card nextCard = cards.next();
+
+                                    if (position < players.get(whoseTurn).getPlayerCards().size() && nextCard.getValue() == entry.getKey())
+                                    {
+
+                                    }
                                 }
+
+                                // // loop through the player's card
+                                // for (int i = 0; i < players.get(whoseTurn).getPlayerCards().size(); i++)
+                                // {
+                                // // find each card that has this rank
+                                // if (players.get(whoseTurn).getCard(i + 1).getValue() == entry.getKey())
+                                // {
+                                // // add it to their book and remove it from their hand
+                                // book.add(players.get(whoseTurn).removeOneFromPlayerHand(i + 1));
+                                // }
+                                //
+                                // }
 
                                 players.get(whoseTurn).addBooks(book);
                             }
