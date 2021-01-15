@@ -136,7 +136,7 @@ public class Player
     }
 
     /***
-     * Calculates how many ranks the player has in their hand
+     * Creates an arraylist of all the ranks the palyer has in their hand
      * @return
      */
     public ArrayList<Rank> getAllRanksPlayerHas()
