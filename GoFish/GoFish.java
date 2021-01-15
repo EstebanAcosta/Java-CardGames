@@ -183,7 +183,7 @@ public class GoFish
                 while (askForMore)
                 {
 
-                    System.out.println(players.get(whoseTurn).getName() + " has " + (players.get(whoseTurn).getListOfBooks().size() > 1 ? "books" : " book ") + " so far\n");
+                    System.out.println(players.get(whoseTurn).getName() + " has " + players.get(whoseTurn).getListOfBooks().size() + (players.get(whoseTurn).getListOfBooks().size() > 1 ? " books" : "  book ") + " so far\n");
                     // show the current player's card
                     players.get(whoseTurn).showPlayerCards();
 
@@ -256,10 +256,10 @@ public class GoFish
 
                     count = 1;
 
-                    ArrayList<Value> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
+                    ArrayList<Rank> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
                     // Show all the ranks the current player has in their hand
-                    for (Value rank : currentPlayersRanks)
+                    for (Rank rank : currentPlayersRanks)
                     {
                         System.out.println(count + ": " + rank);
 
@@ -301,10 +301,10 @@ public class GoFish
                     }
 
                     // the current player's rank that the player selected
-                    Value rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
+                    Rank rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
 
                     // an array list of all the ranks that the selected player has in their hand
-                    ArrayList<Value> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
+                    ArrayList<Rank> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
 
                     // see if the current player's rank is in the selected player's ranks
                     // if the selected player has the card the current player is looking for
@@ -316,53 +316,53 @@ public class GoFish
                         // and make sure that this is set to true so the current player can keep asking for more cards
                         askForMore = true;
 
-                        // loop through the selected player's hand
-                        for (int i = 0; i < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size(); i++)
+                        Iterator<Card> selectedPlayerCards = players.get(thisPlayerIWantToAsk - 1).getPlayerCards().iterator();
+
+                        int position = 0;
+
+                        while (selectedPlayerCards.hasNext())
                         {
-                            // if the card's rank in the selected player's hand is what the current player is looking for
-                            if (players.get(thisPlayerIWantToAsk - 1).getPlayerCards().get(i).getValue() == rankIWant)
+                            Card nextCard = selectedPlayerCards.next();
+
+                            if (position < players.get(thisPlayerIWantToAsk - 1).getPlayerCards().size() && nextCard.getRank() == rankIWant)
                             {
-                                // remove the card from the selected player's hand and put it in the current player's hand
-                                players.get(whoseTurn).addOneToPlayerHand(players.get(thisPlayerIWantToAsk - 1).removeOneFromPlayerHand(i + 1));
+                                players.get(whoseTurn).addOneToPlayerHand(nextCard);
+
+                                selectedPlayerCards.remove();
+
+                                position++;
                             }
                         }
 
                         // make a hash table of all the ranks and how many times they appear in the player's hand
-                        Hashtable<Value, Integer> timesRankAppears = players.get(whoseTurn).howManyTimesThisRankAppears();
+                        Hashtable<Rank, Integer> timesRankAppears = players.get(whoseTurn).howManyTimesThisRankAppears();
 
                         ArrayList<Card> book = new ArrayList<Card>();
 
                         // loop through the hash table
-                        for (Entry<Value, Integer> entry : timesRankAppears.entrySet())
+                        for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
                         {
                             // if a certain rank appears four times in a hash table
                             if (entry.getValue() == 4)
                             {
-                                int position = 0;
+                                position = 0;
 
-                                Iterator<Card> cards = players.get(whoseTurn).getPlayerCards().iterator();
+                                Iterator<Card> currentPlayerCards = players.get(whoseTurn).getPlayerCards().iterator();
 
-                                while (cards.hasNext())
+                                while (currentPlayerCards.hasNext())
                                 {
-                                    Card nextCard = cards.next();
+                                    Card nextCard = currentPlayerCards.next();
 
-                                    if (position < players.get(whoseTurn).getPlayerCards().size() && nextCard.getValue() == entry.getKey())
+                                    if (position < players.get(whoseTurn).getPlayerCards().size() && nextCard.getRank() == entry.getKey())
                                     {
 
+                                        book.add(nextCard);
+
+                                        currentPlayerCards.remove();
+
+                                        position++;
                                     }
                                 }
-
-                                // // loop through the player's card
-                                // for (int i = 0; i < players.get(whoseTurn).getPlayerCards().size(); i++)
-                                // {
-                                // // find each card that has this rank
-                                // if (players.get(whoseTurn).getCard(i + 1).getValue() == entry.getKey())
-                                // {
-                                // // add it to their book and remove it from their hand
-                                // book.add(players.get(whoseTurn).removeOneFromPlayerHand(i + 1));
-                                // }
-                                //
-                                // }
 
                                 players.get(whoseTurn).addBooks(book);
                             }

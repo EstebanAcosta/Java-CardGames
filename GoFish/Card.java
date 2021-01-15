@@ -8,35 +8,29 @@ public class Card
 {
     private Suit suit;
 
-    private Value value;
+    private Rank rank;
 
-    public Card(Suit suit, Value value)
+    public Card(Suit suit, Rank rank)
     {
 
         setSuit(suit);
-        setValue(value);
+        setValue(rank);
 
     }
 
-    public Card(Value redJoker)
+    public Card(Rank rank)
     {
-        setValue(redJoker);
+        setValue(rank);
     }
 
-    public Value getValue()
+    public Rank getRank()
     {
-        return value;
+        return rank;
     }
 
-    private void setValue(Value redJoker)
+    private void setValue(Rank redJoker)
     {
-        this.value = redJoker;
-    }
-
-    public int getValueOfCard()
-    {
-
-        return this.value.getValue();
+        this.rank = redJoker;
     }
 
     public Suit getSuit()
@@ -54,12 +48,12 @@ public class Card
 
         if (getSuit() != null)
         {
-            return getValue() + " of " + getSuit();
+            return getRank() + " of " + getSuit();
         }
 
         else
         {
-            return getValue() + "";
+            return getRank() + "";
         }
 
     }

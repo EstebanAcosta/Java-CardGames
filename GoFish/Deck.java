@@ -70,7 +70,7 @@ public class Deck
 
         for (Suit suit : Suit.values())
         {
-            for (Value value : Value.values())
+            for (Rank value : Rank.values())
             {
 
                 deck.add(new Card(suit, value));

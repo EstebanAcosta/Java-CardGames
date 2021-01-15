@@ -16,7 +16,7 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private Hashtable<Integer, ArrayList<Card>> books = new Hashtable<Integer, ArrayList<Card>>();
+    private Hashtable<Rank, ArrayList<Card>> books = new Hashtable<Rank, ArrayList<Card>>();
 
     public Player(int id)
     {
@@ -105,10 +105,10 @@ public class Player
      */
     public void addBooks(ArrayList<Card> book)
     {
-        books.put(book.get(0).getValueOfCard(), book);
+        books.put(book.get(0).getRank(), book);
     }
 
-    public Hashtable<Integer, ArrayList<Card>> getListOfBooks()
+    public Hashtable<Rank, ArrayList<Card>> getListOfBooks()
     {
         return this.books;
     }
@@ -120,7 +120,7 @@ public class Player
     {
         System.out.println(getName() + "'s list of books: \n");
 
-        for (Map.Entry<Integer, ArrayList<Card>> entry : books.entrySet())
+        for (Map.Entry<Rank, ArrayList<Card>> entry : books.entrySet())
         {
             System.out.print(entry.getKey() + ": ");
 
@@ -139,15 +139,15 @@ public class Player
      * Calculates how many ranks the player has in their hand
      * @return
      */
-    public ArrayList<Value> getAllRanksPlayerHas()
+    public ArrayList<Rank> getAllRanksPlayerHas()
     {
-        ArrayList<Value> ranks = new ArrayList<Value>();
+        ArrayList<Rank> ranks = new ArrayList<Rank>();
 
         for (int i = 0; i < playerCards.size(); i++)
         {
-            if (!ranks.contains(playerCards.get(i).getValue()))
+            if (!ranks.contains(playerCards.get(i).getRank()))
             {
-                ranks.add(playerCards.get(i).getValue());
+                ranks.add(playerCards.get(i).getRank());
             }
 
         }
@@ -160,26 +160,35 @@ public class Player
      * @param cardPosition
      * @return
      */
-    public Hashtable<Value, Integer> howManyTimesThisRankAppears()
+    public Hashtable<Rank, Integer> howManyTimesThisRankAppears()
     {
         int count = 0;
 
-        ArrayList<Value> ranks = getAllRanksPlayerHas();
+        //get an array list of all the ranks this player has in their hand
+        ArrayList<Rank> ranks = getAllRanksPlayerHas();
 
-        Hashtable<Value, Integer> timesRankAppears = new Hashtable<Value, Integer>();
+        //create a hashtable where the key is rank and the value is the number of times that rank appears in a player's hand
+        Hashtable<Rank, Integer> timesRankAppears = new Hashtable<Rank, Integer>();
 
-        for (Value rank : ranks)
+        
+        //loop through the ranks the player has
+        for (Rank rank : ranks)
         {
+            //loop through the cards the player has
             for (int i = 0; i < playerCards.size(); i++)
             {
-                if (playerCards.get(i).getValue() == rank)
+                //if the rank the outer loop is on is equal to this card's rank
+                if (playerCards.get(i).getRank() == rank)
                 {
+                    //add one to count
                     count++;
                 }
             }
-
+            
+            //place the rank and the number of times this rank appears in the table
             timesRankAppears.put(rank, count);
 
+            //reset the counter when it's time for the outer loop to move on to the next rank
             count = 0;
 
         }
