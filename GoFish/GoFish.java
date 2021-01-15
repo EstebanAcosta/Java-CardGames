@@ -178,30 +178,39 @@ public class GoFish
 
                 boolean askForMore = true;
 
+                Hashtable<Integer, ArrayList<Rank>> whoseCardNotToAskFor = new Hashtable<Integer, ArrayList<Rank>>();
+
                 // continue looping until the current player can't ask for more cards because
                 // another player doesn't have the card they're looking for
                 while (askForMore)
                 {
 
-                    System.out.println(players.get(whoseTurn).getName() + " has " + players.get(whoseTurn).getListOfBooks().size() + (players.get(whoseTurn).getListOfBooks().size() > 1 ? " books" : "  book ") + " so far\n");
+                    System.out.println(players.get(whoseTurn).getName() + " has " + players.get(whoseTurn).getListOfBooks().size() + (players.get(whoseTurn).getListOfBooks().size() != 1 ? " books" : " book") + " so far\n");
+
                     // show the current player's card
                     players.get(whoseTurn).showPlayerCards();
 
                     System.out.println("Which player do you want to ask for a card," + players.get(whoseTurn).getName() + "? \n");
 
                     int count = 1;
-
+                    
+                    //a list of all the players in the game except the player whose turn it is
+                    ArrayList<Player> allPlayersMinusCurrentOne = new ArrayList<Player>();
+                    
                     // show all the players that the current player can ask for a card
                     for (Player p : players)
                     {
                         // Don't include the current player in the list of options
                         if (!p.equals(players.get(whoseTurn)))
                         {
+                            //add the player to the list
+                            allPlayersMinusCurrentOne.add(p);
+                            
+                            //print their option number with the player's name
                             System.out.println(count + ": " + p.getName());
 
+                            count++;
                         }
-
-                        count++;
 
                     }
 
@@ -218,23 +227,16 @@ public class GoFish
                     }
 
                     // convert input into an integer
-                    int thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
+                    int IWantToAskThisPlayer = Integer.parseInt(whichPlayerToAsk);
 
                     // Continue promoting the player until they provide
                     // a number between 1 and the max number of players in the game
-                    while (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1 || thisPlayerIWantToAsk == players.get(whoseTurn).getPlayerId())
+                    while (IWantToAskThisPlayer > (players.size() - 1) || IWantToAskThisPlayer < 1)
                     {
 
-                        if (thisPlayerIWantToAsk > players.size() || thisPlayerIWantToAsk < 1)
-                        {
-                            System.out.println("Please enter a number that is between 1 and " + players.size());
-
-                        }
-
-                        else
-                        {
-                            System.out.println("You cannot choose yourself. Please choose another player for cards.");
-                        }
+                        // if the numerical input is bigger than the number of players in the game or less than 1
+                        // output this error message
+                        System.out.println("Please enter a number that is between 1 and " + (players.size() - 1));
 
                         // get player input
                         whichPlayerToAsk = kbd.nextLine();
@@ -247,15 +249,20 @@ public class GoFish
                             whichPlayerToAsk = kbd.nextLine();
                         }
                         // convert the player input into an integer
-                        thisPlayerIWantToAsk = Integer.parseInt(whichPlayerToAsk);
+                        IWantToAskThisPlayer = Integer.parseInt(whichPlayerToAsk);
                     }
 
                     System.out.println();
+                    
+                    //get the player's player id number from the array list (since it's going to be one more than their index number, subtract one from their
+                    //player id #) and set the variable that keeps track of the selected player's index position to that new number
+                    IWantToAskThisPlayer = allPlayersMinusCurrentOne.get(IWantToAskThisPlayer - 1).getPlayerId() - 1;
 
-                    System.out.println("Which card do you want " + players.get(thisPlayerIWantToAsk - 1).getName() + " to give you? ");
+                    System.out.println("Which card do you want " + players.get(IWantToAskThisPlayer).getName() + " to give you? ");
 
                     count = 1;
 
+                    //get all the ranks this current player has in their hand
                     ArrayList<Rank> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
                     // Show all the ranks the current player has in their hand
@@ -304,19 +311,21 @@ public class GoFish
                     Rank rankIWant = currentPlayersRanks.get(thisRankIWant - 1);
 
                     // an array list of all the ranks that the selected player has in their hand
-                    ArrayList<Rank> selectedPlayersRanks = players.get(thisPlayerIWantToAsk - 1).getAllRanksPlayerHas();
+                    ArrayList<Rank> selectedPlayersRanks = players.get(IWantToAskThisPlayer).getAllRanksPlayerHas();
+                    
+                    players.get(IWantToAskThisPlayer).showPlayerCards();
 
                     // see if the current player's rank is in the selected player's ranks
                     // if the selected player has the card the current player is looking for
                     if (selectedPlayersRanks.contains(rankIWant))
                     {
                         // display a message showing that the selected player has that rank
-                        System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " has a " + rankIWant);
+                        System.out.println(players.get(IWantToAskThisPlayer).getName() + " has a " + rankIWant);
 
                         // and make sure that this is set to true so the current player can keep asking for more cards
                         askForMore = true;
 
-                        Iterator<Card> selectedPlayerCards = players.get(thisPlayerIWantToAsk - 1).getPlayerCards().iterator();
+                        Iterator<Card> selectedPlayerCards = players.get(IWantToAskThisPlayer).getPlayerCards().iterator();
 
                         while (selectedPlayerCards.hasNext())
                         {
@@ -330,7 +339,31 @@ public class GoFish
 
                             }
                         }
-                        
+
+                        // if the hash table that contains the other player's id number
+                        // that means that the current player has asked a card from them on this turn
+                        // and that their entry is in the hash table
+                        if (whoseCardNotToAskFor.containsKey(IWantToAskThisPlayer))
+                        {
+                            // since the other player is in the hash table, all we need to do is add the rank that we just asked for
+                            // and add it to the hash table
+                            // now the hash table contains the ranks that the current player asked this specific player
+                            whoseCardNotToAskFor.get(IWantToAskThisPlayer).add(rankIWant);
+                        }
+
+                        // if the hash table doesn't have this other player's id number
+                        // that means the current player has never asked this other player for a card before this moment
+                        else
+                        {
+                            // create an array list for the all the ranks the current player has asked this other player for
+                            ArrayList<Rank> ranksIAskedFor = new ArrayList<Rank>();
+
+                            // add the rank you just asked for in the newly created array list
+                            ranksIAskedFor.add(rankIWant);
+
+                            // Now make an entry in the hash table with the other player's id number and the array list of ranks the current player asked for
+                            whoseCardNotToAskFor.put(IWantToAskThisPlayer, ranksIAskedFor);
+                        }
 
                     }
 
@@ -340,7 +373,7 @@ public class GoFish
                         // display a message showing that the selected player doesn't have that rank
                         System.out.println("GO FISH!!!\n");
 
-                        System.out.println(players.get(thisPlayerIWantToAsk - 1).getName() + " doesn't have a " + rankIWant);
+                        System.out.println(players.get(IWantToAskThisPlayer).getName() + " doesn't have a " + rankIWant);
 
                         // make sure that this is set to false so the current player can't ask for more cards
                         askForMore = false;
@@ -354,8 +387,8 @@ public class GoFish
 
                         kbd.nextLine();
                     }
-                    
-                 // make a hash table of all the ranks and how many times they appear in the player's hand
+
+                    // make a hash table of all the ranks and how many times they appear in the player's hand
                     Hashtable<Rank, Integer> timesRankAppears = players.get(whoseTurn).howManyTimesThisRankAppears();
 
                     ArrayList<Card> book = new ArrayList<Card>();
@@ -364,28 +397,34 @@ public class GoFish
                     for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
                     {
                         System.out.println(entry.getKey() + " " + entry.getValue());
-                        
+
                         // if a certain rank appears four times in a hash table
                         if (entry.getValue() == 4)
                         {
 
                             Iterator<Card> currentPlayerCards = players.get(whoseTurn).getPlayerCards().iterator();
 
+                            // continue looping until there is are no cards left
                             while (currentPlayerCards.hasNext())
                             {
-                       
+                                // get the next card in the current player's hand
                                 Card nextCard = currentPlayerCards.next();
 
+                                // if the rank of that card matches with the key in the hash table
                                 if (nextCard.getRank() == entry.getKey())
                                 {
 
+                                    // add that card to the book hash table
                                     book.add(nextCard);
 
+                                    // and remove that card from the player's hand
                                     currentPlayerCards.remove();
 
                                 }
                             }
 
+                            // once completed this array list should contain all four cards that make up a book
+                            // this array list will be added to this player's list of books
                             players.get(whoseTurn).addBooks(book);
                         }
                     }

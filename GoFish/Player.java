@@ -75,30 +75,6 @@ public class Player
         this.playerCards.add(oneCard);
     }
 
-    public Card removeOneFromPlayerHand(int position)
-    {
-        return playerCards.remove(position - 1);
-    }
-
-    public void removeMultipleFromHand(ArrayList<Card> cards)
-    {
-        int count = 0;
-
-        Iterator<Card> c = playerCards.iterator();
-
-        while (c.hasNext())
-        {
-            Card nextCard = c.next();
-
-            if (count < cards.size() && nextCard.equals(cards.get(count)))
-            {
-                c.remove();
-
-                count++;
-            }
-        }
-    }
-
     /***
      * Every time a player has a book that book will be added to the list of books
      * @param book
@@ -108,6 +84,10 @@ public class Player
         books.put(book.get(0).getRank(), book);
     }
 
+    /***
+     * 
+     * @return a list of all of the current player's books
+     */
     public Hashtable<Rank, ArrayList<Card>> getListOfBooks()
     {
         return this.books;
@@ -136,7 +116,7 @@ public class Player
     }
 
     /***
-     * Creates an arraylist of all the ranks the palyer has in their hand
+     * Creates an array list of all the ranks the player has in their hand
      * @return
      */
     public ArrayList<Rank> getAllRanksPlayerHas()
@@ -167,7 +147,7 @@ public class Player
         //get an array list of all the ranks this player has in their hand
         ArrayList<Rank> ranks = getAllRanksPlayerHas();
 
-        //create a hashtable where the key is rank and the value is the number of times that rank appears in a player's hand
+        //create a hash table where the key is rank and the value is the number of times that rank appears in a player's hand
         Hashtable<Rank, Integer> timesRankAppears = new Hashtable<Rank, Integer>();
 
         
