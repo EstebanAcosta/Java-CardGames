@@ -185,6 +185,8 @@ public class GoFish
                 while (askForMore)
                 {
 
+                    System.out.println("Round " + (currentRound + 1));
+
                     System.out.println(players.get(whoseTurn).getName() + " has " + players.get(whoseTurn).getListOfBooks().size() + (players.get(whoseTurn).getListOfBooks().size() != 1 ? " books" : " book") + " so far\n");
 
                     // show the current player's card
@@ -199,8 +201,8 @@ public class GoFish
 
                     int IWantToAskThisPlayer = 0;
 
-                    //if there are more than two players in the game then there will be a menu that gives you a choice as to which player
-                    //you want to ask for a card
+                    // if there are more than two players in the game then there will be a menu that gives you a choice as to which player
+                    // you want to ask for a card
                     if (players.size() > 2)
                     {
                         // show all the players that the current player can ask for a card
@@ -237,12 +239,12 @@ public class GoFish
 
                         // Continue promoting the player until they provide
                         // a number between 1 and the max number of players in the game
-                        while (IWantToAskThisPlayer > (players.size() - 1) || IWantToAskThisPlayer < 1)
+                        while (IWantToAskThisPlayer > allPlayersMinusCurrentOne.size() || IWantToAskThisPlayer < 1)
                         {
 
                             // if the numerical input is bigger than the number of players in the game or less than 1
                             // output this error message
-                            System.out.println("Please enter a number that is between 1 and " + (players.size() - 1));
+                            System.out.println("Please enter a number that is between 1 and " + allPlayersMinusCurrentOne.size());
 
                             // get player input
                             whichPlayerToAsk = kbd.nextLine();
@@ -266,11 +268,11 @@ public class GoFish
 
                     }
 
-                    //if there are only two players in the game
+                    // if there are only two players in the game
                     else
                     {
-                        //then we know that if the current player's position in the array list is a 0, then the person the current player 
-                        //is asking for a card has to have a position of 1. And vive versa.
+                        // then we know that if the current player's position in the array list is a 0, then the other player
+                        // has to have a position of 1. And vice versa.
                         IWantToAskThisPlayer = (whoseTurn == 0 ? 1 : 0);
 
                     }
@@ -282,9 +284,28 @@ public class GoFish
                     // get all the ranks this current player has in their hand
                     ArrayList<Rank> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
+                    if (whoseCardNotToAskFor.containsKey(IWantToAskThisPlayer))
+                    {
+
+                        Iterator<Rank> ranks = currentPlayersRanks.iterator();
+
+                        while (ranks.hasNext())
+                        {
+                            Rank nextRank = ranks.next();
+
+                            if (whoseCardNotToAskFor.get(IWantToAskThisPlayer).contains(nextRank))
+                            {
+                                ranks.remove();
+                            }
+
+                        }
+
+                    }
+
                     // Show all the ranks the current player has in their hand
                     for (Rank rank : currentPlayersRanks)
                     {
+
                         System.out.println(count + ": " + rank);
 
                         count++;
@@ -306,7 +327,7 @@ public class GoFish
 
                     // Continue promoting the player until they provide
                     // a number between 1 and the number of ranks
-                    while (thisRankIWant > players.get(whoseTurn).getAllRanksPlayerHas().size() || thisRankIWant < 1)
+                    while (thisRankIWant > currentPlayersRanks.size() || thisRankIWant < 1)
                     {
                         System.out.println("Please enter a number that is between 1 and " + players.get(whoseTurn).getAllRanksPlayerHas().size());
 
@@ -411,7 +432,7 @@ public class GoFish
                     // loop through the hash table
                     for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
                     {
-                        System.out.println(entry.getKey() + " " + entry.getValue());
+                        // System.out.println(entry.getKey() + " " + entry.getValue());
 
                         // if a certain rank appears four times in a hash table
                         if (entry.getValue() == 4)
@@ -468,7 +489,47 @@ public class GoFish
 
             System.out.println("The winner for round " + (currentRound + 1) + " is player # " + winner.getPlayerId() + " " + winner.getName() + " with " + winner.getListOfBooks().size() + " books");
 
+            System.out.println("Winner's Book's: \n");
+
+            winner.showListOfBooks();
+
             currentRound++;
+
+            deck = new Deck();
+
+            deck.shuffle();
+
+            for (Player p : players)
+            {
+                p.getPlayerCards().clear();
+                
+                
+                p.getListOfBooks().clear();
+
+            }
+
+            // give each player a certain number of cards depending on how many players there are in the game
+            // if there are less than four players, each player gets seven cards
+            if (players.size() < 4)
+            {
+                for (Player p : players)
+                {
+                    p.addMultipleToPlayerHand(deck.draw(7));
+                }
+            }
+
+            // if there are more than or equal to four players, each player gets five cards
+            else
+            {
+                for (Player p : players)
+                {
+                    p.addMultipleToPlayerHand(deck.draw(5));
+                }
+            }
+
+            whoseTurn = rand.nextInt(players.size());
+
+            System.out.println("______________________________________________________________________________________________________\n");
 
         }
     }
