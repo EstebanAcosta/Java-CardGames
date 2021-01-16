@@ -1,7 +1,10 @@
 package President;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /***
  * @author estebanacosta
@@ -153,7 +156,7 @@ public class Player
     {
         for (Card c : playerCards)
         {
-            if (c.getSuit() == thisCard.getSuit() && c.getValue() == thisCard.getValue())
+            if (c.getSuit() == thisCard.getSuit() && c.getRank() == thisCard.getRank())
             {
                 return true;
             }
@@ -192,11 +195,78 @@ public class Player
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " ) " + playerCards.get(i).getValue() + " appears " + howManyTimesThisRankAppears(i) + "x\n");
+            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " ) " + playerCards.get(i).getRank() + " appears " + howManyTimesThisRankAppears(i) + "x\n");
 
         }
 
         System.out.println();
+        System.out.println();
+
+    }
+
+    /***
+     * Creates an array list of all the ranks the player has in their hand
+     * @return
+     */
+    public ArrayList<Rank> getAllRanksPlayerHas()
+    {
+        ArrayList<Rank> ranks = new ArrayList<Rank>();
+
+        for (int i = 0; i < playerCards.size(); i++)
+        {
+            if (!ranks.contains(playerCards.get(i).getRank()))
+            {
+                ranks.add(playerCards.get(i).getRank());
+            }
+
+        }
+
+        return ranks;
+    }
+
+    /***
+     * Calculates how many times a certain rank appears in the player's hand
+     * @param cardPosition
+     * @return
+     */
+    public void showHowManyTimesThisRankAppears()
+    {
+        int count = 0;
+
+        // get an array list of all the ranks this player has in their hand
+        ArrayList<Rank> ranks = getAllRanksPlayerHas();
+
+        // create a hash table where the key is rank and the value is the number of times that rank appears in a player's hand
+        Hashtable<Rank, Integer> timesRankAppears = new Hashtable<Rank, Integer>();
+
+        // loop through the ranks the player has
+        for (Rank rank : ranks)
+        {
+            // loop through the cards the player has
+            for (int i = 0; i < playerCards.size(); i++)
+            {
+                // if the rank the outer loop is on is equal to this card's rank
+                if (playerCards.get(i).getRank() == rank)
+                {
+                    // add one to count
+                    count++;
+                }
+            }
+
+            // place the rank and the number of times this rank appears in the table
+            timesRankAppears.put(rank, count);
+
+            // reset the counter when it's time for the outer loop to move on to the next rank
+            count = 0;
+
+        }
+
+        System.out.println("How many times the rank appears in " + getName() + "'s hand");
+        for (Map.Entry<Rank, Integer> entry : timesRankAppears.entrySet())
+        {
+            System.out.println(entry.getKey() + ": " + entry.getValue() + "X");
+
+        }
         System.out.println();
 
     }
@@ -207,7 +277,7 @@ public class Player
 
         for (int i = 0; i < playerCards.size(); i++)
         {
-            if (playerCards.get(cardPosition).getValue() == playerCards.get(i).getValue())
+            if (playerCards.get(cardPosition).getRank() == playerCards.get(i).getRank())
             {
                 count++;
             }
@@ -286,7 +356,7 @@ public class Player
         for (Card c : playerCards)
         {
             // if the player has a two in their hand
-            if (c.getValue() == Value.TWO)
+            if (c.getRank() == Rank.TWO)
             {
 
                 return true;

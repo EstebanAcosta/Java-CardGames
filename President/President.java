@@ -194,7 +194,7 @@ public class President
 
         ArrayList<Card> middleCards = new ArrayList<Card>();
 
-        Card threeOfClubs = new Card(Suit.CLUBS, Value.THREE);
+        Card threeOfClubs = new Card(Suit.CLUBS, Rank.THREE);
 
         int rounds = 0;
 
@@ -243,7 +243,7 @@ public class President
             while (isEveryoneOut() == false)
             {
 
-                System.out.println("Round " + rounds);
+                System.out.println("Round " + (rounds + 1));
 
                 System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + " " + (howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle\n");
 
@@ -280,11 +280,14 @@ public class President
                 // System.out.println("---------------------------------------------------\n");
 
                 // show this player's hand
-                players.get(whoseTurn).showPlayerCardsWithNumTimesTheyAppear();
+                players.get(whoseTurn).showPlayerCards();
+
+                // show how many times each rank in the player's hand appears
+                players.get(whoseTurn).showHowManyTimesThisRankAppears();
 
                 // if there is more than one card in the middle and if the player can't put down a card that is higher than the card that's in the middle
                 // ask the player to pass
-                if (middleCards.size() > 0 && players.get(whoseTurn).canPlayACard(middleCards.get(middleCards.size() - 1),howManyCardsOfSameRankToPutDown) == false)
+                if (middleCards.size() > 0 && players.get(whoseTurn).canPlayACard(middleCards.get(middleCards.size() - 1), howManyCardsOfSameRankToPutDown) == false)
                 {
                     System.out.println("\nYou cannot play a card from your hand. You must pass. Please enter p to pass");
 
@@ -300,7 +303,10 @@ public class President
                     // add one to this variable if this player has passed
                     howManyHavePassed++;
 
-                    // if all three players have passed then the played who placed the last card before everyone passed
+                    // change turns
+                    whoseTurn = changeTurn(whoseTurn);
+
+                    // if all other players have passed then the player who placed the last card before everyone passed
                     // gets to put another card down
                     if (howManyHavePassed == players.size() - 1)
                     {
@@ -311,9 +317,6 @@ public class President
 
                         continue;
                     }
-
-                    // change turns
-                    whoseTurn = changeTurn(whoseTurn);
 
                     System.out.println("__________________________________________________\n");
 
@@ -433,7 +436,7 @@ public class President
                 for (int i = 1; i < players.get(whoseTurn).getNumOfPlayerCards() + 1; i++)
                 {
                     // if the card in their hand has the same rank as the card they selected
-                    if (players.get(whoseTurn).getCardInPlayerCards(i).getValue() == players.get(whoseTurn).getCardInPlayerCards(whichCard).getValue())
+                    if (players.get(whoseTurn).getCardInPlayerCards(i).getRank() == players.get(whoseTurn).getCardInPlayerCards(whichCard).getRank())
                     {
 
                         // add that card in a separate array list
@@ -461,7 +464,7 @@ public class President
                     players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
 
                     // if the two or three cards of the same rank has a rank of two
-                    if (cardsToPutDown.get(0).getValue() == Value.TWO)
+                    if (cardsToPutDown.get(0).getRank() == Rank.TWO)
                     {
                         // clear the middle
                         middleCards.clear();
@@ -585,12 +588,15 @@ public class President
                 }
 
                 // if the card that's been placed down is a two, clear the middle cards
-                if (thisCard.getValue() == Value.TWO || middleCards.size() == 0)
+                if (thisCard.getRank() == Rank.TWO || middleCards.size() == 0)
                 {
                     middleCards.clear();
 
                     // show this player's hand
-                    players.get(whoseTurn).showPlayerCardsWithNumTimesTheyAppear();
+                    players.get(whoseTurn).showPlayerCards();
+
+                    // show how many times each rank in the player's hand appears
+                    players.get(whoseTurn).showHowManyTimesThisRankAppears();
 
                     System.out.println("How many cards do you wish to put down at the same time?\n");
                     System.out.println("1. Singles");
@@ -681,7 +687,7 @@ public class President
     public boolean isValidSelection(Card selectedCard, Card middleCard)
     {
 
-        if (selectedCard.getValue() == Value.TWO || selectedCard.getValueOfCard() > middleCard.getValueOfCard())
+        if (selectedCard.getRank() == Rank.TWO || selectedCard.getValueOfCard() > middleCard.getValueOfCard())
         {
             return true;
         }

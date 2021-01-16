@@ -106,7 +106,7 @@ public class Player
 
             for (Card c : entry.getValue())
             {
-                System.out.print(c + " ");
+                System.out.print(" ( " + c + " ) ");
             }
 
             System.out.println();

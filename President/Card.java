@@ -7,30 +7,30 @@ public class Card
 {
     private Suit suit;
 
-    private Value value;
+    private Rank rank;
 
-    public Card(Suit suit, Value value)
+    public Card(Suit suit, Rank value)
     {
 
         setSuit(suit);
-        setValue(value);
+        setRank(value);
 
     }
 
-    public Value getValue()
+    public Rank getRank()
     {
-        return value;
+        return rank;
     }
 
-    private void setValue(Value value)
+    private void setRank(Rank rank)
     {
-        this.value = value;
+        this.rank = rank;
     }
 
     public int getValueOfCard()
     {
 
-        return this.value.getValue();
+        return this.rank.getValue();
     }
 
     public Suit getSuit()
@@ -64,7 +64,7 @@ public class Card
 
         Card c = (Card) o;
 
-        return this.getSuit() == c.getSuit() && this.getValue() == c.getValue();
+        return this.getSuit() == c.getSuit() && this.getRank() == c.getRank();
     }
     
     public String toString()
@@ -72,12 +72,12 @@ public class Card
 
         if (getSuit() != null)
         {
-            return getValue() + " of " + getSuit();
+            return getRank() + " of " + getSuit();
         }
 
         else
         {
-            return getValue() + "";
+            return getRank() + "";
         }
 
     }

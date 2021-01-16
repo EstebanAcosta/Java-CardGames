@@ -178,6 +178,9 @@ public class GoFish
 
                 boolean askForMore = true;
 
+                //this hash table will keep track of all the players the current player has asked on this turn and which card cards they've asked from each player
+                //if the current player asked player 1 for several cards, the entry in the hash table is going to store
+                //the first player's player id as the key and store the several cards the current player has asked for in an array list
                 Hashtable<Integer, ArrayList<Rank>> whoseCardNotToAskFor = new Hashtable<Integer, ArrayList<Rank>>();
 
                 // continue looping until the current player can't ask for more cards because
@@ -201,8 +204,8 @@ public class GoFish
 
                     int IWantToAskThisPlayer = 0;
 
-                    // if there are more than two players in the game then there will be a menu that gives you a choice as to which player
-                    // you want to ask for a card
+                    // if there are more than two players in the game then there will be a menu that gives the current player a choice as to which player
+                    // they want to ask for a card
                     if (players.size() > 2)
                     {
                         // show all the players that the current player can ask for a card
@@ -284,17 +287,21 @@ public class GoFish
                     // get all the ranks this current player has in their hand
                     ArrayList<Rank> currentPlayersRanks = players.get(whoseTurn).getAllRanksPlayerHas();
 
+                    //if the table has this player's id 
                     if (whoseCardNotToAskFor.containsKey(IWantToAskThisPlayer))
                     {
 
+                        //loop through the current player's list of ranks
                         Iterator<Rank> ranks = currentPlayersRanks.iterator();
 
                         while (ranks.hasNext())
                         {
                             Rank nextRank = ranks.next();
 
+                            //if the current player has already asked for this specific rank from this player
                             if (whoseCardNotToAskFor.get(IWantToAskThisPlayer).contains(nextRank))
                             {
+                                //remove the rank from the current player's list of ranks
                                 ranks.remove();
                             }
 
@@ -450,10 +457,10 @@ public class GoFish
                                 if (nextCard.getRank() == entry.getKey())
                                 {
 
-                                    // add that card to the book hash table
+                                    // add that card to the book array list
                                     book.add(nextCard);
 
-                                    // and remove that card from the player's hand
+                                    // and remove that card from the current player's hand
                                     currentPlayerCards.remove();
 
                                 }
