@@ -17,14 +17,6 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private boolean isPresident;
-
-    private boolean isVicePresident;
-
-    private boolean isScum;
-
-    private boolean isViceScum;
-
     private boolean isOut;
 
     public Player(int id)
@@ -40,46 +32,6 @@ public class Player
     public void setName(String name)
     {
         this.name = name;
-    }
-
-    public boolean isVicePresident()
-    {
-        return isVicePresident;
-    }
-
-    public void setVicePresident(boolean isVicePresident)
-    {
-        this.isVicePresident = isVicePresident;
-    }
-
-    public boolean isPresident()
-    {
-        return isPresident;
-    }
-
-    public void setPresident(boolean isPresident)
-    {
-        this.isPresident = isPresident;
-    }
-
-    public boolean isViceScum()
-    {
-        return isViceScum;
-    }
-
-    public void setViceScum(boolean isViceScum)
-    {
-        this.isViceScum = isViceScum;
-    }
-
-    public boolean isScum()
-    {
-        return isScum;
-    }
-
-    public void setScum(boolean isScum)
-    {
-        this.isScum = isScum;
     }
 
     public boolean isOut()
@@ -277,7 +229,7 @@ public class Player
 
         for (int i = 0; i < playerCards.size(); i++)
         {
-            if (playerCards.get(cardPosition).getRank() == playerCards.get(i).getRank())
+            if (playerCards.get(cardPosition - 1).getRank() == playerCards.get(i).getRank())
             {
                 count++;
             }
@@ -351,7 +303,7 @@ public class Player
     public boolean canPlayACard(Card middleCard, int howManyCardsOfSameRankToPutDown)
     {
 
-        int count = 0;
+        int count = 1;
         // loop through the player's hand
         for (Card c : playerCards)
         {
