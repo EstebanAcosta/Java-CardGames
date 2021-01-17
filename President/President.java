@@ -227,11 +227,40 @@ public class President
 
             int manyCardsOfSameRank = 1;
 
+            // an array that keeps track of all the players that are out of the game
             int[] whoWentOut = new int[players.size()];
 
             // continue playing this round until everyone is out
             while (isEveryoneOut() == false)
             {
+
+                if (players.get(whoseTurn).getNumOfPlayerCards() == 0)
+                {
+                    System.out.println("You are out of the game due to the fact that you have no cards ," + players.get(whoseTurn).getName());
+
+                    // loop from the end of the array to the start of the array
+                    for (int i = whoWentOut.length - 1; i >= 0; i--)
+                    {
+                        // check to see if that spot in the array is empty
+                        if (whoWentOut.equals(null))
+                        {
+                            // if it is, add this player's id in that spot
+                            whoWentOut[i] = players.get(whoseTurn).getPlayerId();
+
+                        }
+
+                    }
+
+                }
+
+                if (players.get(whoseTurn).isOut())
+                {
+                    // change turns
+                    whoseTurn = changeTurn(whoseTurn);
+
+                    // skip to the next player
+                    continue;
+                }
 
                 System.out.println("Round " + (rounds + 1));
 
@@ -456,7 +485,7 @@ public class President
 
                     for (Card c : cardsToPutDown)
                     {
-                        System.out.println(count + ": " +  count + (count == 1 ? " card" : " cards"));
+                        System.out.println(count + ": " + count + (count == 1 ? " card" : " cards"));
 
                         count++;
 
@@ -504,10 +533,10 @@ public class President
 
                 }
 
-                //if the card the player is trying to put down is a rank two and they're trying to put down a certain number of 2s in the middle
-                if(thisCard.getRank() == Rank.TWO && howMany2sToPutDown < cardsToPutDown.size() && cardsToPutDown.size() > 1)
+                // if the card the player is trying to put down is a rank two and they're trying to put down a certain number of 2s in the middle
+                if (thisCard.getRank() == Rank.TWO && howMany2sToPutDown < cardsToPutDown.size() && cardsToPutDown.size() > 1)
                 {
-                 // now loop as many times as how many cards of the same rank the player wants to put down
+                    // now loop as many times as how many cards of the same rank the player wants to put down
                     while (howMany2sToPutDown > 0)
                     {
                         // loop through the cards of the same rank
@@ -600,7 +629,7 @@ public class President
                 // if the player wants to put down two cards or three in the middle and there happens to be exactly two or three
                 // cards of the same rank then instead of asking the player which of those two cards they
                 // wish to put down, put them down for the player. If the cards the player is trying to put down are of rank two,
-                //and they are trying to put down all three cards or all two cards of rank two down in the middle
+                // and they are trying to put down all three cards or all two cards of rank two down in the middle
                 else if ((thisCard.getRank() == Rank.TWO && howMany2sToPutDown == 2 && cardsToPutDown.size() == 2) ||
                 (thisCard.getRank() == Rank.TWO && howMany2sToPutDown == 3 && cardsToPutDown.size() == 3) ||
                 howManyCardsOfSameRankToPutDown == 2 && cardsToPutDown.size() == 2 ||
@@ -810,6 +839,16 @@ public class President
                 System.out.println("__________________________________________________\n");
 
             }
+            
+            System.out.println("End of the round results: ");
+                      
+            String[] names = new String[players.size()];
+            // loop from the end of the array
+            for (int i = whoWentOut.length - 1; i >= 0; i--)
+            {
+                
+            }
+            
 
             rounds++;
 
