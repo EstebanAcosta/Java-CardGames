@@ -563,7 +563,7 @@ public class Palace
     {
         // If it's the last person's turn then we need to reset whoseTurn to 0
         // So we can start off with the first player in the list of players
-        if (currentTurn + 1 == players.size())
+        if (currentTurn + 1 >= players.size())
         {
 
             currentTurn = 0;

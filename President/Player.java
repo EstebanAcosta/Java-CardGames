@@ -17,8 +17,6 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private boolean isOut;
-
     private int pointsWon;
 
     public Player(int id)
@@ -45,16 +43,6 @@ public class Player
     {
         this.pointsWon += pointsWon;
         
-    }
-
-    public boolean isOut()
-    {
-        return isOut;
-    }
-
-    public void setOut(boolean isOut)
-    {
-        this.isOut = isOut;
     }
 
     public ArrayList<Card> getPlayerHand()
