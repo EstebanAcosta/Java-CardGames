@@ -83,24 +83,24 @@ public class President
         deck.shuffle();
 
         // calculate how many cards we are supposed to distribute to each player
-        int howManyCardsToEachPlayer = deck.getSize() / players.size();;
+        int howManyCardsToEachPlayer = deck.getSize() / players.size();
 
-         // if we can't give each player the same amount of cards
-         if (deck.getSize() % players.size() != 0)
-         {
-         // calculate how many cards would be left over if we gave each player
-         // roughly the same number of cards
-         int leftOverCards = deck.getSize() % players.size();
-        
-         // and then give a certain number of random players
-         // (that number is determined by the number of leftover cards left)
-         // a card
-         for (int i = 0; i < leftOverCards; i++)
-         {
-         players.get(i).addOneToPlayerHand(deck.draw());
-         }
-        
-         }
+        // if we can't give each player the same amount of cards
+        if (deck.getSize() % players.size() != 0)
+        {
+            // calculate how many cards would be left over if we gave each player
+            // roughly the same number of cards
+            int leftOverCards = deck.getSize() % players.size();
+
+            // and then give a certain number of random players
+            // (that number is determined by the number of leftover cards left)
+            // a card
+            for (int i = 0; i < leftOverCards; i++)
+            {
+                players.get(i).addOneToPlayerHand(deck.draw());
+            }
+
+        }
 
         // loop through the list of players and give each player a name and their
         // cards
@@ -188,7 +188,7 @@ public class President
         int whoseTurn = 0;
 
         // A list of the players in the order they left the game.
-        ArrayList<Player> playersInRightOrder = new ArrayList<Player>();
+        Player[] playersInRightOrder = new Player[players.size()];
 
         // if this is the start of a new game, the first person to play has to have a 3 of clubs in their hand
         if (currentRound == 0)
@@ -230,8 +230,10 @@ public class President
 
             int howManyCardsOfSameRankToPutDown = 1;
 
+            // keeps track of how many players in the game have passed their turn
             int howManyHavePassed = 0;
 
+            // set it to one since typically in the first round, the player can only set down one card
             int manyCardsOfSameRank = 1;;
 
             Card thisCard = null;
@@ -699,8 +701,8 @@ public class President
 
                     // remove them from their hand
                     players.get(whoseTurn).removeMultipleFromPlayerCards(cardsToPutDown);
-                    
-                    if(thisCard.getRank() == Rank.TWO)
+
+                    if (thisCard.getRank() == Rank.TWO)
                     {
                         middleCards.clear();
                     }
@@ -732,8 +734,8 @@ public class President
                 {
                     // remove the selected card from the player's hand and put it down in the middle
                     middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(whichCard));
-                    
-                    if(thisCard.getRank() == Rank.TWO)
+
+                    if (thisCard.getRank() == Rank.TWO)
                     {
                         middleCards.clear();
                     }
@@ -844,7 +846,18 @@ public class President
 
                     // A list of the players in the order they left the game.
                     // add the player that just left the game
-                    playersInRightOrder.add(players.get(whoseTurn));
+
+                    for (int i = 0; i < playersInRightOrder.length; i++)
+                    {
+
+                        if (playersInRightOrder[i] == null)
+                        {
+                            playersInRightOrder[i] = players.get(whoseTurn);
+
+                            break;
+                        }
+
+                    }
 
                     // remove the player that just left from the original list of players
                     players.remove(whoseTurn);
@@ -855,14 +868,82 @@ public class President
 
                 }
 
+                else if (players.get(whoseTurn).getNumOfPlayerCards() < 5 && players.get(whoseTurn).getNumOfPlayerCards() > 0)
+                {
+                    int countTWO = 0;
+
+                    // loop through the player's hand
+                    for (Card c : players.get(whoseTurn).getPlayerHand())
+                    {
+                        // check to see if this card has a rank of two
+                        if (c.getRank() == Rank.TWO)
+                        {
+                            // if it does, add one to the counter
+                            countTWO++;
+                        }
+                    }
+
+                    // if the counter is equal to the number of cards in the player's hand
+                    if (countTWO > 0 && countTWO == players.get(whoseTurn).getNumOfPlayerCards())
+                    {
+
+                        for (int i = playersInRightOrder.length - 1; i >= 0; i--)
+                        {
+                            // if there is no one in the last spot
+                            if (playersInRightOrder[i] == null)
+                            {
+                                // place this player in that spot
+                                // they are the scum of this game
+                                playersInRightOrder[i] = players.get(whoseTurn);
+
+                                break;
+                            }
+                        }
+
+                        // add all the remaining cards in the middle
+                        middleCards.addAll(players.get(whoseTurn).getPlayerHand());
+
+                        // clear the middle pile
+                        middleCards.clear();
+
+                        // clear the player's hand
+                        players.get(whoseTurn).getPlayerHand().clear();
+
+                        if (players.get(whoseTurn).getPlayerId() == playersInRightOrder[playersInRightOrder.length - 1].getPlayerId())
+                        {
+                            System.out.println(players.get(whoseTurn).getName() + " is scum for ending the game with 2's");
+                        }
+
+                        // remove the player that just left from the original list of players
+                        players.remove(whoseTurn);
+
+                        // make sure to subtract one so instead of skipping the next player, the game chooses the
+                        // player that comes after the one player we just removed
+                        whoseTurn = whoseTurn - 1;
+
+                    }
+
+                }
+
                 // change turns
                 whoseTurn = changeTurn(whoseTurn);
 
                 // if there is only 1 player left
                 if (players.size() == 1)
                 {
-                    // add the last player in the new list
-                    playersInRightOrder.add(players.get(0));
+                    // loop from the back of the array
+                    for (int i = playersInRightOrder.length - 1; i >= 0; i--)
+                    {
+                        // if there is no one in the last spot
+                        if (playersInRightOrder[i] == null)
+                        {
+                            // place this player in that spot
+                            // they are the scum of this game
+                            playersInRightOrder[i] = players.get(whoseTurn);
+
+                            break;
+                        }
+                    }
 
                     // remove the last player from the original list
                     players.clear();
@@ -892,7 +973,7 @@ public class President
             // the number of secretaries in a game is computed by taking the
             // the number of basic roles there are in the game and subtracting it from
             // the number of players there are in the game a
-            int howManySecretaries = playersInRightOrder.size() - 4;
+            int howManySecretaries = playersInRightOrder.length - 4;
 
             for (int i = 0; i < howManySecretaries; i++)
             {
@@ -906,19 +987,25 @@ public class President
             names.add("Scum");
 
             // loop from the array
-            for (int i = 0; i < playersInRightOrder.size(); i++)
+            for (int i = 0; i < playersInRightOrder.length; i++)
             {
 
                 // print out which role each player has after the game is over
-                System.out.println(playersInRightOrder.get(i).getName() + " is the " + names.get(i) + "\n");
+                System.out.println(playersInRightOrder[i].getName() + " is the " + names.get(i) + "\n");
 
             }
 
             // and re-add them in the order of who went out of the game
-            players.addAll(playersInRightOrder);
+            for (int i = 0; i < playersInRightOrder.length; i++)
+            {
+                players.add(playersInRightOrder[i]);
+            }
 
             // remove all the players in this list for reuse
-            playersInRightOrder.clear();
+            for (int i = 0; i < playersInRightOrder.length; i++)
+            {
+                playersInRightOrder[i] = null;
+            }
 
             Deck deck = new Deck();
 
@@ -1080,7 +1167,7 @@ public class President
                 int maxPoints = players.get(0).getPointsWon();
 
                 int position = 0;
-                
+
                 for (Player p : players)
                 {
                     if (p.getPointsWon() > maxPoints)
@@ -1089,7 +1176,7 @@ public class President
 
                         maxPoints = p.getPointsWon();
                     }
-                    
+
                     position++;
 
                 }
