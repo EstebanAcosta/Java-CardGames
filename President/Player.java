@@ -19,6 +19,8 @@ public class Player
 
     private boolean isOut;
 
+    private int pointsWon;
+
     public Player(int id)
     {
         setPlayerId(id);
@@ -32,6 +34,17 @@ public class Player
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    public int getPointsWon()
+    {
+        return pointsWon;
+    }
+
+    public void addsPointsWon(int pointsWon)
+    {
+        this.pointsWon += pointsWon;
+        
     }
 
     public boolean isOut()
@@ -97,6 +110,16 @@ public class Player
                 count++;
             }
         }
+    }
+
+    /****
+     * Returns that selected card from their hand
+     * @param whichCard
+     * @return
+     */
+    public Card getCardInPlayerCards(int whichCard)
+    {
+        return this.playerCards.get(whichCard - 1);
     }
 
     /***
@@ -178,6 +201,7 @@ public class Player
 
     /***
      * Calculates how many times a certain rank appears in the player's hand
+     * and shows the rank and the # of times they appear on the screen
      * @param cardPosition
      * @return
      */
@@ -281,16 +305,6 @@ public class Player
 
         return false;
 
-    }
-
-    /****
-     * Returns that selected card from their hand
-     * @param whichCard
-     * @return
-     */
-    public Card getCardInPlayerCards(int whichCard)
-    {
-        return this.playerCards.get(whichCard - 1);
     }
 
     /***

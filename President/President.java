@@ -119,6 +119,9 @@ public class President
             // give this player the predetermined number of cards
             players.get(i).addMultipleToPlayerHand(cardsPerPerson);
 
+            // give each player a score of 0
+            players.get(i).addsPointsWon(0);
+
             // make sure that each status of the player is set to false
             // their out status at the beginning of each round should be set to false
             players.get(i).setOut(false);
@@ -184,41 +187,46 @@ public class President
 
         Card threeOfClubs = new Card(Suit.CLUBS, Rank.THREE);
 
-        int rounds = 0;
+        int currentRound = 0;
 
         int whoseTurn = 0;
 
-        // loop through the players participating in the game
-        for (int j = 0; j < players.size(); j++)
+        // if this is the start of a new game, the first person to play has to have a 3 of clubs in their hand
+        if (currentRound == 0)
         {
-            // if this player has the three of clubs
-            if (players.get(j).containsThisCard(threeOfClubs))
+            // loop through the players participating in the game
+            for (int j = 0; j < players.size(); j++)
             {
-                // this person will be the first player to put down a card
-                whoseTurn = j;
-
-                // loop through the player's hand
-                for (int i = 1; i < players.get(j).getPlayerHand().size() + 1; i++)
+                // if this player has the three of clubs
+                if (players.get(j).containsThisCard(threeOfClubs))
                 {
-                    // if the player's card is equal to the one we are looking for (in this case a three of clubs)
-                    if (players.get(j).getCardInPlayerCards(i).equals(threeOfClubs))
+                    // this person will be the first player to put down a card
+                    whoseTurn = j;
+
+                    // loop through the player's hand
+                    for (int i = 1; i < players.get(j).getPlayerHand().size() + 1; i++)
                     {
+                        // if the player's card is equal to the one we are looking for (in this case a three of clubs)
+                        if (players.get(j).getCardInPlayerCards(i).equals(threeOfClubs))
+                        {
 
-                        // remove the card from the person's hand and place it in the middle of table
-                        middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i));
+                            // remove the card from the person's hand and place it in the middle of table
+                            middleCards.add(players.get(whoseTurn).removeOneFromPlayerCards(i));
 
+                        }
                     }
-                }
 
-                break;
+                    break;
+                }
             }
+
+            // since the player that has a three of clubs put down their card in the middle, it's the next player's turn
+            whoseTurn = changeTurn(whoseTurn);
+
         }
 
-        // since the player that has a three of clubs put down their card in the middle, it's the next player's turn
-        whoseTurn = changeTurn(whoseTurn);
-
         // continue playing the game until there are no more rounds left
-        while (numRounds != rounds)
+        while (numRounds != currentRound)
         {
 
             int howManyCardsOfSameRankToPutDown = 1;
@@ -234,22 +242,28 @@ public class President
             while (isEveryoneOut() == false)
             {
 
-                if (players.get(whoseTurn).getNumOfPlayerCards() == 0)
+                if (players.get(whoseTurn).getNumOfPlayerCards() == 0 && players.get(whoseTurn).isOut() == false)
                 {
                     System.out.println("You are out of the game due to the fact that you have no cards ," + players.get(whoseTurn).getName());
 
-                    // loop from the end of the array to the start of the array
-                    for (int i = whoWentOut.length - 1; i >= 0; i--)
+                    // loop through the array
+                    for (int i = 0; i < whoWentOut.length; i++)
                     {
                         // check to see if that spot in the array is empty
-                        if (whoWentOut.equals(null))
+                        if (whoWentOut[i] == 0)
                         {
                             // if it is, add this player's id in that spot
                             whoWentOut[i] = players.get(whoseTurn).getPlayerId();
 
+                            // break out of the loop so the loop doesn't put this player's id in other empty spots
+                            break;
+
                         }
 
                     }
+
+                    // make sure to set this player's out status to true
+                    players.get(whoseTurn).setOut(true);
 
                 }
 
@@ -262,7 +276,7 @@ public class President
                     continue;
                 }
 
-                System.out.println("Round " + (rounds + 1));
+                System.out.println("Round " + (currentRound + 1));
 
                 System.out.println("Rule: You can only put down " + howManyCardsOfSameRankToPutDown + " " + (howManyCardsOfSameRankToPutDown > 1 ? "cards" : "card") + " of the same rank down in the middle\n");
 
@@ -839,18 +853,238 @@ public class President
                 System.out.println("__________________________________________________\n");
 
             }
-            
-            System.out.println("End of the round results: ");
-                      
-            String[] names = new String[players.size()];
-            // loop from the end of the array
-            for (int i = whoWentOut.length - 1; i >= 0; i--)
-            {
-                
-            }
-            
 
-            rounds++;
+            currentRound++;
+
+            // At the end of the round, which player gets which role is announced
+            System.out.println("End of the round results: \n");
+
+            ArrayList<String> names = new ArrayList<String>();
+
+            // the first player will be president
+            names.add("President");
+
+            // the second player will be vice president
+            names.add("Vice President");
+
+            // if there are 7 players there will be 3 secretaries
+            // if there are six players there will be 2 secretaries
+            // and if there are five players there will be 1 secretary
+            // the number of secretaries in a game is computed by taking the
+            // the number of basic roles there are in the game and subtracting it from
+            // the number of players there are in the game a
+            int howManySecretaries = players.size() - 4;
+
+            for (int i = 0; i < howManySecretaries; i++)
+            {
+                names.add("Secretary");
+            }
+
+            // the second to last player is going to vice scum
+            names.add("Vice Scum");
+
+            // the last player is going to be scum
+            names.add("Scum");
+
+            // A list of the players in the order they left the game.
+            ArrayList<Player> playersInRightOrder = new ArrayList<Player>();
+
+            // loop from the array
+            for (int i = 0; i < whoWentOut.length; i++)
+            {
+                // find each player by first taking the player id number stored in the array whoWentOut
+                // and subtracting one from it
+                // (the player id # is one more than their index position).
+
+                // print out which role each player has after the game is over
+                System.out.println(players.get(whoWentOut[i] - 1).getName() + " is the " + names.get(i) + "\n");
+
+                // since we want to know which players have which roles, we need to create another array list
+                // and add them in that specific order in the array list
+                playersInRightOrder.add(players.get(whoWentOut[i] - 1));
+            }
+
+            // remove all the players in the list
+            players.clear();
+
+            // and re-add them in the order of who went out of the game
+            players.addAll(playersInRightOrder);
+
+            Deck deck = new Deck();
+
+            // shuffle the game deck
+            deck.shuffle();
+
+            // calculate how many cards we are supposed to distribute to each player
+            int howManyCardsToEachPlayer = deck.getSize() / players.size();
+
+            // if we can't give each player the same amount of cards
+            if (deck.getSize() % players.size() != 0)
+            {
+                // calculate how many cards would be left over if we gave each player
+                // roughly the same number of cards
+                int leftOverCards = deck.getSize() % players.size();
+
+                // and then give a certain number of random players
+                // (that number is determined by the number of leftover cards left)
+                // a card
+                for (int i = 0; i < leftOverCards; i++)
+                {
+                    players.get(i).addOneToPlayerHand(deck.draw());
+                }
+
+            }
+
+            // loop through the list of players and give each player their
+            // cards
+            for (int i = 0; i < players.size(); i++)
+            {
+
+                // draw a predetermined number of cards from the deck
+                ArrayList<Card> cardsPerPerson = deck.draw(howManyCardsToEachPlayer);
+
+                // give this player the predetermined number of cards
+                players.get(i).addMultipleToPlayerHand(cardsPerPerson);
+
+                // make sure that each status of the player is set to false
+                // their out status at the beginning of each round should be set to false
+                players.get(i).setOut(false);
+
+                System.out.println(players.get(i).getName() + " has " + players.get(i).getNumOfPlayerCards() + " cards");
+
+                System.out.println("__________________________________________________\n");
+
+            }
+
+            int points = 3;
+
+            for (Player p : players)
+            {
+                p.addsPointsWon(points);
+
+                System.out.println(p.getName() + " has " + p.getPointsWon() + " points so far");
+
+                points--;
+            }
+
+            System.out.println("__________________________________________________________________________________________________________\n");
+
+            if (numRounds != currentRound)
+            {
+
+                // choose a random card and save their rank and their value
+                int highestRank = players.get(players.size() - 1).getCardInPlayerCards(1).getValueOfCard();
+
+                Card highestRankedCard = players.get(players.size() - 1).getCardInPlayerCards(1);
+
+                int highestRankedCardIndex = 0;
+
+                int position = 1;
+
+                // loop through the scum's cards
+                for (Card c : players.get(players.size() - 1).getPlayerHand())
+                {
+                    // if the rank of the current card is higher than the rank we are comparing it to
+                    if (c.getValueOfCard() > highestRank)
+                    {
+                        // that is the highest ranked card
+                        highestRankedCard = c;
+
+                        // keep track of the position
+                        highestRankedCardIndex = position;
+                    }
+
+                    position++;
+                }
+
+                System.out.println(players.get(0).getName() + " receives a " + players.get(players.size() - 1).getCardInPlayerCards(highestRankedCardIndex) + "\n");
+
+                //remove the highest ranked card in the scum's hand and put it in the president's hand
+                players.get(0).addOneToPlayerHand(players.get(players.size() - 1).removeOneFromPlayerCards(highestRankedCardIndex));
+
+                players.get(0).showPlayerCards();
+
+                System.out.println("Which card do you wish to give " + players.get(players.size() - 1).getName() + ", Mr. President " + players.get(0).getName() + "?");
+
+                // ask the player which card they want to put down
+                String selectedCard = kbd.nextLine();
+
+                // if player gives a non-numerical answer
+                // continue prompting player until they give a numeric answer
+                while (!selectedCard.matches("[0-9]+"))
+                {
+                    System.out.println("Please enter a number for the card you wish to put down in this game");
+
+                    selectedCard = kbd.nextLine();
+                }
+
+                // Convert the string input into an integer
+                int whichCard = Integer.parseInt(selectedCard);
+
+                // If the player puts a number greater than the number of cards in the player's hand or less than 1
+                // Continue prompting the player until they give
+                // a number between 1 and the # of cards in the player's hand
+                while (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                {
+                    // Warning messages depending on the mistake the player made
+                    // if the player chose a card that's not in the range of cards they have in their hand, this message will be displayed
+                    if (whichCard < 1 || whichCard > players.get(whoseTurn).getNumOfPlayerCards())
+                    {
+                        System.out.println("Please choose a card that's within the range of between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                    }
+
+                    // get player input
+                    selectedCard = kbd.nextLine();
+
+                    // if player gives a non-numerical answer
+                    // continue prompting player until they give a numeric answer
+                    while (!selectedCard.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get player input
+                        selectedCard = kbd.nextLine();
+                    }
+
+                    // convert the player input into an integer
+                    whichCard = Integer.parseInt(selectedCard);
+                }
+
+                System.out.println(players.get(players.size() - 1).getName() + " receives a " + players.get(0).getCardInPlayerCards(whichCard));
+
+                // Remove the selected card from the president's hand
+                // And add it to the scum's hand
+                players.get(players.size() - 1).addOneToPlayerHand(players.get(0).removeOneFromPlayerCards(whichCard));
+
+                System.out.println("__________________________________________________________________________________________________________\n");
+
+            }
+
+            else
+            {
+                int IAmTheWinner = players.get(0).getPlayerId();
+
+                int maxPoints = players.get(0).getPointsWon();
+
+                for (Player p : players)
+                {
+                    if (p.getPointsWon() > maxPoints)
+                    {
+                        IAmTheWinner = p.getPlayerId();
+
+                        maxPoints = p.getPointsWon();
+                    }
+
+                }
+
+                System.out.println("The winner of the game is" + players.get(IAmTheWinner - 1) + " with " + players.get(IAmTheWinner - 1).getPointsWon() + " points\n");
+
+                System.out.println("Thank you for playing President\n");
+
+                System.out.println("__________________________________________________________________________________________________________\n");
+
+            }
 
         }
 
