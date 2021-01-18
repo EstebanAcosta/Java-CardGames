@@ -358,8 +358,6 @@ public class President
 
                 }
 
-                //
-
                 // show this player's hand
                 players.get(whoseTurn).showPlayerCards();
 
@@ -710,7 +708,7 @@ public class President
                 }
 
                 // if they player wants to put down four cards at the same time
-                // they will clear the deck and it will be their turn again
+                // this will clear the deck and it will be their turn again
                 else if ((thisCard.getRank() == Rank.TWO && howMany2sToPutDown == 4 && cardsToPutDown.size() == 4) || howManyCardsOfSameRankToPutDown == 4)
                 {
 
