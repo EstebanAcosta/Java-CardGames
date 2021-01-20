@@ -17,6 +17,8 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
+    private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
+
     private int pointsWon;
 
     public Player(int id)
@@ -42,7 +44,7 @@ public class Player
     public void addsPointsWon(int pointsWon)
     {
         this.pointsWon += pointsWon;
-        
+
     }
 
     public ArrayList<Card> getPlayerHand()
@@ -79,6 +81,37 @@ public class Player
     public Card removeOneFromPlayerCards(int position)
     {
         return playerCards.remove(position - 1);
+    }
+
+    /***
+     * Add any sets or runs in this player's list of melds
+     * @param set
+     */
+    public void addMeld(ArrayList<Card> set)
+    {
+        // the key should be in which order that set/run has been added to the list of melds
+        // the value should be the run/set
+        melds.put(melds.size() + 1, set);
+    }
+    
+    public boolean isASet()
+    {
+        return true;
+    }
+    
+    public boolean isARun()
+    {
+        return false;
+    }
+    
+    public void findSets()
+    {
+        
+    }
+    
+    public void findRuns()
+    {
+        
     }
 
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
@@ -248,6 +281,8 @@ public class Player
         }
         return count;
     }
+    
+
 
     /***
      * Checks to see if the user has two or more of the same card in their hand.

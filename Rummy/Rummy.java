@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-
 public class Rummy
 {
     private ArrayList<Player> players = new ArrayList<Player>();
+
     /**
      * Adds that number of players to the list of players
      * @param numPlayers
@@ -61,7 +61,7 @@ public class Rummy
 
         System.out.println(numPlayers + " players have been added to the game\n");
     }
-    
+
     public void setUpPlayers()
     {
         Scanner kbd = new Scanner(System.in);
@@ -75,17 +75,16 @@ public class Rummy
         // calculate how many cards we are supposed to distribute to each player
         int howManyCardsToEachPlayer = 0;
 
-
-        if(players.size() == 2)
+        if (players.size() == 2)
         {
             howManyCardsToEachPlayer = 10;
         }
-        
-        else if(players.size() == 3 || players.size() == 4)
+
+        else if (players.size() == 3 || players.size() == 4)
         {
             howManyCardsToEachPlayer = 7;
         }
-        
+
         else
         {
             howManyCardsToEachPlayer = 6;
@@ -116,9 +115,11 @@ public class Rummy
             System.out.println("__________________________________________________\n");
 
         }
+
+        setUpGame(deck);
     }
 
-    public void setUpGame(Deck deck)
+    public void setUpGame(Deck stack)
     {
         Scanner kbd = new Scanner(System.in);
 
@@ -160,35 +161,203 @@ public class Rummy
 
         System.out.println("__________________________________________________\n");
 
-        startGame(deck, numberOfRounds);
+        startGame(stack, numberOfRounds);
     }
 
     public void startGame(Deck stack, int numRounds)
     {
         ArrayList<Card> discardPile = new ArrayList<Card>();
-        
-        //flip over a card from the stack and put it in the discard pile
+
+        // flip over a card from the stack and put it in the discard pile
         discardPile.add(stack.draw());
-        
+
         int currentRound = 0;
-        
+
         Random rand = new Random();
-        
-        //randomly choose who can start the game
+
+        Scanner kbd = new Scanner(System.in);
+
+        // randomly choose who can start the game
         int whoseTurn = rand.nextInt(players.size());
-        
-        while(currentRound != numRounds)
+
+        while (currentRound != numRounds)
         {
-            while(true)
+            while (atLeastSomeoneIsOut() == false)
             {
+
                 System.out.println("Round " + currentRound);
-                
+
+                System.out.println("Discard Pile: ");
+                for (int i = 0; i < discardPile.size(); i++)
+                {
+                    System.out.println((i + 1) + ": " + discardPile.get(i));
+                }
+
+                players.get(whoseTurn).showPlayerCards();
+
+                System.out.println("Do you want to take a card from the discard pile or the stock pile?\n");
+
+                System.out.println("1. Stack ");
+                System.out.println("2. Discard Pile\n");
+
+                String whichPile = "";
+
+                // Convert the string input into an integer
+                int thisPile = 0;
+
+                // If the user puts a number greater than 2 or less than 1
+                // Continue prompting the user until they give
+                // a number between 1 and 2
+                while (thisPile < 1 || thisPile > 2)
+                {
+                    System.out.println("Please keep the option number between 1 and 2");
+
+                    // get user input
+                    whichPile = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!whichPile.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get user input
+                        whichPile = kbd.nextLine();
+                    }
+
+                    // convert the user input into an integer
+                    thisPile = Integer.parseInt(whichPile);
+                }
+
+                // if the player chose to draw one from the stack
+                if (thisPile == 1)
+                {
+                    // remove the card from the stack and add it to the player's hand
+                    players.get(whoseTurn).addOneToPlayerHand(stack.draw());
+                }
+
+                else
+                {
+                    System.out.println("One or multiple cards?");
+
+                    System.out.println("1: One");
+                    
+                    
+                    System.out.println("2: Multiple\n");
+
+                    int pickUpOne = 0;
+
+                    if (pickUpOne == 1)
+                    {
+                        players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
+
+                    }
+
+                    else
+                    {
+                        System.out.println("Which card in the discard pile do you want?");
+
+                        String whichCardFromDiscard = "";
+
+                        int thisCardFromDiscard = 0;
+
+                        // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                        // Continue prompting the user
+                        while (thisCardFromDiscard < 1 || thisCardFromDiscard > discardPile.size())
+                        {
+                            System.out.println("Please keep the option number between 1 and " + discardPile.size());
+
+                            // get user input
+                            whichCardFromDiscard = kbd.nextLine();
+
+                            // if user gives a non-numerical answer
+                            // continue prompting user until they give a numeric answer
+                            while (!whichCardFromDiscard.matches("[0-9]+"))
+                            {
+                                System.out.println("Please enter a number");
+
+                                // get user input
+                                whichCardFromDiscard = kbd.nextLine();
+                            }
+
+                            // convert the user input into an integer
+                            thisCardFromDiscard = Integer.parseInt(whichCardFromDiscard);
+                        }
+
+                        System.out.println("Card selected is: " + players.get(whoseTurn).getCardInPlayerCards(thisCardFromDiscard) + "\n");
+
+                        // loop through the discard pile from the back to whichever card the player wants in their hand
+                        // the last card in the array list version of the discard pile is the last card placed in the discard
+                        for (int i = discardPile.size() - 1; i >= thisCardFromDiscard; i--)
+
+                        {
+                            // add each card to this new list
+                            players.get(whoseTurn).addOneToPlayerHand(discardPile.get(i));
+
+                            // show which card has been added
+                            System.out.println(discardPile.get(i) + " has been added to " + players.get(whoseTurn).getName() + "'s hand");
+
+                            // remove this card from the discard pile
+                            discardPile.remove(i);
+
+                            System.out.println("______________________________________________________________________________________________");
+                        }
+
+                    }
+
+                }
+
+                System.out.println("Which card do you wish to discard?\n");
+
+                players.get(whoseTurn).showPlayerCards();
+
+                String whichCardToDiscard = "";
+
+                int thisCardToDiscard = 0;
+
+                // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                // Continue prompting the user
+                while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards())
+                {
+                    System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                    // get user input
+                    whichCardToDiscard = kbd.nextLine();
+
+                    // if user gives a non-numerical answer
+                    // continue prompting user until they give a numeric answer
+                    while (!whichCardToDiscard.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get user input
+                        whichCardToDiscard = kbd.nextLine();
+                    }
+
+                    // convert the user input into an integer
+                    thisCardToDiscard = Integer.parseInt(whichCardToDiscard);
+                }
+
                 whoseTurn = changeTurn(whoseTurn);
+
+                break;
             }
 
         }
-        
-        
+
+    }
+
+    public boolean atLeastSomeoneIsOut()
+    {
+        for (Player p : players)
+        {
+            if (p.getNumOfPlayerCards() == 0)
+            {
+                return true;
+            }
+
+        }
+        return false;
     }
 
     /***
@@ -214,11 +383,13 @@ public class Rummy
 
         return currentTurn;
     }
-    
+
     public static void main(String[] args)
     {
         Rummy rummy = new Rummy();
-        
+
         rummy.setUpNumOfPlayers();
+
+        rummy.setUpPlayers();
     }
 }
