@@ -188,6 +188,7 @@ public class Rummy
                 System.out.println("Round " + currentRound);
 
                 System.out.println("Discard Pile: ");
+
                 for (int i = 0; i < discardPile.size(); i++)
                 {
                     System.out.println((i + 1) + ": " + discardPile.get(i));
@@ -238,21 +239,56 @@ public class Rummy
 
                 else
                 {
-                    System.out.println("One or multiple cards?");
 
-                    System.out.println("1: One");
-                    
-                    
-                    System.out.println("2: Multiple\n");
+                    int pickUpOneFromDiscard = 1;
 
-                    int pickUpOne = 0;
+                    String pickUpFromDiscard = "";
 
-                    if (pickUpOne == 1)
+                    // if there's more than one card in the middle
+                    if (discardPile.size() > 1)
+                    {
+
+                        System.out.println("Do you want to pick up one or more cards from the discard pile, " + players.get(whoseTurn).getName() + "?");
+
+                        // print out a list of options
+                        System.out.println("1: One");
+
+                        System.out.println("2: Multiple\n");
+
+                        // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                        // Continue prompting the user
+                        while (pickUpOneFromDiscard < 1 || pickUpOneFromDiscard > discardPile.size())
+                        {
+                            System.out.println("Please keep the option number between 1 and " + discardPile.size());
+
+                            // get user input
+                            pickUpFromDiscard = kbd.nextLine();
+
+                            // if user gives a non-numerical answer
+                            // continue prompting user until they give a numeric answer
+                            while (!pickUpFromDiscard.matches("[0-9]+"))
+                            {
+                                System.out.println("Please enter a number");
+
+                                // get user input
+                                pickUpFromDiscard = kbd.nextLine();
+                            }
+
+                            // convert the user input into an integer
+                            pickUpOneFromDiscard = Integer.parseInt(pickUpFromDiscard);
+                        }
+                    }
+
+                    // if player chooses to pick up one card from the discard pile
+                    if (pickUpOneFromDiscard == 1)
                     {
                         players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
 
+                        discardPile.clear();
+
                     }
 
+                    // if the player chooses to pick up multiple cards from the discard pile
                     else
                     {
                         System.out.println("Which card in the discard pile do you want?");
@@ -261,7 +297,7 @@ public class Rummy
 
                         int thisCardFromDiscard = 0;
 
-                        // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                        // If the user puts a number greater than the # of cards in the discard pile or less than 1
                         // Continue prompting the user
                         while (thisCardFromDiscard < 1 || thisCardFromDiscard > discardPile.size())
                         {
@@ -307,9 +343,9 @@ public class Rummy
 
                 }
 
-                System.out.println("Which card do you wish to discard?\n");
-
                 players.get(whoseTurn).showPlayerCards();
+
+                System.out.println("Which card do you wish to discard?\n");
 
                 String whichCardToDiscard = "";
 
@@ -337,6 +373,11 @@ public class Rummy
                     // convert the user input into an integer
                     thisCardToDiscard = Integer.parseInt(whichCardToDiscard);
                 }
+
+                // remove the card the player selected from their hand and put it in the discard pile
+                discardPile.add(players.get(whoseTurn).removeOneFromPlayerCards(thisCardToDiscard));
+
+                System.out.println("______________________________________________________________________________________________");
 
                 whoseTurn = changeTurn(whoseTurn);
 
