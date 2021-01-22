@@ -52,22 +52,6 @@ public class Player
         return playerCards;
     }
 
-    public void addMultipleToPlayerHand(ArrayList<Card> playerCards)
-    {
-        this.playerCards.addAll(playerCards);
-    }
-
-    public void addOneToPlayerHand(Card oneCard)
-    {
-        this.playerCards.add(oneCard);
-    }
-
-    public int getNumOfPlayerCards()
-    {
-        return this.playerCards.size();
-
-    }
-
     public int getPlayerId()
     {
         return playerId;
@@ -78,42 +62,36 @@ public class Player
         this.playerId = playerId;
     }
 
+    public int getNumOfPlayerCards()
+    {
+        return this.playerCards.size();
+
+    }
+
+    public void addMultipleToPlayerHand(ArrayList<Card> playerCards)
+    {
+        this.playerCards.addAll(playerCards);
+    }
+
+    public void addOneToPlayerHand(Card oneCard)
+    {
+        this.playerCards.add(oneCard);
+    }
+
     public Card removeOneFromPlayerCards(int position)
     {
         return playerCards.remove(position - 1);
     }
 
-    /***
-     * Add any sets or runs in this player's list of melds
-     * @param set
-     */
-    public void addMeld(ArrayList<Card> set)
+    public Hashtable<Integer, ArrayList<Card>> getMelds()
     {
-        // the key should be in which order that set/run has been added to the list of melds
-        // the value should be the run/set
-        melds.put(melds.size() + 1, set);
-    }
-    
-    public boolean isASet()
-    {
-        return true;
-    }
-    
-    public boolean isARun()
-    {
-        return false;
-    }
-    
-    public void findSets()
-    {
-        
-    }
-    
-    public void findRuns()
-    {
-        
+        return this.melds;
     }
 
+    /****
+     * Removes the selected cards from the player's hand
+     * @param cards
+     */
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
     {
         int count = 0;
@@ -131,6 +109,37 @@ public class Player
                 count++;
             }
         }
+    }
+
+    /***
+     * Add any sets or runs in this player's list of melds
+     * @param set
+     */
+    public void addMeld(ArrayList<Card> set)
+    {
+        // the key should be in which order that set/run has been added to the list of melds
+        // the value should be the run/set
+        melds.put(melds.size() + 1, set);
+    }
+
+    public boolean isThereASet()
+    {
+        return false;
+    }
+
+    public boolean isThereARun()
+    {
+        return false;
+    }
+
+    public void findSets()
+    {
+
+    }
+
+    public void findRuns()
+    {
+
     }
 
     /****
@@ -159,6 +168,30 @@ public class Player
         }
 
         return false;
+    }
+
+    /****
+     * Prints all the melds this player has to the screen
+     */
+    public void showMelds()
+    {
+        System.out.println(getName() + "'s melds:");
+
+        // loop through the list of melds
+        for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        {
+            // print out the key
+            System.out.print(entry.getKey() + " ");
+
+            // print out the run or set associated with that key
+            for (Card c : entry.getValue())
+            {
+                System.out.print(c + " ");
+            }
+
+            System.out.println();
+        }
+
     }
 
     /***
@@ -281,8 +314,6 @@ public class Player
         }
         return count;
     }
-    
-
 
     /***
      * Checks to see if the user has two or more of the same card in their hand.

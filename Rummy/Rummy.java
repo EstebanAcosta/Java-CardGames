@@ -171,7 +171,7 @@ public class Rummy
         // flip over a card from the stack and put it in the discard pile
         discardPile.add(stack.draw());
 
-        int currentRound = 0;
+        int currentRound = 1;
 
         Random rand = new Random();
 
@@ -180,14 +180,14 @@ public class Rummy
         // randomly choose who can start the game
         int whoseTurn = rand.nextInt(players.size());
 
-        while (currentRound != numRounds)
+        while (currentRound <= numRounds)
         {
             while (atLeastSomeoneIsOut() == false)
             {
 
-                System.out.println("Round " + currentRound);
+                System.out.println("Round " + currentRound + "\n");
 
-                System.out.println("Discard Pile: ");
+                System.out.println("Discard Pile:");
 
                 for (int i = 0; i < discardPile.size(); i++)
                 {
@@ -196,10 +196,11 @@ public class Rummy
 
                 players.get(whoseTurn).showPlayerCards();
 
-                System.out.println("Do you want to take a card from the discard pile or the stock pile?\n");
 
                 System.out.println("1. Stack ");
                 System.out.println("2. Discard Pile\n");
+
+                System.out.println("Do you want to take a card from the discard pile or the stock pile?");
 
                 String whichPile = "";
 
@@ -237,10 +238,11 @@ public class Rummy
                     players.get(whoseTurn).addOneToPlayerHand(stack.draw());
                 }
 
+                // if the player chooses to draw a card or cards from the discard pile
                 else
                 {
 
-                    int pickUpOneFromDiscard = 1;
+                    int pickUpOneFromDiscard = 0;
 
                     String pickUpFromDiscard = "";
 
@@ -248,18 +250,18 @@ public class Rummy
                     if (discardPile.size() > 1)
                     {
 
-                        System.out.println("Do you want to pick up one or more cards from the discard pile, " + players.get(whoseTurn).getName() + "?");
-
                         // print out a list of options
                         System.out.println("1: One");
 
                         System.out.println("2: Multiple\n");
 
+                        System.out.println("Do you want to pick up one or more cards from the discard pile, " + players.get(whoseTurn).getName() + "?");
+
                         // If the user puts a number greater than the # of cards in the player's hand or less than 1
                         // Continue prompting the user
-                        while (pickUpOneFromDiscard < 1 || pickUpOneFromDiscard > discardPile.size())
+                        while (pickUpOneFromDiscard < 1 || pickUpOneFromDiscard > 2)
                         {
-                            System.out.println("Please keep the option number between 1 and " + discardPile.size());
+                            System.out.println("Please keep the option number between 1 and 2");
 
                             // get user input
                             pickUpFromDiscard = kbd.nextLine();
@@ -284,14 +286,19 @@ public class Rummy
                     {
                         players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
 
-                        discardPile.clear();
 
+                        discardPile.remove(discardPile.size() - 1);
                     }
 
                     // if the player chooses to pick up multiple cards from the discard pile
                     else
                     {
-                        System.out.println("Which card in the discard pile do you want?");
+                        for (int i = 0; i < discardPile.size(); i++)
+                        {
+                            System.out.println((i + 1) + ": " + discardPile.get(i));
+                        }
+
+                        System.out.println("\nWhich card in the discard pile do you want?");
 
                         String whichCardFromDiscard = "";
 
@@ -320,23 +327,100 @@ public class Rummy
                             thisCardFromDiscard = Integer.parseInt(whichCardFromDiscard);
                         }
 
-                        System.out.println("Card selected is: " + players.get(whoseTurn).getCardInPlayerCards(thisCardFromDiscard) + "\n");
+                        System.out.println("Card selected is: " + discardPile.get(thisCardFromDiscard - 1) + "\n");
 
                         // loop through the discard pile from the back to whichever card the player wants in their hand
                         // the last card in the array list version of the discard pile is the last card placed in the discard
-                        for (int i = discardPile.size() - 1; i >= thisCardFromDiscard; i--)
+                        // Have to subtract 1 from the variable because the option the player selected is one more than the
+                        // actual index position of the card
+                        for (int i = discardPile.size() - 1; i >= (thisCardFromDiscard - 1); i--)
 
                         {
                             // add each card to this new list
                             players.get(whoseTurn).addOneToPlayerHand(discardPile.get(i));
 
                             // show which card has been added
-                            System.out.println(discardPile.get(i) + " has been added to " + players.get(whoseTurn).getName() + "'s hand");
+                            System.out.println(discardPile.get(i) + " has been added to " + players.get(whoseTurn).getName() + "'s hand\n");
 
                             // remove this card from the discard pile
                             discardPile.remove(i);
 
-                            System.out.println("______________________________________________________________________________________________");
+                        }
+
+                    }
+
+                }
+
+                ArrayList<Player> playersWithMelds = new ArrayList<Player>();
+
+                // loop through the players
+                for (Player p : players)
+                {
+                    // if this player has melds
+                    if (p.getMelds().size() > 0)
+                    {
+                        // add this player to this new list of players that have melds
+                        playersWithMelds.add(p);
+                    }
+
+                }
+
+                // if there is at least one player who has a meld
+                if (playersWithMelds.size() > 0)
+                {
+                    int option = 1;
+
+                    String whichOption = "";
+
+                    int thisOption = 0;
+
+                    System.out.println("Whose melds do you want to see? ");
+
+                    // continue showing the menu options
+                    while (thisOption != playersWithMelds.size() + 1)
+                    {
+
+                        // show each player that has at least one meld
+                        for (Player p : playersWithMelds)
+                        {
+                            System.out.println(option + ": " + p.getName());
+
+                            option++;
+
+                        }
+
+                        // show the quit option
+                        System.out.println(option + ": quit");
+
+                        // continue prompting the player until they enter a legal option number
+                        while (thisOption < 1 || thisOption > playersWithMelds.size())
+                        {
+                            System.out.println("Please select an option between 1 and " + players.size());
+
+                            // get player input
+                            whichOption = kbd.nextLine();
+
+                            // if the player input isn't a number
+                            while (!whichOption.matches("[0-9]+"))
+                            {
+                                System.out.println("Please enter a number");
+
+                                // get player input
+                                whichOption = kbd.nextLine();
+                            }
+
+                            // convert input to a number
+                            thisOption = Integer.parseInt(whichOption);
+                        }
+
+                        // if the option the player selected isn't the quit option
+                        if (thisOption != option)
+                        {
+                            // shows this player's melds
+                            playersWithMelds.get(thisOption - 1).showMelds();
+
+                            // Ask the player if they want to add to this player's meld
+                            System.out.println("Do you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld");
                         }
 
                     }
