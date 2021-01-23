@@ -18,11 +18,9 @@ public class Player
 
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
-    private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
+    private Hashtable<Integer, ArrayList<Card>> sets = new Hashtable<Integer, ArrayList<Card>>();
 
-    Hashtable<Integer, ArrayList<Card>> sets = new Hashtable<Integer, ArrayList<Card>>();
-
-    Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
+    private Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
 
     private int pointsWon;
 
@@ -50,6 +48,16 @@ public class Player
     {
         this.pointsWon += pointsWon;
 
+    }
+    
+    public Hashtable<Integer, ArrayList<Card>> getRuns()
+    {
+        return this.runs;
+    }
+    
+    public Hashtable<Integer, ArrayList<Card>> getSets()
+    {
+        return this.sets;
     }
 
     public ArrayList<Card> getPlayerHand()
@@ -109,22 +117,6 @@ public class Player
                 count++;
             }
         }
-    }
-
-    /***
-     * Add any sets or runs in this player's list of melds
-     * @param set
-     */
-    public void addMeld(ArrayList<Card> set)
-    {
-        // the key should be in which order that set/run has been added to the list of melds
-        // the value should be the run/set
-        melds.put(melds.size() + 1, set);
-    }
-
-    public Hashtable<Integer, ArrayList<Card>> getMelds()
-    {
-        return this.melds;
     }
 
     public boolean isThereASet()
@@ -316,14 +308,38 @@ public class Player
     }
 
     /****
-     * Prints all the melds this player has to the screen
+     * Prints all the runs this player has to the screen
      */
-    public void showMelds()
+    public void showRuns()
     {
-        System.out.println(getName() + "'s melds:");
+        System.out.println(getName() + "'s runs:");
 
-        // loop through the list of melds
-        for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        // loop through the list of runs
+        for (Map.Entry<Integer, ArrayList<Card>> entry : runs.entrySet())
+        {
+            // print out the key
+            System.out.print(entry.getKey() + " ");
+
+            // print out the run or set associated with that key
+            for (Card c : entry.getValue())
+            {
+                System.out.print(c + " ");
+            }
+
+            System.out.println();
+        }
+
+    }
+    
+    /****
+     * Prints all the sets this player has to the screen
+     */
+    public void showSets()
+    {
+        System.out.println(getName() + "'s sets:");
+
+        // loop through the list of sets
+        for (Map.Entry<Integer, ArrayList<Card>> entry : sets.entrySet())
         {
             // print out the key
             System.out.print(entry.getKey() + " ");

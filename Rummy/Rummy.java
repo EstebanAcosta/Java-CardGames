@@ -356,7 +356,7 @@ public class Rummy
                 for (Player p : players)
                 {
                     // if this player has melds
-                    if (p.getMelds().size() > 0)
+                    if (p.getRuns().size() > 0 || p.getSets().size() > 0)
                     {
                         // add this player to this new list of players that have melds
                         playersWithMelds.add(p);
@@ -419,8 +419,11 @@ public class Rummy
                         // if the option the player selected isn't the quit option
                         if (thisOption != quitOption)
                         {
-                            // shows this player's melds
-                            playersWithMelds.get(thisOption - 1).showMelds();
+                            // show this player's runs
+                            playersWithMelds.get(thisOption - 1).showRuns();
+
+                            // show this player's sets
+                            playersWithMelds.get(thisOption - 1).showSets();
 
                             // Ask the player if they want to add to this player's meld
                             System.out.println("Do you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld");
@@ -456,18 +459,26 @@ public class Rummy
                             {
 
                                 System.out.println();
-                                
-                                players.get(thisOption - 1).showMelds();
-                                
+
+                                players.get(thisOption - 1).showRuns();
+
+                                players.get(thisOption - 1).showSets();
+
                                 System.out.println("Which meld do you want to add to?");
-                                
+
+                                System.out.println("1.Runs");
+
+                                System.out.println("2.Sets");
+
+                                System.out.println();
+
                                 String whichMeld = "";
 
                                 int thisMeld = 0;
 
-                                while (thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size())
+                                while (thisMeld < 1 || thisMeld > 2)
                                 {
-                                    System.out.println("Please select an option between 1 and " + players.get(thisOption - 1).getMelds().size());
+                                    System.out.println("Please select an option between 1 and 2");
 
                                     // get player input
                                     whichMeld = kbd.nextLine();
@@ -484,19 +495,57 @@ public class Rummy
                                     // convert input to a number
                                     thisMeld = Integer.parseInt(whichMeld);
                                 }
-                            }
-                            
-                            System.out.println();
-                            
-                            System.out.println("Now choose a card to form a meld");
-                            
-                            players.get(whoseTurn).showPlayerCards();
-                            
-                            ////////
-                          ////
-                          ////
-                          ////
 
+                                if (thisMeld == 1)
+                                {
+                                    players.get(thisOption - 1).showRuns();
+                                }
+
+                                else
+                                {
+                                    players.get(thisOption - 1).showSets();
+
+                                }
+
+                                System.out.println();
+
+                                System.out.println("Now choose a card to form a meld");
+
+                                players.get(whoseTurn).showPlayerCards();
+
+                                String whichCardToMeld = "";
+
+                                int thisCardToMeld = 0;
+
+                                // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                                // Continue prompting the user
+                                while (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
+                                {
+                                    System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                                    // get user input
+                                    whichCardToMeld = kbd.nextLine();
+
+                                    // if user gives a non-numerical answer
+                                    // continue prompting user until they give a numeric answer
+                                    while (!whichCardToMeld.matches("[0-9]+"))
+                                    {
+                                        System.out.println("Please enter a number");
+
+                                        // get user input
+                                        whichCardToMeld = kbd.nextLine();
+                                    }
+
+                                    // convert the user input into an integer
+                                    thisCardToMeld = Integer.parseInt(whichCardToMeld);
+                                }
+
+                                ////////
+                                ////
+                                ////
+                                ////
+
+                            }
 
                         }
 
@@ -539,22 +588,21 @@ public class Rummy
 
                 // remove the card the player selected from their hand and put it in the discard pile
                 discardPile.add(players.get(whoseTurn).removeOneFromPlayerCards(thisCardToDiscard));
-                
-                if(stack.getSize() == 0)
+
+                if (stack.getSize() == 0)
                 {
-                    //shuffle the discard pile
+                    // shuffle the discard pile
                     Collections.shuffle(discardPile);
-                    
-                    //create a stack using the discard pile
+
+                    // create a stack using the discard pile
                     stack.addAll(discardPile);
-                    
-                    //clear the discard pile
+
+                    // clear the discard pile
                     discardPile.clear();
-                    
-                    //draw one from the stack and add it to the new discard pile
+
+                    // draw one from the stack and add it to the new discard pile
                     discardPile.add(stack.draw());
-                    
-                    
+
                 }
 
                 System.out.println("______________________________________________________________________________________________");
