@@ -469,6 +469,9 @@ public class GoFish
                             // once completed this array list should contain all four cards that make up a book
                             // this array list will be added to this player's list of books
                             players.get(whoseTurn).addBooks(book);
+                            
+                            //remove all cards in this list for reuse
+                            book.clear();
                         }
                     }
                 }

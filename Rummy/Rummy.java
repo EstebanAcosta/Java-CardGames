@@ -454,6 +454,8 @@ public class Rummy
                     }
 
                 }
+                
+                players.get(whoseTurn).findSets();
 
                 players.get(whoseTurn).showPlayerCards();
 

@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
 /***
  * @author estebanacosta
  */
@@ -20,6 +19,10 @@ public class Player
     private ArrayList<Card> playerCards = new ArrayList<Card>();
 
     private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
+
+    Hashtable<Integer, ArrayList<Card>> sets = new Hashtable<Integer, ArrayList<Card>>();
+
+    Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
 
     private int pointsWon;
 
@@ -85,11 +88,6 @@ public class Player
         return playerCards.remove(position - 1);
     }
 
-    public Hashtable<Integer, ArrayList<Card>> getMelds()
-    {
-        return this.melds;
-    }
-
     /****
      * Removes the selected cards from the player's hand
      * @param cards
@@ -124,15 +122,36 @@ public class Player
         melds.put(melds.size() + 1, set);
     }
 
+    public Hashtable<Integer, ArrayList<Card>> getMelds()
+    {
+        return this.melds;
+    }
+
     public boolean isThereASet()
     {
-        Hashtable<Integer, ArrayList<Card>> sets = findSets();
+        // Hashtable<Integer, ArrayList<Card>> sets = findSets();
+
+        //find all possible sets
+        findSets();
+
+        if (sets.size() > 0)
+        {
+            return true;
+        }
         return false;
     }
 
     public boolean isThereARun()
     {
-        Hashtable<Integer, ArrayList<Card>> runs = findRuns();
+        // Hashtable<Integer, ArrayList<Card>> runs = findRuns();
+
+        //find all possible runs
+        findRuns();
+
+        if (runs.size() > 0)
+        {
+            return true;
+        }
 
         return false;
     }
@@ -146,6 +165,11 @@ public class Player
 
         Collections.sort(copyPlayerCards);
         
+        for(Card c : copyPlayerCards)
+        {
+            System.out.println(c);
+        }
+
         // make a hash table of all the ranks and how many times they appear in the player's hand
         Hashtable<Rank, Integer> timesRankAppears = howManyTimesThisRankAppears();
 
@@ -178,11 +202,11 @@ public class Player
 
                     }
                 }
+                
+                set.clear();
 
-               
             }
         }
-        
 
         return null;
     }
@@ -198,7 +222,7 @@ public class Player
 
         return null;
     }
-    
+
     /***
      * Creates an array list of all the ranks the player has in their hand
      * @return
@@ -228,35 +252,34 @@ public class Player
     {
         int count = 0;
 
-        //get an array list of all the ranks this player has in their hand
+        // get an array list of all the ranks this player has in their hand
         ArrayList<Rank> ranks = getAllRanksPlayerHas();
 
-        //create a hash table where the key is rank and the value is the number of times that rank appears in a player's hand
+        // create a hash table where the key is rank and the value is the number of times that rank appears in a player's hand
         Hashtable<Rank, Integer> timesRankAppears = new Hashtable<Rank, Integer>();
 
-        
-        //loop through the ranks the player has
+        // loop through the ranks the player has
         for (Rank rank : ranks)
         {
-            //loop through the cards the player has
+            // loop through the cards the player has
             for (int i = 0; i < playerCards.size(); i++)
             {
-                //if the rank the outer loop is on is equal to this card's rank
+                // if the rank the outer loop is on is equal to this card's rank
                 if (playerCards.get(i).getRank() == rank)
                 {
-                    //add one to count
+                    // add one to count
                     count++;
                 }
             }
-            
-            //place the rank and the number of times this rank appears in the table
+
+            // place the rank and the number of times this rank appears in the table
             timesRankAppears.put(rank, count);
 
-            //reset the counter when it's time for the outer loop to move on to the next rank
+            // reset the counter when it's time for the outer loop to move on to the next rank
             count = 0;
 
         }
-        
+
         return timesRankAppears;
     }
 
