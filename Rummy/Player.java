@@ -124,22 +124,30 @@ public class Player
 
     public boolean isThereASet()
     {
+        Hashtable<Integer,ArrayList<Card>> runs = findSets();
         return false;
     }
 
     public boolean isThereARun()
     {
+        Hashtable<Integer,ArrayList<Card>> runs= findRuns();
+        
         return false;
     }
 
-    public void findSets()
+    public Hashtable<Integer, ArrayList<Card>>  findSets()
     {
 
+        ArrayList<Card> copyPlayerCards = new ArrayList<Card>();
+        
+        return null;
     }
 
-    public void findRuns()
+    public Hashtable<Integer, ArrayList<Card>> findRuns()
     {
 
+        ArrayList<Card> copyPlayerCards = new ArrayList<Card>();
+        return null;
     }
 
     /****
