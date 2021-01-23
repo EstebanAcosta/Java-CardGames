@@ -196,7 +196,6 @@ public class Rummy
 
                 players.get(whoseTurn).showPlayerCards();
 
-
                 System.out.println("1. Stack ");
                 System.out.println("2. Discard Pile\n");
 
@@ -286,7 +285,6 @@ public class Rummy
                     {
                         players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
 
-
                         discardPile.remove(discardPile.size() - 1);
                     }
 
@@ -373,11 +371,13 @@ public class Rummy
                     String whichOption = "";
 
                     int thisOption = 0;
+                    
+                    int quitOption = playersWithMelds.size() + 1;
 
                     System.out.println("Whose melds do you want to see? ");
 
                     // continue showing the menu options
-                    while (thisOption != playersWithMelds.size() + 1)
+                    while (thisOption != quitOption)
                     {
 
                         // show each player that has at least one meld
@@ -414,13 +414,41 @@ public class Rummy
                         }
 
                         // if the option the player selected isn't the quit option
-                        if (thisOption != option)
+                        if (thisOption != quitOption)
                         {
                             // shows this player's melds
                             playersWithMelds.get(thisOption - 1).showMelds();
 
                             // Ask the player if they want to add to this player's meld
                             System.out.println("Do you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld");
+
+                            System.out.println("1. Yes");
+                            System.out.println("2. No");
+
+                            String wantToMeld = "";
+
+                            int decisionToMeld = 0;
+
+                            while (decisionToMeld < 1 || decisionToMeld > 2)
+                            {
+                                System.out.println("Please select an option between 1 and 2");
+
+                                // get player input
+                                wantToMeld = kbd.nextLine();
+
+                                // if the player input isn't a number
+                                while (!whichOption.matches("[0-9]+"))
+                                {
+                                    System.out.println("Please enter a number");
+
+                                    // get player input
+                                    wantToMeld = kbd.nextLine();
+                                }
+
+                                // convert input to a number
+                                decisionToMeld = Integer.parseInt(wantToMeld);
+                            }
+                              
                         }
 
                     }
