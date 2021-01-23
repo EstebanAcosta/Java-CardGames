@@ -81,12 +81,20 @@ public class Deck
         this.deck = deck;
     }
 
+    public void addAll(ArrayList<Card> newCards)
+    {
+
+        deck.addAll(newCards);
+
+    }
+
     public String toString()
     {
 
         String Deck = "";
 
         int numberOfCardsInSuit = 1;
+
         for (Card c : deck)
         {
             if (numberOfCardsInSuit % 13 == 0)

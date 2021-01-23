@@ -129,8 +129,6 @@ public class Player
 
     public boolean isThereASet()
     {
-        // Hashtable<Integer, ArrayList<Card>> sets = findSets();
-
         //find all possible sets
         findSets();
 
@@ -143,8 +141,6 @@ public class Player
 
     public boolean isThereARun()
     {
-        // Hashtable<Integer, ArrayList<Card>> runs = findRuns();
-
         //find all possible runs
         findRuns();
 
@@ -165,10 +161,10 @@ public class Player
 
         Collections.sort(copyPlayerCards);
         
-        for(Card c : copyPlayerCards)
-        {
-            System.out.println(c);
-        }
+//        for(Card c : copyPlayerCards)
+//        {
+//            System.out.println(c);
+//        }
 
         // make a hash table of all the ranks and how many times they appear in the player's hand
         Hashtable<Rank, Integer> timesRankAppears = howManyTimesThisRankAppears();
@@ -182,7 +178,7 @@ public class Player
             if (entry.getValue() == 4 || entry.getValue() == 3)
             {
 
-                Iterator<Card> currentPlayerCards = getPlayerHand().iterator();
+                Iterator<Card> currentPlayerCards = copyPlayerCards.iterator();
 
                 // continue looping until there are no cards left
                 while (currentPlayerCards.hasNext())
@@ -203,12 +199,14 @@ public class Player
                     }
                 }
                 
+                sets.put(set.get(0).getValueOfCard(), set);
+                
                 set.clear();
 
             }
         }
 
-        return null;
+        return sets;
     }
 
     public Hashtable<Integer, ArrayList<Card>> findRuns()
@@ -220,7 +218,13 @@ public class Player
 
         Collections.sort(copyPlayerCards);
 
-        return null;
+        return runs;
+    }
+    
+    
+    public void combineRuns()
+    {
+        
     }
 
     /***

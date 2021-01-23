@@ -1,6 +1,7 @@
 package Rummy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -371,10 +372,8 @@ public class Rummy
                     String whichOption = "";
 
                     int thisOption = 0;
-                    
-                    int quitOption = playersWithMelds.size() + 1;
 
-                    System.out.println("Whose melds do you want to see? ");
+                    int quitOption = playersWithMelds.size() + 1;
 
                     // continue showing the menu options
                     while (thisOption != quitOption)
@@ -391,6 +390,8 @@ public class Rummy
 
                         // show the quit option
                         System.out.println(option + ": quit");
+
+                        System.out.println("Whose melds do you want to see? ");
 
                         // continue prompting the player until they enter a legal option number
                         while (thisOption < 1 || thisOption > playersWithMelds.size())
@@ -412,6 +413,8 @@ public class Rummy
                             // convert input to a number
                             thisOption = Integer.parseInt(whichOption);
                         }
+
+                        System.out.println();
 
                         // if the option the player selected isn't the quit option
                         if (thisOption != quitOption)
@@ -437,7 +440,7 @@ public class Rummy
                                 wantToMeld = kbd.nextLine();
 
                                 // if the player input isn't a number
-                                while (!whichOption.matches("[0-9]+"))
+                                while (!wantToMeld.matches("[0-9]+"))
                                 {
                                     System.out.println("Please enter a number");
 
@@ -448,14 +451,60 @@ public class Rummy
                                 // convert input to a number
                                 decisionToMeld = Integer.parseInt(wantToMeld);
                             }
-                              
+
+                            if (decisionToMeld == 1)
+                            {
+
+                                System.out.println();
+                                
+                                players.get(thisOption - 1).showMelds();
+                                
+                                System.out.println("Which meld do you want to add to?");
+                                
+                                String whichMeld = "";
+
+                                int thisMeld = 0;
+
+                                while (thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size())
+                                {
+                                    System.out.println("Please select an option between 1 and " + players.get(thisOption - 1).getMelds().size());
+
+                                    // get player input
+                                    whichMeld = kbd.nextLine();
+
+                                    // if the player input isn't a number
+                                    while (!whichMeld.matches("[0-9]+"))
+                                    {
+                                        System.out.println("Please enter a number");
+
+                                        // get player input
+                                        whichMeld = kbd.nextLine();
+                                    }
+
+                                    // convert input to a number
+                                    thisMeld = Integer.parseInt(whichMeld);
+                                }
+                            }
+                            
+                            System.out.println();
+                            
+                            System.out.println("Now choose a card to form a meld");
+                            
+                            players.get(whoseTurn).showPlayerCards();
+                            
+                            ////////
+                          ////
+                          ////
+                          ////
+
+
                         }
 
                     }
 
                 }
-                
-                players.get(whoseTurn).findSets();
+
+                // players.get(whoseTurn).findSets();
 
                 players.get(whoseTurn).showPlayerCards();
 
@@ -490,6 +539,23 @@ public class Rummy
 
                 // remove the card the player selected from their hand and put it in the discard pile
                 discardPile.add(players.get(whoseTurn).removeOneFromPlayerCards(thisCardToDiscard));
+                
+                if(stack.getSize() == 0)
+                {
+                    //shuffle the discard pile
+                    Collections.shuffle(discardPile);
+                    
+                    //create a stack using the discard pile
+                    stack.addAll(discardPile);
+                    
+                    //clear the discard pile
+                    discardPile.clear();
+                    
+                    //draw one from the stack and add it to the new discard pile
+                    discardPile.add(stack.draw());
+                    
+                    
+                }
 
                 System.out.println("______________________________________________________________________________________________");
 
