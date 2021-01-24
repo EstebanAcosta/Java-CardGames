@@ -119,7 +119,7 @@ public class Player
         }
     }
 
-    public boolean isThereASet()
+    public boolean hasASet()
     {
         //find all possible sets
         findSets();
@@ -131,7 +131,7 @@ public class Player
         return false;
     }
 
-    public boolean isThereARun()
+    public boolean hasARun()
     {
         //find all possible runs
         findRuns();

@@ -460,8 +460,22 @@ public class Rummy
 
                                 System.out.println();
 
-                                players.get(thisOption - 1).showRuns();
+                                if (players.get(thisOption - 1).hasARun() && players.get(thisOption - 1).hasASet())
+                                {
+                                    players.get(thisOption - 1).showRuns();
 
+                                    players.get(thisOption - 1).showSets();
+                                }
+                                else if (players.get(thisOption - 1).hasARun())
+                                {
+                                    players.get(thisOption - 1).showRuns();
+                                }
+
+                                else
+                                {
+                                    players.get(thisOption - 1).showSets();
+
+                                }
                                 players.get(thisOption - 1).showSets();
 
                                 System.out.println("Which meld do you want to add to?");
@@ -543,7 +557,6 @@ public class Rummy
                                 ////////
                                 ////
                                 ////
-                                ////
 
                             }
 
@@ -553,7 +566,47 @@ public class Rummy
 
                 }
 
-                // players.get(whoseTurn).findSets();
+                if (players.get(whoseTurn).hasARun() == true)
+                {
+                    players.get(whoseTurn).showRuns();
+                }
+
+                if (players.get(whoseTurn).hasASet() == true)
+                {
+                    players.get(whoseTurn).showSets();
+                }
+
+                System.out.println("Which meld do you want to add to?");
+
+                System.out.println("1.Runs");
+
+                System.out.println("2.Sets");
+
+                System.out.println();
+
+                String whichMeld = "";
+
+                int thisMeld = 0;
+
+                while (thisMeld < 1 || thisMeld > 2)
+                {
+                    System.out.println("Please select an option between 1 and 2");
+
+                    // get player input
+                    whichMeld = kbd.nextLine();
+
+                    // if the player input isn't a number
+                    while (!whichMeld.matches("[0-9]+"))
+                    {
+                        System.out.println("Please enter a number");
+
+                        // get player input
+                        whichMeld = kbd.nextLine();
+                    }
+
+                    // convert input to a number
+                    thisMeld = Integer.parseInt(whichMeld);
+                }
 
                 players.get(whoseTurn).showPlayerCards();
 
