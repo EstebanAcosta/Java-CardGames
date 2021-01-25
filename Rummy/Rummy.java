@@ -460,63 +460,72 @@ public class Rummy
 
                                 System.out.println();
 
-                                if (players.get(thisOption - 1).hasARun() && players.get(thisOption - 1).hasASet())
-                                {
-                                    players.get(thisOption - 1).showRuns();
-
-                                    players.get(thisOption - 1).showSets();
-                                }
-                                else if (players.get(thisOption - 1).hasARun())
-                                {
-                                    players.get(thisOption - 1).showRuns();
-                                }
-
-                                else
-                                {
-                                    players.get(thisOption - 1).showSets();
-
-                                }
-                                players.get(thisOption - 1).showSets();
-
-                                System.out.println("Which meld do you want to add to?");
-
-                                System.out.println("1.Runs");
-
-                                System.out.println("2.Sets");
-
-                                System.out.println();
-
                                 String whichMeld = "";
 
                                 int thisMeld = 0;
 
-                                while (thisMeld < 1 || thisMeld > 2)
+                                if (players.get(thisOption - 1).hasARun() && players.get(thisOption - 1).hasASet())
                                 {
-                                    System.out.println("Please select an option between 1 and 2");
 
-                                    // get player input
-                                    whichMeld = kbd.nextLine();
+                                    players.get(thisOption - 1).showRuns();
 
-                                    // if the player input isn't a number
-                                    while (!whichMeld.matches("[0-9]+"))
+                                    players.get(thisOption - 1).showSets();
+
+                                    System.out.println("Which meld do you want to add to?");
+
+                                    System.out.println("1.Runs");
+
+                                    System.out.println("2.Sets");
+
+                                    // if the player selects an option that's not there
+                                    while (thisMeld < 1 || thisMeld > 2)
                                     {
-                                        System.out.println("Please enter a number");
+                                        System.out.println("Please select an option between 1 and 2");
 
                                         // get player input
                                         whichMeld = kbd.nextLine();
+
+                                        // if the player input isn't a number
+                                        while (!whichMeld.matches("[0-9]+"))
+                                        {
+                                            System.out.println("Please enter a number");
+
+                                            // get player input again
+                                            whichMeld = kbd.nextLine();
+                                        }
+
+                                        // convert input to a number
+                                        thisMeld = Integer.parseInt(whichMeld);
                                     }
 
-                                    // convert input to a number
-                                    thisMeld = Integer.parseInt(whichMeld);
+                                    // if the player chose to add their card to a run
+                                    if (thisMeld == 1)
+                                    {
+                                        // redisplay this other player's runs
+                                        players.get(thisOption - 1).showRuns();
+                                    }
+
+                                    // if the player chose to add their to a set
+                                    else
+                                    {
+                                        // redisplay this other player's sets
+                                        players.get(thisOption - 1).showSets();
+
+                                    }
                                 }
 
-                                if (thisMeld == 1)
+                                // if this other player only has a run
+                                else if (players.get(thisOption - 1).hasARun())
                                 {
+                                    // display their runs
                                     players.get(thisOption - 1).showRuns();
+
                                 }
 
+                                // if this other player only has a set
                                 else
                                 {
+                                    // display their sets
                                     players.get(thisOption - 1).showSets();
 
                                 }
@@ -566,14 +575,28 @@ public class Rummy
 
                 }
 
-                if (players.get(whoseTurn).hasARun() == true)
+                if (players.get(whoseTurn).hasARun() || players.get(whoseTurn).hasASet())
                 {
-                    players.get(whoseTurn).showRuns();
-                }
+                    if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
+                    {
+                        players.get(whoseTurn).showRuns();
 
-                if (players.get(whoseTurn).hasASet() == true)
-                {
-                    players.get(whoseTurn).showSets();
+                        players.get(whoseTurn).showSets();
+                    }
+
+                    else if (players.get(whoseTurn).hasASet() == true)
+                    {
+                        System.out.println("You have at least one set/book in your hand \n");
+
+                        players.get(whoseTurn).showSets();
+                    }
+
+                    else
+                    {
+                        System.out.println("You have at least one run in your hand \n");
+
+                        players.get(whoseTurn).showRuns();
+                    }
                 }
 
                 System.out.println("Which meld do you want to add to?");
