@@ -424,6 +424,8 @@ public class Rummy
 
                             // show this player's sets
                             playersWithMelds.get(thisOption - 1).showSets();
+                            
+                            System.out.println();
 
                             // Ask the player if they want to add to this player's meld
                             System.out.println("Do you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld");
@@ -575,13 +577,45 @@ public class Rummy
 
                 }
 
-                if (players.get(whoseTurn).hasARun() || players.get(whoseTurn).hasASet())
+                if (players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true)
                 {
                     if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
                     {
                         players.get(whoseTurn).showRuns();
 
                         players.get(whoseTurn).showSets();
+
+                        System.out.println("Which meld do you want to add to?");
+
+                        System.out.println("1.Runs");
+
+                        System.out.println("2.Sets");
+
+                        System.out.println();
+
+                        String whichMeld = "";
+
+                        int thisMeld = 0;
+
+                        while (thisMeld < 1 || thisMeld > 2)
+                        {
+                            System.out.println("Please select an option between 1 and 2");
+
+                            // get player input
+                            whichMeld = kbd.nextLine();
+
+                            // if the player input isn't a number
+                            while (!whichMeld.matches("[0-9]+"))
+                            {
+                                System.out.println("Please enter a number");
+
+                                // get player input
+                                whichMeld = kbd.nextLine();
+                            }
+
+                            // convert input to a number
+                            thisMeld = Integer.parseInt(whichMeld);
+                        }
                     }
 
                     else if (players.get(whoseTurn).hasASet() == true)
@@ -597,38 +631,6 @@ public class Rummy
 
                         players.get(whoseTurn).showRuns();
                     }
-                }
-
-                System.out.println("Which meld do you want to add to?");
-
-                System.out.println("1.Runs");
-
-                System.out.println("2.Sets");
-
-                System.out.println();
-
-                String whichMeld = "";
-
-                int thisMeld = 0;
-
-                while (thisMeld < 1 || thisMeld > 2)
-                {
-                    System.out.println("Please select an option between 1 and 2");
-
-                    // get player input
-                    whichMeld = kbd.nextLine();
-
-                    // if the player input isn't a number
-                    while (!whichMeld.matches("[0-9]+"))
-                    {
-                        System.out.println("Please enter a number");
-
-                        // get player input
-                        whichMeld = kbd.nextLine();
-                    }
-
-                    // convert input to a number
-                    thisMeld = Integer.parseInt(whichMeld);
                 }
 
                 players.get(whoseTurn).showPlayerCards();

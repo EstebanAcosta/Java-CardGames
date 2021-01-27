@@ -126,8 +126,11 @@ public class Player
 
         if (sets.size() > 0)
         {
+            System.out.println("yes");
+            
             return true;
         }
+        
         return false;
     }
 
@@ -161,11 +164,12 @@ public class Player
         // make a hash table of all the ranks and how many times they appear in the player's hand
         Hashtable<Rank, Integer> timesRankAppears = howManyTimesThisRankAppears();
 
-        ArrayList<Card> set = new ArrayList<Card>();
 
         // loop through the hash table
         for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
         {
+            ArrayList<Card> set = new ArrayList<Card>();
+
             // if a certain rank appears four times or three times in a hash table
             if (entry.getValue() == 4 || entry.getValue() == 3)
             {
@@ -182,6 +186,8 @@ public class Player
                     if (nextCard.getRank() == entry.getKey())
                     {
 
+                        System.out.println(nextCard);
+                        
                         // add that card to the set array list
                         set.add(nextCard);
 
@@ -193,8 +199,6 @@ public class Player
                 
                 sets.put(set.get(0).getValueOfCard(), set);
                 
-                set.clear();
-
             }
         }
 
@@ -209,6 +213,14 @@ public class Player
         copyPlayerCards.addAll(playerCards);
 
         Collections.sort(copyPlayerCards);
+        
+        for(Card c : copyPlayerCards)
+        {
+            if(c.)
+            {
+                
+            }
+        }
 
         return runs;
     }

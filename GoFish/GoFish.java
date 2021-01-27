@@ -434,12 +434,12 @@ public class GoFish
                     // make a hash table of all the ranks and how many times they appear in the player's hand
                     Hashtable<Rank, Integer> timesRankAppears = players.get(whoseTurn).howManyTimesThisRankAppears();
 
-                    ArrayList<Card> book = new ArrayList<Card>();
 
                     // loop through the hash table
                     for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
                     {
                         // System.out.println(entry.getKey() + " " + entry.getValue());
+                        ArrayList<Card> book = new ArrayList<Card>();
 
                         // if a certain rank appears four times in a hash table
                         if (entry.getValue() == 4)
@@ -470,8 +470,6 @@ public class GoFish
                             // this array list will be added to this player's list of books
                             players.get(whoseTurn).addBooks(book);
                             
-                            //remove all cards in this list for reuse
-                            book.clear();
                         }
                     }
                 }
