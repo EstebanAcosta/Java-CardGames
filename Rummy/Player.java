@@ -49,12 +49,12 @@ public class Player
         this.pointsWon += pointsWon;
 
     }
-    
+
     public Hashtable<Integer, ArrayList<Card>> getRuns()
     {
         return this.runs;
     }
-    
+
     public Hashtable<Integer, ArrayList<Card>> getSets()
     {
         return this.sets;
@@ -146,24 +146,25 @@ public class Player
 
         return false;
     }
+
     public boolean hasASet()
     {
-        //find all possible sets
+        // find all possible sets
         findSets();
 
         if (sets.size() > 0)
         {
             System.out.println("yes");
-            
+
             return true;
         }
-        
+
         return false;
     }
 
     public boolean hasARun()
     {
-        //find all possible runs
+        // find all possible runs
         findRuns();
 
         if (runs.size() > 0)
@@ -182,15 +183,14 @@ public class Player
         copyPlayerCards.addAll(playerCards);
 
         Collections.sort(copyPlayerCards);
-        
-//        for(Card c : copyPlayerCards)
-//        {
-//            System.out.println(c);
-//        }
+
+        // for(Card c : copyPlayerCards)
+        // {
+        // System.out.println(c);
+        // }
 
         // make a hash table of all the ranks and how many times they appear in the player's hand
         Hashtable<Rank, Integer> timesRankAppears = howManyTimesThisRankAppears();
-
 
         // loop through the hash table
         for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
@@ -214,7 +214,7 @@ public class Player
                     {
 
                         System.out.println(nextCard);
-                        
+
                         // add that card to the set array list
                         set.add(nextCard);
 
@@ -223,36 +223,83 @@ public class Player
 
                     }
                 }
-                
+
                 sets.put(set.get(0).getValueOfCard(), set);
-                
+
             }
         }
 
         return sets;
     }
 
+    /***
+     * @return a hash table of all the possible runs that can be formed from this player's hand
+     */
     public Hashtable<Integer, ArrayList<Card>> findRuns()
     {
 
-        ArrayList<Card> copyPlayerCards = new ArrayList<Card>();
+        Hashtable<Suit, Integer> timesSuitAppears = howManyTimesThisSuitAppears();
 
-        copyPlayerCards.addAll(playerCards);
-
-        Collections.sort(copyPlayerCards);
-        
-        for(Card c : copyPlayerCards)
+        // loop through the hash table
+        for (Entry<Suit, Integer> entry : timesSuitAppears.entrySet())
         {
-            
+            ArrayList<Card> run = new ArrayList<Card>();
+
+            // if there is a suit that appears three times or more in the player's hand
+            if (entry.getValue() >= 3)
+            {
+                ArrayList<Card> cardsOfSameSuit = getAllCardsOfThatSuit(entry.getKey());
+
+                Collections.sort(cardsOfSameSuit);
+
+                for (int i = 0; i < cardsOfSameSuit.size(); i++)
+                {
+                    // if this card's value when added one to it is equal to the next card
+                    if ((cardsOfSameSuit.get(i).getValueOfCard() + 1) == cardsOfSameSuit.get(i + 1).getValueOfCard())
+                    {
+                        // add this card to the run
+                        run.add(cardsOfSameSuit.get(i));
+                    }
+
+                    else
+                    {
+                        // break out of this loop because this isn't a run
+                        break;
+                    }
+                }
+            }
+
         }
 
         return runs;
     }
-    
-    
+
+    /***
+     * @param suit
+     * @return a list of cards with the same suit
+     */
+    public ArrayList<Card> getAllCardsOfThatSuit(Suit suit)
+    {
+
+        ArrayList<Card> cardsOfThisSuit = new ArrayList<Card>();
+
+        // loop through the list
+        for (Card c : playerCards)
+        {
+            // if this card has the same suit we are looking for
+            if (c.getSuit() == suit)
+            {
+                // add it to the list
+                cardsOfThisSuit.add(c);
+            }
+        }
+
+        return cardsOfThisSuit;
+    }
+
     public void combineRuns()
     {
-        
+
     }
 
     /***
@@ -273,13 +320,13 @@ public class Player
 
         return ranks;
     }
-    
+
     /***
      * @return an array list of all the suits the player has in their hand
      */
     public ArrayList<Suit> getAllSuitsPlayerHas()
     {
-        
+
         ArrayList<Suit> suits = new ArrayList<Suit>();
 
         for (int i = 0; i < playerCards.size(); i++)
@@ -293,7 +340,6 @@ public class Player
 
         return suits;
     }
-
 
     /***
      * Calculates how many times a certain rank appears in the player's hand
@@ -334,7 +380,7 @@ public class Player
 
         return timesRankAppears;
     }
-    
+
     /***
      * Calculates how many times a certain suit appears in the player's hand
      */
@@ -373,9 +419,6 @@ public class Player
         return timesSuitAppears;
     }
 
-
-
-
     /****
      * Prints all the runs this player has to the screen
      */
@@ -399,7 +442,7 @@ public class Player
         }
 
     }
-    
+
     /****
      * Prints all the sets this player has to the screen
      */
