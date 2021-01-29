@@ -249,6 +249,7 @@ public class Rummy
                     // if there's more than one card in the middle
                     if (discardPile.size() > 1)
                     {
+                        System.out.println();
 
                         // print out a list of options
                         System.out.println("1: One");
@@ -378,6 +379,9 @@ public class Rummy
                     // continue showing the menu options
                     while (thisOption != quitOption)
                     {
+                        System.out.println();
+
+                        option = 1;
 
                         // show each player that has at least one meld
                         for (Player p : playersWithMelds)
@@ -389,8 +393,9 @@ public class Rummy
                         }
 
                         // show the quit option
-                        System.out.println(option + ": quit");
+                        System.out.println(option + ": quit\n");
 
+                        
                         System.out.println("Whose melds do you want to see? ");
 
                         // continue prompting the player until they enter a legal option number
@@ -424,11 +429,11 @@ public class Rummy
 
                             // show this player's sets
                             playersWithMelds.get(thisOption - 1).showSets();
-                            
+
                             System.out.println();
 
                             // Ask the player if they want to add to this player's meld
-                            System.out.println("Do you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld");
+                            System.out.println("\nDo you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld?");
 
                             System.out.println("1. Yes");
                             System.out.println("2. No");
@@ -473,7 +478,7 @@ public class Rummy
 
                                     players.get(thisOption - 1).showSets();
 
-                                    System.out.println("Which meld do you want to add to?");
+                                    System.out.println("\n Which meld do you want to add to?");
 
                                     System.out.println("1.Runs");
 
@@ -625,13 +630,17 @@ public class Rummy
                         players.get(whoseTurn).showSets();
                     }
 
-                    else
+                    else if (players.get(whoseTurn).hasARun())
                     {
                         System.out.println("You have at least one run in your hand \n");
 
                         players.get(whoseTurn).showRuns();
                     }
                 }
+
+                players.get(whoseTurn).findRuns();
+
+                players.get(whoseTurn).showRuns();
 
                 players.get(whoseTurn).showPlayerCards();
 

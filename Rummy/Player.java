@@ -154,8 +154,6 @@ public class Player
 
         if (sets.size() > 0)
         {
-            System.out.println("yes");
-
             return true;
         }
 
@@ -213,8 +211,6 @@ public class Player
                     if (nextCard.getRank() == entry.getKey())
                     {
 
-                        System.out.println(nextCard);
-
                         // add that card to the set array list
                         set.add(nextCard);
 
@@ -252,7 +248,7 @@ public class Player
 
                 Collections.sort(cardsOfSameSuit);
 
-                for (int i = 0; i < cardsOfSameSuit.size(); i++)
+                for (int i = 0; i < cardsOfSameSuit.size() - 1; i++)
                 {
                     // if this card's value when added one to it is equal to the next card
                     if ((cardsOfSameSuit.get(i).getValueOfCard() + 1) == cardsOfSameSuit.get(i + 1).getValueOfCard())
@@ -267,6 +263,8 @@ public class Player
                         break;
                     }
                 }
+
+                runs.put(run.size() + 1, run);
             }
 
         }
