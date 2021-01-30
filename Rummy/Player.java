@@ -247,6 +247,13 @@ public class Player
                 ArrayList<Card> cardsOfSameSuit = getAllCardsOfThatSuit(entry.getKey());
 
                 Collections.sort(cardsOfSameSuit);
+                
+                for(Card c : cardsOfSameSuit)
+                {
+                    System.out.println(c);
+                }
+                
+                System.out.println();
 
                 for (int i = 0; i < cardsOfSameSuit.size() - 1; i++)
                 {
@@ -262,8 +269,16 @@ public class Player
                         // break out of this loop because this isn't a run
                         break;
                     }
+                    
                 }
 
+                System.out.println(run.size());
+
+                for(Card c : run)
+                {
+                    System.out.println(c);
+                }
+                
                 runs.put(run.size() + 1, run);
             }
 
@@ -344,7 +359,7 @@ public class Player
      * @param cardPosition
      * @return
      */
-    public Hashtable<Rank, Integer> howManyTimesThisRankAppears()
+     public Hashtable<Rank, Integer> howManyTimesThisRankAppears()
     {
         int count = 0;
 
