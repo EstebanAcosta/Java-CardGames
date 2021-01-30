@@ -244,47 +244,77 @@ public class Player
             // if there is a suit that appears three times or more in the player's hand
             if (entry.getValue() >= 3)
             {
+                // get a list of cards that all have the same suit
                 ArrayList<Card> cardsOfSameSuit = getAllCardsOfThatSuit(entry.getKey());
 
+                // sort the list in order
                 Collections.sort(cardsOfSameSuit);
-                
-                for(Card c : cardsOfSameSuit)
-                {
-                    System.out.println(c);
-                }
-                
-                System.out.println();
 
+                // loop through the list of cards of the same suit
                 for (int i = 0; i < cardsOfSameSuit.size() - 1; i++)
                 {
-                    // if this card's value when added one to it is equal to the next card
+                    // if this card's value when added one to it is equal to the next card's value
                     if ((cardsOfSameSuit.get(i).getValueOfCard() + 1) == cardsOfSameSuit.get(i + 1).getValueOfCard())
                     {
                         // add this card to the run
                         run.add(cardsOfSameSuit.get(i));
+
+                        // add the subsequent card to the run
+                        run.add(cardsOfSameSuit.get(i + 1));
                     }
 
                     else
                     {
-                        // break out of this loop because this isn't a run
+                        // break out of this loop because this isn't a run or we are at the end of the loop
                         break;
                     }
-                    
+
                 }
 
-                System.out.println(run.size());
+                // We are going to iterate through the run in order to remove duplicates
+                Iterator<Card> r = run.iterator();
 
-                for(Card c : run)
+                // loop through the run
+                while (r.hasNext())
                 {
-                    System.out.println(c);
+                    // get the next card
+                    Card nextCard = r.next();
+
+                    // if this card appears more than once in the list
+                    if (howManyTimesThisCardAppears(nextCard, run) > 1)
+                    {
+                        // remove it from the list
+                        r.remove();
+                    }
                 }
-                
-                runs.put(run.size() + 1, run);
+
+                // if the run that this algorithm has created has at least more than three cards in it
+                if (run.size() >= 3)
+                {
+                    // put this run in the table of runs
+                    runs.put(run.size() + 1, run);
+                }
+
             }
 
         }
 
         return runs;
+    }
+
+    public int howManyTimesThisCardAppears(Card card, ArrayList<Card> list)
+    {
+        int count = 0;
+
+        for (Card c : list)
+        {
+            if (c == card)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     /***
@@ -359,7 +389,7 @@ public class Player
      * @param cardPosition
      * @return
      */
-     public Hashtable<Rank, Integer> howManyTimesThisRankAppears()
+    public Hashtable<Rank, Integer> howManyTimesThisRankAppears()
     {
         int count = 0;
 

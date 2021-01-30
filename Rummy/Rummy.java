@@ -230,6 +230,8 @@ public class Rummy
                     // convert the user input into an integer
                     thisPile = Integer.parseInt(whichPile);
                 }
+                
+                System.out.println("---------------------------------------------------\n");
 
                 // if the player chose to draw one from the stack
                 if (thisPile == 1)
@@ -281,6 +283,8 @@ public class Rummy
                             pickUpOneFromDiscard = Integer.parseInt(pickUpFromDiscard);
                         }
                     }
+
+                    System.out.println("---------------------------------------------------\n");
 
                     // if player chooses to pick up one card from the discard pile
                     if (pickUpOneFromDiscard == 1)
@@ -346,6 +350,9 @@ public class Rummy
                             discardPile.remove(i);
 
                         }
+                        
+                        System.out.println("---------------------------------------------------\n");
+
 
                     }
 
@@ -630,21 +637,21 @@ public class Rummy
                         players.get(whoseTurn).showSets();
                     }
 
-                    else if (players.get(whoseTurn).hasARun())
+                    else if (players.get(whoseTurn).hasARun() == true)
                     {
                         System.out.println("You have at least one run in your hand \n");
 
                         players.get(whoseTurn).showRuns();
                     }
                 }
-
-                players.get(whoseTurn).findRuns();
-
-                players.get(whoseTurn).showRuns();
+//
+//                players.get(whoseTurn).findRuns();
+//
+//                players.get(whoseTurn).showRuns();
 
                 players.get(whoseTurn).showPlayerCards();
 
-                System.out.println("Which card do you wish to discard?\n");
+                System.out.println("Which card do you wish to discard?");
 
                 String whichCardToDiscard = "";
 
