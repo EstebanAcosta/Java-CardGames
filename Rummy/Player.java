@@ -22,6 +22,8 @@ public class Player
 
     private Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
 
+    private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
+
     private int pointsWon;
 
     public Player(int id)
@@ -250,49 +252,69 @@ public class Player
                 // sort the list in order
                 Collections.sort(cardsOfSameSuit);
 
-                // loop through the list of cards of the same suit
-                for (int i = 0; i < cardsOfSameSuit.size() - 1; i++)
-                {
-                    // if this card's value when added one to it is equal to the next card's value
-                    if ((cardsOfSameSuit.get(i).getValueOfCard() + 1) == cardsOfSameSuit.get(i + 1).getValueOfCard())
-                    {
-                        // add this card to the run
-                        run.add(cardsOfSameSuit.get(i));
+                // make a deep copy of the list
+                ArrayList<Card> copyList = new ArrayList<Card>(cardsOfSameSuit);
 
-                        // add the subsequent card to the run
-                        run.add(cardsOfSameSuit.get(i + 1));
+                // continue looping through the copy list
+                while (copyList.size() >= 3)
+                {
+                    run = new ArrayList<Card>();
+
+                    // for(Card c : copyList)
+                    // {
+                    // System.out.println(c);
+                    // }
+                    //
+                    // System.out.println();
+
+                    // loop through the list of cards of the same suit
+                    for (int i = 0; i < copyList.size() - 1; i++)
+                    {
+                        // if this card's value when added one to it is equal to the next card's value
+                        if ((copyList.get(i).getValueOfCard() + 1) == copyList.get(i + 1).getValueOfCard())
+                        {
+                            // add this card to the run
+                            run.add(copyList.get(i));
+
+                            // add the subsequent card to the run
+                            run.add(copyList.get(i + 1));
+                        }
+
+                        else
+                        {
+                            // break out of this loop because this isn't a run or we are at the end of the loop
+                            break;
+                        }
+
                     }
 
-                    else
+                    // We are going to iterate through the run in order to remove duplicates
+                    Iterator<Card> r = run.iterator();
+
+                    // loop through the run
+                    while (r.hasNext())
                     {
-                        // break out of this loop because this isn't a run or we are at the end of the loop
-                        break;
+                        // get the next card
+                        Card nextCard = r.next();
+
+                        // if this card appears more than once in the list
+                        if (howManyTimesThisCardAppears(nextCard, run) > 1)
+                        {
+                            // remove it from the list
+                            r.remove();
+                        }
                     }
 
-                }
-
-                // We are going to iterate through the run in order to remove duplicates
-                Iterator<Card> r = run.iterator();
-
-                // loop through the run
-                while (r.hasNext())
-                {
-                    // get the next card
-                    Card nextCard = r.next();
-
-                    // if this card appears more than once in the list
-                    if (howManyTimesThisCardAppears(nextCard, run) > 1)
+                    // if the run that this algorithm has created has at least more than three cards in it
+                    if (run.size() >= 3)
                     {
-                        // remove it from the list
-                        r.remove();
+                        // put this run in the table of runs
+                        runs.put(runs.size() + 1, run);
                     }
-                }
 
-                // if the run that this algorithm has created has at least more than three cards in it
-                if (run.size() >= 3)
-                {
-                    // put this run in the table of runs
-                    runs.put(run.size() + 1, run);
+                    // remove the head of the list
+                    copyList.remove(0);
+
                 }
 
             }
@@ -478,7 +500,7 @@ public class Player
             // print out the run or set associated with that key
             for (Card c : entry.getValue())
             {
-                System.out.print(c + " ");
+                System.out.print(" (" + c + ") ");
             }
 
             System.out.println();
@@ -502,7 +524,7 @@ public class Player
             // print out the run or set associated with that key
             for (Card c : entry.getValue())
             {
-                System.out.print(c + " ");
+                System.out.print(" (" + c + ") ");
             }
 
             System.out.println();

@@ -230,7 +230,7 @@ public class Rummy
                     // convert the user input into an integer
                     thisPile = Integer.parseInt(whichPile);
                 }
-                
+
                 System.out.println("---------------------------------------------------\n");
 
                 // if the player chose to draw one from the stack
@@ -350,9 +350,8 @@ public class Rummy
                             discardPile.remove(i);
 
                         }
-                        
-                        System.out.println("---------------------------------------------------\n");
 
+                        System.out.println("---------------------------------------------------\n");
 
                     }
 
@@ -402,7 +401,6 @@ public class Rummy
                         // show the quit option
                         System.out.println(option + ": quit\n");
 
-                        
                         System.out.println("Whose melds do you want to see? ");
 
                         // continue prompting the player until they enter a legal option number
@@ -426,13 +424,15 @@ public class Rummy
                             thisOption = Integer.parseInt(whichOption);
                         }
 
-                        System.out.println();
+                        System.out.println("---------------------------------------------------\n");
 
                         // if the option the player selected isn't the quit option
                         if (thisOption != quitOption)
                         {
                             // show this player's runs
                             playersWithMelds.get(thisOption - 1).showRuns();
+
+                            System.out.println();
 
                             // show this player's sets
                             playersWithMelds.get(thisOption - 1).showSets();
@@ -468,6 +468,7 @@ public class Rummy
                                 // convert input to a number
                                 decisionToMeld = Integer.parseInt(wantToMeld);
                             }
+                            System.out.println("---------------------------------------------------\n");
 
                             if (decisionToMeld == 1)
                             {
@@ -644,10 +645,10 @@ public class Rummy
                         players.get(whoseTurn).showRuns();
                     }
                 }
-//
-//                players.get(whoseTurn).findRuns();
-//
-//                players.get(whoseTurn).showRuns();
+                //
+                // players.get(whoseTurn).findRuns();
+                //
+                // players.get(whoseTurn).showRuns();
 
                 players.get(whoseTurn).showPlayerCards();
 
