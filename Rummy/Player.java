@@ -22,7 +22,7 @@ public class Player
 
     private Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
 
-    private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
+    private Hashtable<TypeOfMeld, ArrayList<Card>> melds = new Hashtable<TypeOfMeld, ArrayList<Card>>();
 
     private int pointsWon;
 
@@ -62,7 +62,7 @@ public class Player
         return this.sets;
     }
 
-    public Hashtable<Integer, ArrayList<Card>> getMelds()
+    public Hashtable<TypeOfMeld, ArrayList<Card>> getMelds()
     {
         return this.melds;
     }
@@ -288,11 +288,21 @@ public class Player
                         // if this card's value when added one to it is equal to the next card's value
                         if ((copyList.get(i).getValueOfCard() + 1) == copyList.get(i + 1).getValueOfCard())
                         {
-                            // add this card to the run
-                            run.add(copyList.get(i));
 
-                            // add the subsequent card to the run
-                            run.add(copyList.get(i + 1));
+                            if (!run.contains(copyList.get(i)))
+                            {
+                                // add this card to the run
+                                run.add(copyList.get(i));
+
+                            }
+
+                            if (!run.contains(copyList.get(i + 1)))
+                            {
+                                // add the subsequent card to the run
+                                run.add(copyList.get(i + 1));
+
+                            }
+
                         }
 
                         else
@@ -301,23 +311,6 @@ public class Player
                             break;
                         }
 
-                    }
-
-                    // We are going to iterate through the run in order to remove duplicates
-                    Iterator<Card> r = run.iterator();
-
-                    // loop through the run
-                    while (r.hasNext())
-                    {
-                        // get the next card
-                        Card nextCard = r.next();
-
-                        // if this card appears more than once in the list
-                        if (howManyTimesThisCardAppears(nextCard, run) > 1)
-                        {
-                            // remove it from the list
-                            r.remove();
-                        }
                     }
 
                     // if the run that this algorithm has created has at least more than three cards in it
@@ -551,17 +544,20 @@ public class Player
     {
         System.out.println(getName() + "'s melds:");
 
+        int count = 1;
         // loop through the list of sets
-        for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        for (Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
         {
             // print out the key
-            System.out.print(entry.getKey() + " ");
+            System.out.print(count + " " + entry.getKey() + " ");
 
             // print out the run or set associated with that key
             for (Card c : entry.getValue())
             {
                 System.out.print(" (" + c + ") ");
             }
+            
+            count++;
 
             System.out.println();
         }

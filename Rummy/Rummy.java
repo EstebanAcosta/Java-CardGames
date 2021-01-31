@@ -525,10 +525,19 @@ public class Rummy
 
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                                     // Continue prompting the user
-                                    while (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
+                                    while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) &&
+                                    canAddThisCardToThisMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), players.get(thisOption - 1).getMelds().get(thisMeld)) == false)
                                     {
-                                        System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+                                        if(thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
+                                        {
+                                            System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
 
+                                        }
+                                        
+                                        if(canAddThisCardToThisMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), players.get(thisOption - 1).getMelds().get(thisMeld)) == false)
+                                        {
+                                            System.out.println("Please choose a different card that can be added to this meld");
+                                        }
                                         // get user input
                                         whichCardToMeld = kbd.nextLine();
 
@@ -547,6 +556,17 @@ public class Rummy
                                     }
 
                                     System.out.println(players.get(whoseTurn).getName() + " has selected" + players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld));
+
+                                    System.out.println("---------------------------------------------------\n");
+
+                                }
+
+                                else
+                                {
+                                    System.out.println("There are no melds that you can add to. Choose another player.");
+
+                                    System.out.println("---------------------------------------------------\n");
+
                                 }
 
                             }
@@ -615,10 +635,6 @@ public class Rummy
                         players.get(whoseTurn).showRuns();
                     }
                 }
-                //
-                // players.get(whoseTurn).findRuns();
-                //
-                // players.get(whoseTurn).showRuns();
 
                 players.get(whoseTurn).showPlayerCards();
 
@@ -690,11 +706,11 @@ public class Rummy
      * @return false if there are no melds that this player can add a card to this other player's melds or true if this player can add a card to
      *         this other player's melds
      */
-    public boolean canAddToThisPlayersMelds(Hashtable<Integer, ArrayList<Card>> melds, ArrayList<Card> playerHand)
+    public boolean canAddToThisPlayersMelds(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand)
     {
         for (Card c : playerHand)
         {
-            for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+            for (Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
             {
 
             }
@@ -706,8 +722,8 @@ public class Rummy
      * Method takes the card the player selected and the meld the player chose.
      * @param c
      * @param meld
-     * @return true if this specific card can be added to this other player's meld. 
-     * Returns false if this specific card can't be added to this other player's meld
+     * @return true if this specific card can be added to this other player's meld.
+     *         Returns false if this specific card can't be added to this other player's meld
      */
     public boolean canAddThisCardToThisMeld(Card c, ArrayList<Card> meld)
     {

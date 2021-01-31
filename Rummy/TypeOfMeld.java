@@ -3,7 +3,9 @@ package Rummy;
 /***
  * @author estebanacosta
  */
-public enum Suit
+
+public enum TypeOfMeld
 {
-    HEARTS, CLUBS, SPADES, DIAMONDS
+    RUN, SET
+
 }
