@@ -2,6 +2,9 @@ package Rummy;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -363,7 +366,7 @@ public class Rummy
                 for (Player p : players)
                 {
                     // if this player has melds
-                    if (p.getRuns().size() > 0 || p.getSets().size() > 0)
+                    if (p.hasAMeld())
                     {
                         // add this player to this new list of players that have melds
                         playersWithMelds.add(p);
@@ -430,12 +433,7 @@ public class Rummy
                         if (thisOption != quitOption)
                         {
                             // show this player's runs
-                            playersWithMelds.get(thisOption - 1).showRuns();
-
-                            System.out.println();
-
-                            // show this player's sets
-                            playersWithMelds.get(thisOption - 1).showSets();
+                            playersWithMelds.get(thisOption - 1).showMelds();
 
                             System.out.println();
 
@@ -468,6 +466,7 @@ public class Rummy
                                 // convert input to a number
                                 decisionToMeld = Integer.parseInt(wantToMeld);
                             }
+
                             System.out.println("---------------------------------------------------\n");
 
                             if (decisionToMeld == 1)
@@ -479,112 +478,83 @@ public class Rummy
 
                                 int thisMeld = 0;
 
-                                if (players.get(thisOption - 1).hasARun() && players.get(thisOption - 1).hasASet())
+                                if (canAddToThisPlayersMelds(players.get(thisOption - 1).getMelds(), players.get(whoseTurn).getPlayerHand()))
                                 {
 
-                                    players.get(thisOption - 1).showRuns();
-
-                                    players.get(thisOption - 1).showSets();
-
-                                    System.out.println("\n Which meld do you want to add to?");
-
-                                    System.out.println("1.Runs");
-
-                                    System.out.println("2.Sets");
-
-                                    // if the player selects an option that's not there
-                                    while (thisMeld < 1 || thisMeld > 2)
+                                    if (players.get(thisOption - 1).getMelds().size() > 1)
                                     {
-                                        System.out.println("Please select an option between 1 and 2");
 
-                                        // get player input
-                                        whichMeld = kbd.nextLine();
+                                        players.get(thisOption - 1).showMelds();
 
-                                        // if the player input isn't a number
-                                        while (!whichMeld.matches("[0-9]+"))
+                                        System.out.println("\n Which meld do you want to add to?");
+
+                                        players.get(thisOption - 1).showMelds();
+
+                                        // if the player selects an option that's not there
+                                        while (thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size())
                                         {
-                                            System.out.println("Please enter a number");
+                                            System.out.println("Please select an option between 1 " + players.get(thisOption - 1).getMelds().size());
 
-                                            // get player input again
+                                            // get player input
                                             whichMeld = kbd.nextLine();
+
+                                            // if the player input isn't a number
+                                            while (!whichMeld.matches("[0-9]+"))
+                                            {
+                                                System.out.println("Please enter a number");
+
+                                                // get player input again
+                                                whichMeld = kbd.nextLine();
+                                            }
+
+                                            // convert input to a number
+                                            thisMeld = Integer.parseInt(whichMeld);
                                         }
 
-                                        // convert input to a number
-                                        thisMeld = Integer.parseInt(whichMeld);
                                     }
 
-                                    // if the player chose to add their card to a run
-                                    if (thisMeld == 1)
+                                    System.out.println("---------------------------------------------------\n");
+
+                                    System.out.println("Now choose a card to form a meld");
+
+                                    players.get(whoseTurn).showPlayerCards();
+
+                                    String whichCardToMeld = "";
+
+                                    int thisCardToMeld = 0;
+
+                                    // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                                    // Continue prompting the user
+                                    while (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
                                     {
-                                        // redisplay this other player's runs
-                                        players.get(thisOption - 1).showRuns();
-                                    }
-
-                                    // if the player chose to add their to a set
-                                    else
-                                    {
-                                        // redisplay this other player's sets
-                                        players.get(thisOption - 1).showSets();
-
-                                    }
-                                }
-
-                                // if this other player only has a run
-                                else if (players.get(thisOption - 1).hasARun())
-                                {
-                                    // display their runs
-                                    players.get(thisOption - 1).showRuns();
-
-                                }
-
-                                // if this other player only has a set
-                                else
-                                {
-                                    // display their sets
-                                    players.get(thisOption - 1).showSets();
-
-                                }
-
-                                System.out.println();
-
-                                System.out.println("Now choose a card to form a meld");
-
-                                players.get(whoseTurn).showPlayerCards();
-
-                                String whichCardToMeld = "";
-
-                                int thisCardToMeld = 0;
-
-                                // If the user puts a number greater than the # of cards in the player's hand or less than 1
-                                // Continue prompting the user
-                                while (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
-                                {
-                                    System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
-
-                                    // get user input
-                                    whichCardToMeld = kbd.nextLine();
-
-                                    // if user gives a non-numerical answer
-                                    // continue prompting user until they give a numeric answer
-                                    while (!whichCardToMeld.matches("[0-9]+"))
-                                    {
-                                        System.out.println("Please enter a number");
+                                        System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
 
                                         // get user input
                                         whichCardToMeld = kbd.nextLine();
+
+                                        // if user gives a non-numerical answer
+                                        // continue prompting user until they give a numeric answer
+                                        while (!whichCardToMeld.matches("[0-9]+"))
+                                        {
+                                            System.out.println("Please enter a number");
+
+                                            // get user input
+                                            whichCardToMeld = kbd.nextLine();
+                                        }
+
+                                        // convert the user input into an integer
+                                        thisCardToMeld = Integer.parseInt(whichCardToMeld);
                                     }
 
-                                    // convert the user input into an integer
-                                    thisCardToMeld = Integer.parseInt(whichCardToMeld);
+                                    System.out.println(players.get(whoseTurn).getName() + " has selected" + players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld));
                                 }
-
-                                ////////
-                                ////
-                                ////
 
                             }
 
                         }
+
+                        // reset this back to zero so it has to ask you which options you want to choose
+                        thisOption = 0;
 
                     }
 
@@ -709,6 +679,43 @@ public class Rummy
 
         }
 
+    }
+
+    /****
+     * Method takes the player's hand and the other player's melds as input. This method loops through the player's hand and checks each card against each meld
+     * this other player possesses. If the card can be added to at least one meld in the other player's melds then the method should return true. However if none
+     * of the cards in the player's hand can be added to any of the other player's melds then the method should return false
+     * @param melds
+     * @param playerHand
+     * @return false if there are no melds that this player can add a card to this other player's melds or true if this player can add a card to
+     *         this other player's melds
+     */
+    public boolean canAddToThisPlayersMelds(Hashtable<Integer, ArrayList<Card>> melds, ArrayList<Card> playerHand)
+    {
+        for (Card c : playerHand)
+        {
+            for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+            {
+
+            }
+        }
+        return false;
+    }
+
+    /****
+     * Method takes the card the player selected and the meld the player chose.
+     * @param c
+     * @param meld
+     * @return true if this specific card can be added to this other player's meld. 
+     * Returns false if this specific card can't be added to this other player's meld
+     */
+    public boolean canAddThisCardToThisMeld(Card c, ArrayList<Card> meld)
+    {
+        for (Card card : meld)
+        {
+
+        }
+        return false;
     }
 
     public boolean atLeastSomeoneIsOut()

@@ -62,6 +62,11 @@ public class Player
         return this.sets;
     }
 
+    public Hashtable<Integer, ArrayList<Card>> getMelds()
+    {
+        return this.melds;
+    }
+
     public ArrayList<Card> getPlayerHand()
     {
         return playerCards;
@@ -175,6 +180,16 @@ public class Player
         return false;
     }
 
+    public boolean hasAMeld()
+    {
+        if (melds.size() > 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public Hashtable<Integer, ArrayList<Card>> findSets()
     {
 
@@ -193,7 +208,7 @@ public class Player
         Hashtable<Rank, Integer> timesRankAppears = howManyTimesThisRankAppears();
 
         // loop through the hash table
-        for (Entry<Rank, Integer> entry : timesRankAppears.entrySet())
+        for (Map.Entry<Rank, Integer> entry : timesRankAppears.entrySet())
         {
             ArrayList<Card> set = new ArrayList<Card>();
 
@@ -239,7 +254,7 @@ public class Player
         Hashtable<Suit, Integer> timesSuitAppears = howManyTimesThisSuitAppears();
 
         // loop through the hash table
-        for (Entry<Suit, Integer> entry : timesSuitAppears.entrySet())
+        for (Map.Entry<Suit, Integer> entry : timesSuitAppears.entrySet())
         {
             ArrayList<Card> run = new ArrayList<Card>();
 
@@ -255,7 +270,7 @@ public class Player
                 // make a deep copy of the list
                 ArrayList<Card> copyList = new ArrayList<Card>(cardsOfSameSuit);
 
-                // continue looping through the copy list
+                // continue looping through the copy list until there are only 3 elements left
                 while (copyList.size() >= 3)
                 {
                     run = new ArrayList<Card>();
@@ -530,6 +545,26 @@ public class Player
             System.out.println();
         }
 
+    }
+
+    public void showMelds()
+    {
+        System.out.println(getName() + "'s melds:");
+
+        // loop through the list of sets
+        for (Map.Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        {
+            // print out the key
+            System.out.print(entry.getKey() + " ");
+
+            // print out the run or set associated with that key
+            for (Card c : entry.getValue())
+            {
+                System.out.print(" (" + c + ") ");
+            }
+
+            System.out.println();
+        }
     }
 
     /***
