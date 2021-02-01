@@ -390,6 +390,9 @@ public class Rummy
                     {
                         System.out.println();
 
+                        // reset this back to zero so it has to ask you which options you want to choose
+                        thisOption = 0;
+
                         option = 1;
 
                         // show each player that has at least one meld
@@ -404,12 +407,13 @@ public class Rummy
                         // show the quit option
                         System.out.println(option + ": quit\n");
 
+                        int listOfOptions = playersWithMelds.size() + 1;
                         System.out.println("Whose melds do you want to see? ");
 
                         // continue prompting the player until they enter a legal option number
-                        while (thisOption < 1 || thisOption > playersWithMelds.size())
+                        while (thisOption < 1 || thisOption > listOfOptions)
                         {
-                            System.out.println("Please select an option between 1 and " + players.size());
+                            System.out.println("Please select an option between 1 and " + listOfOptions);
 
                             // get player input
                             whichOption = kbd.nextLine();
@@ -524,7 +528,7 @@ public class Rummy
 
                                     String whichCardToMeld = "";
 
-                                    int thisCardToMeld = 0;
+                                    int thisCardToMeld = 1;
 
                                     int count = 1;
 
@@ -583,67 +587,213 @@ public class Rummy
 
                         }
 
-                        // reset this back to zero so it has to ask you which options you want to choose
-                        thisOption = 0;
-
                     }
 
                 }
 
                 if (players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true)
                 {
-                    if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
+
+                    System.out.println("Do you wish to form a meld?");
+
+                    System.out.println("1. Yes");
+
+                    System.out.println("2. No");
+
+                    System.out.println();
+
+                    String confirm = "";
+
+                    int decision = 0;
+
+                    while (decision < 1 || decision > 2)
                     {
-                        players.get(whoseTurn).showRuns();
+                        System.out.println("Please select an option between 1 and 2");
 
-                        players.get(whoseTurn).showSets();
+                        // get player input
+                        confirm = kbd.nextLine();
 
-                        System.out.println("Which meld do you want to add to?");
-
-                        System.out.println("1.Runs");
-
-                        System.out.println("2.Sets");
-
-                        System.out.println();
-
-                        String whichMeld = "";
-
-                        int thisMeld = 0;
-
-                        while (thisMeld < 1 || thisMeld > 2)
+                        // if the player input isn't a number
+                        while (!confirm.matches("[0-9]+"))
                         {
-                            System.out.println("Please select an option between 1 and 2");
+                            System.out.println("Please enter a number");
 
                             // get player input
-                            whichMeld = kbd.nextLine();
+                            confirm = kbd.nextLine();
+                        }
 
-                            // if the player input isn't a number
-                            while (!whichMeld.matches("[0-9]+"))
+                        // convert input to a number
+                        decision = Integer.parseInt(confirm);
+                    }
+
+                    System.out.println("---------------------------------------------------\n");
+
+                    if (decision == 1)
+                    {
+                        if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
+                        {
+                            players.get(whoseTurn).showRuns();
+
+                            System.out.println();
+
+                            players.get(whoseTurn).showSets();
+
+                            System.out.println();
+
+                            System.out.println("Which meld do you want to form?");
+
+                            System.out.println("1.Runs");
+
+                            System.out.println("2.Sets");
+
+                            System.out.println();
+
+                            String whichMeld = "";
+
+                            int thisMeld = 0;
+
+                            while (thisMeld < 1 || thisMeld > 2)
                             {
-                                System.out.println("Please enter a number");
+                                System.out.println("Please select an option between 1 and 2");
 
                                 // get player input
                                 whichMeld = kbd.nextLine();
+
+                                // if the player input isn't a number
+                                while (!whichMeld.matches("[0-9]+"))
+                                {
+                                    System.out.println("Please enter a number");
+
+                                    // get player input
+                                    whichMeld = kbd.nextLine();
+                                }
+
+                                // convert input to a number
+                                thisMeld = Integer.parseInt(whichMeld);
                             }
 
-                            // convert input to a number
-                            thisMeld = Integer.parseInt(whichMeld);
+                            System.out.println("---------------------------------------------------\n");
+
+                            // if the player chose to meld the run
+                            if (thisMeld == 1)
+                            {
+                                // if the player has more than one run
+                                if (players.get(whoseTurn).getRuns().size() > 1)
+                                {
+                                    System.out.println("Which run do you want to meld?");
+                                }
+
+                                // if the player only has one run
+                                else
+                                {
+                                    int position = 0;
+
+                                    for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
+                                    {
+
+                                        position = entry.getKey();
+                                    }
+
+                                    players.get(whoseTurn).meldRun(position);
+                                }
+                            }
+
+                            // if the player chose to meld the set
+                            else
+                            {
+                                // if the player has more than one set
+                                if (players.get(whoseTurn).getSets().size() > 1)
+                                {
+                                    System.out.println("Which set do you want to meld?");
+
+                                }
+
+                                // if the player has only has one set
+                                else
+                                {
+                                    int position = 0;
+
+                                    for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
+                                    {
+                                        position = entry.getKey();
+                                    }
+
+                                    players.get(whoseTurn).meldSet(position);
+                                }
+
+                            }
+
                         }
+
+                        // if the player only has a set
+                        else if (players.get(whoseTurn).hasASet() == true)
+                        {
+                            System.out.println("You have at least one set/book in your hand \n");
+
+                            players.get(whoseTurn).showSets();
+
+                            System.out.println();
+
+                            // if the player has more than one set
+                            if (players.get(whoseTurn).getSets().size() > 1)
+                            {
+                                System.out.println("Which set do you want to meld?");
+
+                            }
+
+                            // if the player has only has one set
+                            else
+                            {
+                                int position = 0;
+
+                                for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
+                                {
+                                    position = entry.getKey();
+                                }
+
+                                players.get(whoseTurn).meldSet(position);
+                            }
+
+                            System.out.println();
+
+                        }
+
+                        // if the player only has a run
+                        else if (players.get(whoseTurn).hasARun() == true)
+                        {
+                            System.out.println("You have at least one run in your hand \n");
+
+                            players.get(whoseTurn).showRuns();
+
+                            System.out.println();
+
+                            // if the player has more than one run
+                            if (players.get(whoseTurn).getRuns().size() > 1)
+                            {
+                                System.out.println("Which run do you want to meld?");
+
+                            }
+
+                            // if the player only has one run
+                            else
+                            {
+                                int position = 0;
+
+                                for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
+                                {
+
+                                    position = entry.getKey();
+                                }
+
+                                players.get(whoseTurn).meldRun(position);
+
+                            }
+
+                            System.out.println();
+                        }
+
                     }
 
-                    else if (players.get(whoseTurn).hasASet() == true)
-                    {
-                        System.out.println("You have at least one set/book in your hand \n");
-
-                        players.get(whoseTurn).showSets();
-                    }
-
-                    else if (players.get(whoseTurn).hasARun() == true)
-                    {
-                        System.out.println("You have at least one run in your hand \n");
-
-                        players.get(whoseTurn).showRuns();
-                    }
                 }
 
                 players.get(whoseTurn).showPlayerCards();
@@ -825,7 +975,7 @@ public class Rummy
     }
 
     /****
-     * Method takes the card the player selected and the meld the player chose. Method checks the player's card against the meld the player chose and if the
+     * Method takes the card the player selected and the meld the player chose. Method checks the player's card against the meld the player chose and the method
      * determines if the card can be a part of that run or set
      * @param c
      * @param meld
@@ -888,7 +1038,6 @@ public class Rummy
         return false;
     }
 
-    
     /***
      * Loops through each player in the list of players and checks to see how many cards each player has. Method only
      * returns true if at least one player has gotten rid of all of their cards

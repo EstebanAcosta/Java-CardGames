@@ -154,6 +154,42 @@ public class Player
         return false;
     }
 
+    /***
+     * Adds this specific run to the table of melds
+     * @param position
+     */
+    public void meldRun(int position)
+    {
+
+        // add this run to the table of melds
+        // key is type of meld which in this case is a run and the value is the array list of cards that form a run
+        melds.put(TypeOfMeld.RUN, runs.get(position));
+
+        // remove this run from the player's hand
+        removeMultipleFromPlayerCards(runs.get(position));
+
+        // remove this run from the table of runs
+        runs.remove(position);
+    }
+
+    /***
+     * Add this specific set to the table of melds
+     * @param position
+     */
+    public void meldSet(int position)
+    {
+        // add this set to the table of sets
+        // key is type of meld which in this case is a set and the value is the array list of cards that form a set
+        melds.put(TypeOfMeld.SET, sets.get(position));
+
+        // remove this set from the player's hand
+        removeMultipleFromPlayerCards(sets.get(position));
+
+        // remove this set from the player's hand
+        sets.remove(position);
+
+    }
+
     public boolean hasASet()
     {
         // find all possible sets
@@ -332,6 +368,11 @@ public class Player
         return runs;
     }
 
+    public void combineRuns()
+    {
+
+    }
+
     public int howManyTimesThisCardAppears(Card card, ArrayList<Card> list)
     {
         int count = 0;
@@ -368,11 +409,6 @@ public class Player
         }
 
         return cardsOfThisSuit;
-    }
-
-    public void combineRuns()
-    {
-
     }
 
     /***
@@ -556,7 +592,7 @@ public class Player
             {
                 System.out.print(" (" + c + ") ");
             }
-            
+
             count++;
 
             System.out.println();
