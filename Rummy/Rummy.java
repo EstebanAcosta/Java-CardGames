@@ -477,9 +477,8 @@ public class Rummy
                                 String whichMeld = "";
 
                                 int thisMeld = 0;
-                                
-                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = players.get(thisOption - 1).getMelds();
 
+                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = players.get(thisOption - 1).getMelds();
 
                                 // if this player can add to any of these melds that this other player possesses
                                 if (canAddToMelds(players.get(thisOption - 1).getMelds(), players.get(whoseTurn).getPlayerHand()))
@@ -529,10 +528,8 @@ public class Rummy
 
                                     int count = 1;
 
-
                                     Card meldThisCard = players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld);
 
-                   
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                                     // or if the user selected a card that can't be added to this other player's specific meld
                                     // Continue prompting the user
@@ -547,7 +544,7 @@ public class Rummy
                                         }
 
                                         // display an error message if the card they selected can't be added to this meld
-                                        if (canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard,thisMeld) == false)
+                                        if (canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard, thisMeld) == false)
                                         {
                                             System.out.println("Please choose a different card that can be added to this meld");
                                         }
@@ -711,15 +708,69 @@ public class Rummy
     }
 
     /***
-     * Method loops through the player's hand and checks every card against a specific meld. 
+     * Method loops through the player's hand and checks every card against a specific meld.
      * @param melds
      * @param playerHand
      * @param position
+     *            of meld
      * @return true if at least one card can be added to the meld, false if no card can be added to the meld
      */
     public boolean canAddAnyCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand, int position)
     {
-        // TODO Auto-generated method stub
+
+        TypeOfMeld tom = null;
+
+        int count = 1;
+
+        // loop through the table that contains this other player's melds
+        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+        {
+            // if the position is equal to the position the player chose
+            if (count == position)
+            {
+                // store the key
+                tom = entry.getKey();
+            }
+
+            // add one to move to the next position
+            count++;
+
+        }
+
+        ArrayList<Card> thisMeld = melds.get(position);
+
+        // loop through the player's hand
+        for (Card c : playerHand)
+        {
+            // if the entry is a set/book
+            if (tom == TypeOfMeld.SET)
+            {
+                // check the rank of the player's card against the meld card's rank
+                // if they're the same
+                if (c.getRank() == thisMeld.get(0).getRank())
+                {
+                    return true;
+                }
+            }
+
+            // if this entry is a run
+            else if (tom == TypeOfMeld.RUN)
+            {
+                // check the suit of the player's card against the meld card's suit
+                // if they're the same
+                if (c.getSuit() == thisMeld.get(0).getSuit())
+                {
+                    // make sure that the card's rank is either one below the first card in the run
+                    // or one above the last card in the run
+                    // if it means either requirement
+                    if ((c.getValueOfCard() + 1) == thisMeld.get(0).getValueOfCard() ||
+                    (c.getValueOfCard() - 1) == thisMeld.get(thisMeld.size() - 1).getValueOfCard())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
         return false;
     }
 
@@ -774,8 +825,8 @@ public class Rummy
     }
 
     /****
-     * Method takes the card the player selected and the meld the player chose. Method checks the player's card against the meld the player chose and if the 
-     *determines if the card can be a part of that run or set
+     * Method takes the card the player selected and the meld the player chose. Method checks the player's card against the meld the player chose and if the
+     * determines if the card can be a part of that run or set
      * @param c
      * @param meld
      * @return true if this specific card can be added to this other player's meld.
@@ -787,7 +838,7 @@ public class Rummy
         TypeOfMeld tom = null;
 
         int count = 1;
-        
+
         // loop through the table that contains this other player's melds
         for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
         {
@@ -802,11 +853,47 @@ public class Rummy
             count++;
 
         }
-        
-        
+
+        ArrayList<Card> thisMeld = melds.get(position);
+
+        // if the entry is a set/book
+        if (tom == TypeOfMeld.SET)
+        {
+            // check the rank of the player's card against the meld card's rank
+            // if they're the same
+            if (c.getRank() == thisMeld.get(0).getRank())
+            {
+                return true;
+            }
+        }
+
+        // if this entry is a run
+        else if (tom == TypeOfMeld.RUN)
+        {
+            // check the suit of the player's card against the meld card's suit
+            // if they're the same
+            if (c.getSuit() == thisMeld.get(0).getSuit())
+            {
+                // make sure that the card's rank is either one below the first card in the run
+                // or one above the last card in the run
+                // if it means either requirement
+                if ((c.getValueOfCard() + 1) == thisMeld.get(0).getValueOfCard() ||
+                (c.getValueOfCard() - 1) == thisMeld.get(thisMeld.size() - 1).getValueOfCard())
+                {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 
+    
+    /***
+     * Loops through each player in the list of players and checks to see how many cards each player has. Method only
+     * returns true if at least one player has gotten rid of all of their cards
+     * @return true if at least one player got rid of all of their cards. false if no one has gotten rid of all their cards
+     */
     public boolean atLeastSomeoneIsOut()
     {
         for (Player p : players)
