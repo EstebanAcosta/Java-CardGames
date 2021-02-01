@@ -477,21 +477,25 @@ public class Rummy
                                 String whichMeld = "";
 
                                 int thisMeld = 0;
+                                
+                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = players.get(thisOption - 1).getMelds();
 
-                                if (canAddToThisPlayersMelds(players.get(thisOption - 1).getMelds(), players.get(whoseTurn).getPlayerHand()))
+
+                                // if this player can add to any of these melds that this other player possesses
+                                if (canAddToMelds(players.get(thisOption - 1).getMelds(), players.get(whoseTurn).getPlayerHand()))
                                 {
 
+                                    // if the other player has more than one meld
                                     if (players.get(thisOption - 1).getMelds().size() > 1)
                                     {
 
+                                        // show their melds
                                         players.get(thisOption - 1).showMelds();
 
                                         System.out.println("\n Which meld do you want to add to?");
 
-                                        players.get(thisOption - 1).showMelds();
-
                                         // if the player selects an option that's not there
-                                        while (thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size())
+                                        while ((thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size()) && canAddAnyCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getPlayerHand(), thisMeld) == false)
                                         {
                                             System.out.println("Please select an option between 1 " + players.get(thisOption - 1).getMelds().size());
 
@@ -523,18 +527,27 @@ public class Rummy
 
                                     int thisCardToMeld = 0;
 
+                                    int count = 1;
+
+
+                                    Card meldThisCard = players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld);
+
+                   
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
+                                    // or if the user selected a card that can't be added to this other player's specific meld
                                     // Continue prompting the user
                                     while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) &&
-                                    canAddThisCardToThisMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), players.get(thisOption - 1).getMelds().get(thisMeld)) == false)
+                                    canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard, thisMeld) == false)
                                     {
-                                        if(thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
+                                        // display an error message if the player chose a number that's not within the range of the # of cards they have
+                                        if (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
                                         {
                                             System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
 
                                         }
-                                        
-                                        if(canAddThisCardToThisMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), players.get(thisOption - 1).getMelds().get(thisMeld)) == false)
+
+                                        // display an error message if the card they selected can't be added to this meld
+                                        if (canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard,thisMeld) == false)
                                         {
                                             System.out.println("Please choose a different card that can be added to this meld");
                                         }
@@ -697,6 +710,19 @@ public class Rummy
 
     }
 
+    /***
+     * Method loops through the player's hand and checks every card against a specific meld. 
+     * @param melds
+     * @param playerHand
+     * @param position
+     * @return true if at least one card can be added to the meld, false if no card can be added to the meld
+     */
+    public boolean canAddAnyCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand, int position)
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     /****
      * Method takes the player's hand and the other player's melds as input. This method loops through the player's hand and checks each card against each meld
      * this other player possesses. If the card can be added to at least one meld in the other player's melds then the method should return true. However if none
@@ -706,31 +732,78 @@ public class Rummy
      * @return false if there are no melds that this player can add a card to this other player's melds or true if this player can add a card to
      *         this other player's melds
      */
-    public boolean canAddToThisPlayersMelds(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand)
+    public boolean canAddToMelds(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand)
     {
+        // loop through the player's hand
         for (Card c : playerHand)
         {
+            // loop through the other player's melds
             for (Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
             {
+                // if the entry is a set/book
+                if (entry.getKey() == TypeOfMeld.SET)
+                {
+                    // check the rank of the player's card against the meld card's rank
+                    // if they're the same
+                    if (c.getRank() == entry.getValue().get(0).getRank())
+                    {
+                        return true;
+                    }
+                }
 
+                // if this entry is a run
+                else if (entry.getKey() == TypeOfMeld.RUN)
+                {
+                    // check the suit of the player's card against the meld card's suit
+                    // if they're the same
+                    if (c.getSuit() == entry.getValue().get(0).getSuit())
+                    {
+                        // make sure that the card's rank is either one below the first card in the run
+                        // or one above the last card in the run
+                        // if it means either requirement
+                        if ((c.getValueOfCard() + 1) == entry.getValue().get(0).getValueOfCard() ||
+                        (c.getValueOfCard() - 1) == entry.getValue().get(entry.getValue().size() - 1).getValueOfCard())
+                        {
+                            return true;
+                        }
+                    }
+                }
             }
         }
         return false;
     }
 
     /****
-     * Method takes the card the player selected and the meld the player chose.
+     * Method takes the card the player selected and the meld the player chose. Method checks the player's card against the meld the player chose and if the 
+     *determines if the card can be a part of that run or set
      * @param c
      * @param meld
      * @return true if this specific card can be added to this other player's meld.
      *         Returns false if this specific card can't be added to this other player's meld
      */
-    public boolean canAddThisCardToThisMeld(Card c, ArrayList<Card> meld)
+    public boolean canAddThisCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, Card c, int position)
     {
-        for (Card card : meld)
+
+        TypeOfMeld tom = null;
+
+        int count = 1;
+        
+        // loop through the table that contains this other player's melds
+        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
         {
+            // if the position is equal to the position the player chose
+            if (count == position)
+            {
+                // store the key
+                tom = entry.getKey();
+            }
+
+            // add one to move to the next position
+            count++;
 
         }
+        
+        
         return false;
     }
 
