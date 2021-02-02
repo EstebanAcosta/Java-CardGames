@@ -482,25 +482,25 @@ public class Rummy
 
                                 int thisMeld = 0;
 
-                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = players.get(thisOption - 1).getMelds();
+                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = playersWithMelds.get(thisOption - 1).getMelds();
 
                                 // if this player can add to any of these melds that this other player possesses
                                 if (canAddToMelds(otherPlayersMelds, players.get(whoseTurn).getPlayerHand()) == true)
                                 {
 
                                     // if the other player has more than one meld
-                                    if (players.get(thisOption - 1).getMelds().size() > 1)
+                                    if (otherPlayersMelds.size() > 1)
                                     {
 
                                         // show their melds
-                                        players.get(thisOption - 1).showMelds();
+                                        playersWithMelds.get(thisOption - 1).showMelds();
 
                                         System.out.println("\n Which meld do you want to add to?");
 
                                         // if the player selects an option that's not there
-                                        while ((thisMeld < 1 || thisMeld > players.get(thisOption - 1).getMelds().size()) && canAddAnyCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getPlayerHand(), thisMeld) == false)
+                                        while ((thisMeld < 1 || thisMeld > playersWithMelds.get(thisOption - 1).getMelds().size()) || canAddAnyCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getPlayerHand(), thisMeld) == false)
                                         {
-                                            System.out.println("Please select an option between 1 " + players.get(thisOption - 1).getMelds().size());
+                                            System.out.println("Please select an option between 1 " + playersWithMelds.get(thisOption - 1).getMelds().size());
 
                                             // get player input
                                             whichMeld = kbd.nextLine();
@@ -533,7 +533,7 @@ public class Rummy
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                                     // or if the user selects a card that can't be added to this other player's specific meld
                                     // Continue prompting the user
-                                    while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) &&
+                                    while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) ||
                                     canAddThisCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld) == false)
                                     {
                                         // display an error message if the player chose a number that's not within the range of the # of cards they have
@@ -544,7 +544,7 @@ public class Rummy
                                         }
 
                                         // display an error message if the card they selected can't be added to this meld
-                                        if (canAddThisCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld) == false)
+                                        else if (canAddThisCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld) == false)
                                         {
                                             System.out.println("Please choose a different card that can be added to this meld");
                                         }
@@ -569,7 +569,7 @@ public class Rummy
 
                                     System.out.println("---------------------------------------------------\n");
 
-                                    players.get(thisOption - 1).addToPlayersMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld);
+                                    playersWithMelds.get(thisOption - 1).addToPlayersMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld);
 
                                 }
 
@@ -1133,6 +1133,8 @@ public class Rummy
 
         int count = 1;
 
+        ArrayList<Card> thisMeld = new ArrayList<Card>();
+        
         // loop through the table that contains this other player's melds
         for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
         {
@@ -1141,6 +1143,11 @@ public class Rummy
             {
                 // store the key
                 tom = entry.getKey();
+                
+                //store the value
+                thisMeld = entry.getValue();
+                
+                break;
             }
 
             // add one to move to the next position
@@ -1148,8 +1155,7 @@ public class Rummy
 
         }
 
-        ArrayList<Card> thisMeld = melds.get(position);
-
+  
         // loop through the player's hand
         for (Card c : playerHand)
         {
@@ -1204,7 +1210,13 @@ public class Rummy
             {
                 // if the entry is a set/book
                 if (entry.getKey() == TypeOfMeld.SET)
+
                 {
+
+                    // System.out.println("card rank " + c.getRank());
+                    //
+                    // System.out.println("value cards rank " + entry.getValue().get(0).getRank());
+
                     // check the rank of the player's card against the meld card's rank
                     // if they're the same
                     if (c.getRank() == entry.getValue().get(0).getRank())
@@ -1216,11 +1228,22 @@ public class Rummy
                 // if this entry is a run
                 else if (entry.getKey() == TypeOfMeld.RUN)
                 {
+
+                    // System.out.println("card suit " + c.getSuit());
+                    //
+                    // System.out.println("value cards suit " + entry.getValue().get(0).getSuit());
+
                     // check the suit of the player's card against the meld card's suit
                     // if they're the same
                     if (c.getSuit() == entry.getValue().get(0).getSuit())
                     {
-                        System.out.println(c);
+                        // System.out.println("value - 1" + (c.getValueOfCard() + 1));
+                        //
+                        // System.out.println("first val " + entry.getValue().get(0).getValueOfCard());
+                        //
+                        // System.out.println("value + 1" + (c.getValueOfCard() - 1));
+                        //
+                        // System.out.println("last val " + entry.getValue().get(entry.getValue().size() - 1).getValueOfCard());
                         // make sure that the card's rank is either one below the first card in the run
                         // or one above the last card in the run
                         // if it means either requirement
@@ -1233,6 +1256,7 @@ public class Rummy
                 }
             }
         }
+
         return false;
     }
 
@@ -1247,8 +1271,6 @@ public class Rummy
     public boolean canAddThisCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, Card c, int position)
     {
 
-        TypeOfMeld tom = null;
-
         int count = 1;
 
         // loop through the table that contains this other player's melds
@@ -1257,8 +1279,41 @@ public class Rummy
             // if the position is equal to the position the player chose
             if (count == position)
             {
-                // store the key
-                tom = entry.getKey();
+                System.out.println("here");
+                // if the entry is a set/book
+                if (entry.getKey() == TypeOfMeld.SET)
+                {
+                    
+                    System.out.println("here w " + c.getRank());
+
+                    // check the rank of the player's card against the meld card's rank
+                    // if they're the same
+                    if (c.getRank() == entry.getValue().get(0).getRank())
+                        
+                    {
+                        return true;
+                    }
+                }
+
+                // if this entry is a run
+                else if (entry.getKey() == TypeOfMeld.RUN)
+                {
+                    // check the suit of the player's card against the meld card's suit
+                    // if they're the same
+                    if (c.getSuit() == entry.getValue().get(0).getSuit())
+                    {
+                        // make sure that the card's rank is either one below the first card in the run
+                        // or one above the last card in the run
+                        // if it means either requirement
+                        if ((c.getValueOfCard() + 1) == entry.getValue().get(0).getValueOfCard() ||
+                        (c.getValueOfCard() - 1) == entry.getValue().get(entry.getValue().size() - 1).getValueOfCard())
+                        {
+                            return true;
+                        }
+                    }
+                }
+                
+                break;
             }
 
             // add one to move to the next position
@@ -1266,36 +1321,6 @@ public class Rummy
 
         }
 
-        ArrayList<Card> thisMeld = melds.get(position);
-
-        // if the entry is a set/book
-        if (tom == TypeOfMeld.SET)
-        {
-            // check the rank of the player's card against the meld card's rank
-            // if they're the same
-            if (c.getRank() == thisMeld.get(0).getRank())
-            {
-                return true;
-            }
-        }
-
-        // if this entry is a run
-        else if (tom == TypeOfMeld.RUN)
-        {
-            // check the suit of the player's card against the meld card's suit
-            // if they're the same
-            if (c.getSuit() == thisMeld.get(0).getSuit())
-            {
-                // make sure that the card's rank is either one below the first card in the run
-                // or one above the last card in the run
-                // if it means either requirement
-                if ((c.getValueOfCard() + 1) == thisMeld.get(0).getValueOfCard() ||
-                (c.getValueOfCard() - 1) == thisMeld.get(thisMeld.size() - 1).getValueOfCard())
-                {
-                    return true;
-                }
-            }
-        }
 
         return false;
     }
