@@ -109,19 +109,21 @@ public class Player
      */
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
     {
-        int count = 0;
 
-        Iterator<Card> c = playerCards.iterator();
-
-        while (c.hasNext())
+        for (Card card : cards)
         {
-            Card nextCard = c.next();
+            Iterator<Card> playersHand = playerCards.iterator();
 
-            if (count < cards.size() && nextCard.equals(cards.get(count)))
+            while (playersHand.hasNext())
             {
-                c.remove();
+                Card nextCard = playersHand.next();
 
-                count++;
+                if (nextCard.equals(card))
+                {
+
+                    playersHand.remove();
+
+                }
             }
         }
     }
@@ -190,6 +192,58 @@ public class Player
 
     }
 
+    /***
+     * In the Rummy class, the player is asked which card and whose meld they want to. Once they've selected both,
+     * this method will take the card they want and add it to the respective meld this player possesses. Method loops through
+     * the player's meld and adds this card either to the end of the list of cards or at the beginning depending on
+     * the type of meld the card is being added to.
+     * @param c
+     * @param thisMeld
+     */
+    public void addToPlayersMeld(Card c, int thisMeld)
+    {
+        int count = 1;
+
+        // loop through the table
+        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : getMelds().entrySet())
+        {
+            // if this is the meld the player wants to add
+            if (count == thisMeld)
+            {
+                // if this meld is a run
+                if (entry.getKey() == TypeOfMeld.RUN)
+                {
+                    // if this card is one less than the first card in the list of cards
+                    if ((c.getValueOfCard() + 1) == entry.getValue().get(0).getValueOfCard())
+                    {
+                        // add the card to the beginning of the list
+                        entry.getValue().add(0, c);
+                    }
+
+                    // if this card is one more than the last card in the list of cards
+                    else if ((c.getValueOfCard() - 1) == entry.getValue().get(entry.getValue().size() - 1).getValueOfCard())
+                    {
+                        // add the card to the end of the list
+                        entry.getValue().add(c);
+                    }
+
+                }
+
+                // if this meld is a set
+                else
+                {
+                    // add the card to the end of the list
+                    entry.getValue().add(c);
+                }
+
+                break;
+            }
+
+            count++;
+        }
+
+    }
+
     public void clearRuns()
     {
         runs.clear();
@@ -202,9 +256,6 @@ public class Player
 
     public boolean hasASet()
     {
-        // find all possible sets
-        findSets();
-
         if (sets.size() > 0)
         {
             return true;
@@ -215,8 +266,6 @@ public class Player
 
     public boolean hasARun()
     {
-        // find all possible runs
-        findRuns();
 
         if (runs.size() > 0)
         {
@@ -376,11 +425,6 @@ public class Player
         }
 
         return runs;
-    }
-
-    public void combineRuns()
-    {
-
     }
 
     public int howManyTimesThisCardAppears(Card card, ArrayList<Card> list)

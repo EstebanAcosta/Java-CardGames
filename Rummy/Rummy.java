@@ -485,7 +485,7 @@ public class Rummy
                                 Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = players.get(thisOption - 1).getMelds();
 
                                 // if this player can add to any of these melds that this other player possesses
-                                if (canAddToMelds(players.get(thisOption - 1).getMelds(), players.get(whoseTurn).getPlayerHand()))
+                                if (canAddToMelds(otherPlayersMelds, players.get(whoseTurn).getPlayerHand()) == true)
                                 {
 
                                     // if the other player has more than one meld
@@ -530,13 +530,11 @@ public class Rummy
 
                                     int thisCardToMeld = 0;
 
-                                    Card meldThisCard = players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld);
-
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                                     // or if the user selects a card that can't be added to this other player's specific meld
                                     // Continue prompting the user
                                     while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) &&
-                                    canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard, thisMeld) == false)
+                                    canAddThisCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld) == false)
                                     {
                                         // display an error message if the player chose a number that's not within the range of the # of cards they have
                                         if (thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards())
@@ -546,7 +544,7 @@ public class Rummy
                                         }
 
                                         // display an error message if the card they selected can't be added to this meld
-                                        if (canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard, thisMeld) == false)
+                                        if (canAddThisCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld) == false)
                                         {
                                             System.out.println("Please choose a different card that can be added to this meld");
                                         }
@@ -571,13 +569,24 @@ public class Rummy
 
                                     System.out.println("---------------------------------------------------\n");
 
+                                    players.get(thisOption - 1).addToPlayersMeld(players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld), thisMeld);
+
                                 }
 
                                 else
                                 {
-                                    System.out.println("There are no melds that you can add to. Choose another player.");
+                                    if (playersWithMelds.size() > 1)
+                                    {
+                                        System.out.println("There are no melds that you can add to. Choose another player.");
 
-                                    System.out.println("---------------------------------------------------\n");
+                                    }
+
+                                    else
+                                    {
+                                        System.out.println("There are no melds that you can add to. Please quit");
+                                    }
+
+                                    System.out.println("----------------------------------------------------------------\n");
 
                                 }
 
@@ -589,20 +598,26 @@ public class Rummy
 
                 }
 
+                players.get(whoseTurn).findRuns();
+
+                players.get(whoseTurn).findSets();
+
                 // if this player has either a run or a set
                 if (players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true)
                 {
 
-                    if(players.get(whoseTurn).hasARun() && players.get(whoseTurn).hasASet())
+                    if (players.get(whoseTurn).hasARun() && players.get(whoseTurn).hasASet())
                     {
                         players.get(whoseTurn).showRuns();
+
+                        System.out.println();
 
                         players.get(whoseTurn).showSets();
                     }
 
-                    else if(players.get(whoseTurn).hasARun())
+                    else if (players.get(whoseTurn).hasARun())
                     {
-                        players.get(whoseTurn).showRuns(); 
+                        players.get(whoseTurn).showRuns();
                     }
 
                     else
@@ -611,11 +626,13 @@ public class Rummy
 
                     }
 
+                    System.out.println();
+
                     System.out.println("Do you wish to form a meld?");
 
-                    System.out.println("1. Yes");
+                    System.out.println("1.Yes");
 
-                    System.out.println("2. No");
+                    System.out.println("2.No");
 
                     System.out.println();
 
@@ -701,6 +718,8 @@ public class Rummy
                                 {
 
                                     players.get(whoseTurn).showRuns();
+
+                                    System.out.println();
 
                                     System.out.println("Which run do you want to meld?");
 
@@ -989,18 +1008,113 @@ public class Rummy
 
                 whoseTurn = changeTurn(whoseTurn);
 
-                break;
             }
 
+            stack = new Deck();
+
+            // shuffle the game deck
+            stack.shuffle();
+
+            Player winner = null;
+
+            for (Player p : players)
+            {
+                if (p.getNumOfPlayerCards() == 0)
+                {
+                    winner = p;
+
+                    break;
+                }
+            }
+
+            System.out.println("The winner of Round " + currentRound + " is " + winner.getName());
+
+            int totalPoints = 0;
+
+            // loop through the list of players
+            for (Player p : players)
+            {
+
+                // loop through the player's hand
+                for (Card c : p.getPlayerHand())
+                {
+                    // if the card's value is greater than or equal to 10 (king, jack, queen, or ten)
+                    if (c.getValueOfCard() >= 10)
+                    {
+                        // add ten points
+                        totalPoints += 10;
+
+                    }
+
+                    // if it's a regular card
+                    else
+                    {
+                        // add their normal value to the total points
+                        totalPoints += c.getValueOfCard();
+
+                    }
+                }
+            }
+
+            // add the total points to the winner's total points
+            winner.addsPointsWon(totalPoints);
+
+            for (Player p : players)
+            {
+                System.out.println(p.getName() + " has " + p.getPointsWon() + " points so far");
+
+                p.getPlayerHand().clear();
+
+                System.out.println("________________________________________________________________________________________________\n");
+
+            }
+
+            // calculate how many cards we are supposed to distribute to each player
+            int howManyCardsToEachPlayer = 0;
+
+            if (players.size() == 2)
+            {
+                howManyCardsToEachPlayer = 10;
+            }
+
+            else if (players.size() == 3 || players.size() == 4)
+            {
+                howManyCardsToEachPlayer = 7;
+            }
+
+            else
+            {
+                howManyCardsToEachPlayer = 6;
+            }
+
+            // loop through the list of players and give each player their
+            // cards
+            for (int i = 0; i < players.size(); i++)
+            {
+                // draw a predetermined number of cards from the deck
+                ArrayList<Card> cardsPerPerson = stack.draw(howManyCardsToEachPlayer);
+
+                // give this player the predetermined number of cards
+                players.get(i).addMultipleToPlayerHand(cardsPerPerson);
+
+                System.out.println(players.get(i).getName() + " has " + players.get(i).getNumOfPlayerCards() + " cards");
+
+                System.out.println("________________________________________________________________________________________________\n");
+
+            }
+
+            // clear the discard pile
+            discardPile.clear();
+
+            // add the first card from the stack
+            discardPile.add(stack.draw());
+
+            // the first person to play is the winner
+            whoseTurn = winner.getPlayerId() - 1;
+
+            currentRound++;
+
         }
-
-    }
-
-    /****
-     * Method displays the results of the game and resets the game if there is more than 1 round
-     */
-    public void endGame()
-    {
 
     }
 
@@ -1086,7 +1200,7 @@ public class Rummy
         for (Card c : playerHand)
         {
             // loop through the other player's melds
-            for (Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+            for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
             {
                 // if the entry is a set/book
                 if (entry.getKey() == TypeOfMeld.SET)
@@ -1106,6 +1220,7 @@ public class Rummy
                     // if they're the same
                     if (c.getSuit() == entry.getValue().get(0).getSuit())
                     {
+                        System.out.println(c);
                         // make sure that the card's rank is either one below the first card in the run
                         // or one above the last card in the run
                         // if it means either requirement

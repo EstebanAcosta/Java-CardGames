@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-
 /***
  * @author estebanacosta
  */
@@ -42,7 +41,7 @@ public class Player
     public void addsPointsWon(int pointsWon)
     {
         this.pointsWon += pointsWon;
-        
+
     }
 
     public ArrayList<Card> getPlayerHand()
@@ -83,19 +82,20 @@ public class Player
 
     public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
     {
-        int count = 0;
-
-        Iterator<Card> c = playerCards.iterator();
-
-        while (c.hasNext())
+        for (Card card : cards)
         {
-            Card nextCard = c.next();
+            Iterator<Card> playersHand = playerCards.iterator();
 
-            if (count < cards.size() && nextCard.equals(cards.get(count)))
+            while (playersHand.hasNext())
             {
-                c.remove();
+                Card nextCard = playersHand.next();
 
-                count++;
+                if (nextCard.equals(card))
+                {
+
+                    playersHand.remove();
+
+                }
             }
         }
     }
