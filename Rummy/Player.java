@@ -190,6 +190,16 @@ public class Player
 
     }
 
+    public void clearRuns()
+    {
+        runs.clear();
+    }
+
+    public void clearSets()
+    {
+        sets.clear();
+    }
+
     public boolean hasASet()
     {
         // find all possible sets

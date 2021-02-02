@@ -236,7 +236,7 @@ public class Rummy
 
                 System.out.println("---------------------------------------------------\n");
 
-                // if the player chose to draw one from the stack
+                // if the player chooses to draw one from the stack
                 if (thisPile == 1)
                 {
                     // remove the card from the stack and add it to the player's hand
@@ -444,8 +444,8 @@ public class Rummy
                             // Ask the player if they want to add to this player's meld
                             System.out.println("\nDo you wish to add to " + playersWithMelds.get(thisOption - 1).getName() + "'s meld?");
 
-                            System.out.println("1. Yes");
-                            System.out.println("2. No");
+                            System.out.println("1.Yes");
+                            System.out.println("2.No");
 
                             String wantToMeld = "";
 
@@ -518,9 +518,9 @@ public class Rummy
                                             thisMeld = Integer.parseInt(whichMeld);
                                         }
 
-                                    }
+                                        System.out.println("---------------------------------------------------\n");
 
-                                    System.out.println("---------------------------------------------------\n");
+                                    }
 
                                     System.out.println("Now choose a card to form a meld");
 
@@ -528,14 +528,12 @@ public class Rummy
 
                                     String whichCardToMeld = "";
 
-                                    int thisCardToMeld = 1;
-
-                                    int count = 1;
+                                    int thisCardToMeld = 0;
 
                                     Card meldThisCard = players.get(whoseTurn).getCardInPlayerCards(thisCardToMeld);
 
                                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
-                                    // or if the user selected a card that can't be added to this other player's specific meld
+                                    // or if the user selects a card that can't be added to this other player's specific meld
                                     // Continue prompting the user
                                     while ((thisCardToMeld < 1 || thisCardToMeld > players.get(whoseTurn).getNumOfPlayerCards()) &&
                                     canAddThisCardToThisMeld(otherPlayersMelds, meldThisCard, thisMeld) == false)
@@ -591,8 +589,27 @@ public class Rummy
 
                 }
 
+                // if this player has either a run or a set
                 if (players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true)
                 {
+
+                    if(players.get(whoseTurn).hasARun() && players.get(whoseTurn).hasASet())
+                    {
+                        players.get(whoseTurn).showRuns();
+
+                        players.get(whoseTurn).showSets();
+                    }
+
+                    else if(players.get(whoseTurn).hasARun())
+                    {
+                        players.get(whoseTurn).showRuns(); 
+                    }
+
+                    else
+                    {
+                        players.get(whoseTurn).showSets();
+
+                    }
 
                     System.out.println("Do you wish to form a meld?");
 
@@ -628,8 +645,10 @@ public class Rummy
 
                     System.out.println("---------------------------------------------------\n");
 
+                    // if the player decides to form a meld
                     if (decision == 1)
                     {
+                        // if the player has both a run and a set
                         if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
                         {
                             players.get(whoseTurn).showRuns();
@@ -680,7 +699,40 @@ public class Rummy
                                 // if the player has more than one run
                                 if (players.get(whoseTurn).getRuns().size() > 1)
                                 {
+
+                                    players.get(whoseTurn).showRuns();
+
                                     System.out.println("Which run do you want to meld?");
+
+                                    String whichRun = "";
+
+                                    int thisRun = 0;
+
+                                    // continue looping until the player has chosen an option
+                                    // between the first and the last run
+                                    while (thisRun < 1 || thisRun > players.get(whoseTurn).getRuns().size())
+                                    {
+                                        System.out.println("Please select an option between 1 and " + players.get(whoseTurn).getRuns().size());
+
+                                        // get player input
+                                        whichRun = kbd.nextLine();
+
+                                        // if the player input isn't a number
+                                        while (!whichRun.matches("[0-9]+"))
+                                        {
+                                            System.out.println("Please enter a number");
+
+                                            // get player input
+                                            whichRun = kbd.nextLine();
+                                        }
+
+                                        // convert input to a number
+                                        thisRun = Integer.parseInt(whichRun);
+                                    }
+
+                                    // meld that specific run
+                                    players.get(whoseTurn).meldRun(thisRun);
+
                                 }
 
                                 // if the player only has one run
@@ -688,23 +740,58 @@ public class Rummy
                                 {
                                     int position = 0;
 
+                                    // loop through the table of runs
                                     for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
                                     {
 
+                                        // since there's only one entry, store the key value of the one entry
                                         position = entry.getKey();
                                     }
 
+                                    // meld that specific run
                                     players.get(whoseTurn).meldRun(position);
                                 }
                             }
 
-                            // if the player chose to meld the set
+                            // if the player chooses to meld the set
                             else
                             {
                                 // if the player has more than one set
                                 if (players.get(whoseTurn).getSets().size() > 1)
                                 {
+
+                                    players.get(whoseTurn).showSets();
+
                                     System.out.println("Which set do you want to meld?");
+
+                                    String whichSet = "";
+
+                                    int thisSet = 0;
+
+                                    // continue looping until the player has chosen an option
+                                    // between the first and the last run
+                                    while (thisSet < 1 || thisSet > players.get(whoseTurn).getSets().size())
+                                    {
+                                        System.out.println("Please select an option between 1 and " + players.get(whoseTurn).getSets().size());
+
+                                        // get player input
+                                        whichSet = kbd.nextLine();
+
+                                        // if the player input isn't a number
+                                        while (!whichSet.matches("[0-9]+"))
+                                        {
+                                            System.out.println("Please enter a number");
+
+                                            // get player input
+                                            whichSet = kbd.nextLine();
+                                        }
+
+                                        // convert input to a number
+                                        thisSet = Integer.parseInt(whichSet);
+                                    }
+
+                                    // meld that specific run
+                                    players.get(whoseTurn).meldSet(thisSet);
 
                                 }
 
@@ -713,11 +800,14 @@ public class Rummy
                                 {
                                     int position = 0;
 
+                                    // loop through the table of sets
                                     for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
                                     {
+                                        // since there's only one entry, store the key value of the one entry
                                         position = entry.getKey();
                                     }
 
+                                    // meld that specific set
                                     players.get(whoseTurn).meldSet(position);
                                 }
 
@@ -746,11 +836,14 @@ public class Rummy
                             {
                                 int position = 0;
 
+                                // loop through the table of sets
                                 for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
                                 {
+                                    // since there's only one entry, store the key value of the one entry
                                     position = entry.getKey();
                                 }
 
+                                // meld that specific set
                                 players.get(whoseTurn).meldSet(position);
                             }
 
@@ -772,6 +865,35 @@ public class Rummy
                             {
                                 System.out.println("Which run do you want to meld?");
 
+                                String whichRun = "";
+
+                                int thisRun = 0;
+
+                                // continue looping until the player has chosen an option
+                                // between the first and the last run
+                                while (thisRun < 1 || thisRun > players.get(whoseTurn).getRuns().size())
+                                {
+                                    System.out.println("Please select an option between 1 and " + players.get(whoseTurn).getRuns().size());
+
+                                    // get player input
+                                    whichRun = kbd.nextLine();
+
+                                    // if the player input isn't a number
+                                    while (!whichRun.matches("[0-9]+"))
+                                    {
+                                        System.out.println("Please enter a number");
+
+                                        // get player input
+                                        whichRun = kbd.nextLine();
+                                    }
+
+                                    // convert input to a number
+                                    thisRun = Integer.parseInt(whichRun);
+                                }
+
+                                // meld that specific run
+                                players.get(whoseTurn).meldRun(thisRun);
+
                             }
 
                             // if the player only has one run
@@ -779,20 +901,24 @@ public class Rummy
                             {
                                 int position = 0;
 
+                                // loop through the table of runs
                                 for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
                                 {
 
+                                    // since there's only one entry, store the key value of the one entry
                                     position = entry.getKey();
                                 }
 
+                                // meld that specific run
                                 players.get(whoseTurn).meldRun(position);
 
                             }
 
-                            System.out.println();
                         }
 
                     }
+
+                    System.out.println("---------------------------------------------------\n");
 
                 }
 
@@ -830,6 +956,7 @@ public class Rummy
                 // remove the card the player selected from their hand and put it in the discard pile
                 discardPile.add(players.get(whoseTurn).removeOneFromPlayerCards(thisCardToDiscard));
 
+                // if there are no more cards in the stack
                 if (stack.getSize() == 0)
                 {
                     // shuffle the discard pile
@@ -846,6 +973,18 @@ public class Rummy
 
                 }
 
+                // clear the player's runs and sets
+                // this has to be done because if these aren't cleared
+                // by the time it's this player's turn again, there's a chance
+                // that some of the runs and sets will no longer exist anymore.
+                // This happens either because some of these cards have been discarded or have been used
+                // to form a meld somewhere else. This is merely a way to prevent
+                // the player from picking runs or sets that no longer exist/aren't valid
+                // when it's their turn again
+                players.get(whoseTurn).clearRuns();
+
+                players.get(whoseTurn).clearSets();
+
                 System.out.println("______________________________________________________________________________________________");
 
                 whoseTurn = changeTurn(whoseTurn);
@@ -854,6 +993,14 @@ public class Rummy
             }
 
         }
+
+    }
+
+    /****
+     * Method displays the results of the game and resets the game if there is more than 1 round
+     */
+    public void endGame()
+    {
 
     }
 
