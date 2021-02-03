@@ -640,8 +640,10 @@ public class Rummy
 
                 players.get(whoseTurn).findSets();
 
-                // if this player has either a run or a set
-                if (players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true)
+                int decision = 0;
+
+                // continue looping until the player has decided to stop forming melds or until they've melded all their runs/sets
+                while ((players.get(whoseTurn).hasARun() == true || players.get(whoseTurn).hasASet() == true) && decision != 2)
                 {
 
                     if (players.get(whoseTurn).hasARun() && players.get(whoseTurn).hasASet())
@@ -675,8 +677,6 @@ public class Rummy
                     System.out.println();
 
                     String confirm = "";
-
-                    int decision = 0;
 
                     while (decision < 1 || decision > 2)
                     {
@@ -847,8 +847,28 @@ public class Rummy
                                         thisSet = Integer.parseInt(whichSet);
                                     }
 
+                                    // create a counter
+                                    int position = 1;
+
+                                    // loop through the table of sets
+                                    for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
+                                    {
+
+                                        // if this is the meld the player wants
+                                        if (thisSet == position)
+                                        {
+                                            // store the key value of that meld
+                                            thisSet = entry.getKey();
+                                        }
+
+                                        // add one to counter
+                                        position++;
+
+                                    }
+
                                     // meld that specific run
                                     players.get(whoseTurn).meldSet(thisSet);
+
 
                                 }
 
@@ -910,6 +930,25 @@ public class Rummy
 
                                     // convert input to a number
                                     thisSet = Integer.parseInt(whichSet);
+                                }
+
+                                // create a counter
+                                int position = 1;
+
+                                // loop through the table of sets
+                                for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
+                                {
+
+                                    // if this is the meld the player wants
+                                    if (thisSet == position)
+                                    {
+                                        // store the key value of that meld
+                                        thisSet = entry.getKey();
+                                    }
+
+                                    // add one to counter
+                                    position++;
+
                                 }
 
                                 // meld that specific run

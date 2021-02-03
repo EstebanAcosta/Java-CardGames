@@ -613,11 +613,13 @@ public class Player
     {
         System.out.println(getName() + "'s sets:");
 
+        int position = 1;
+        
         // loop through the list of sets
         for (Map.Entry<Integer, ArrayList<Card>> entry : sets.entrySet())
         {
             // print out the key
-            System.out.print(entry.getKey() + " ");
+            System.out.print(position + ": " + entry.getKey() + " ");
 
             // print out the run or set associated with that key
             for (Card c : entry.getValue())
@@ -625,6 +627,8 @@ public class Player
                 System.out.print(" (" + c + ") ");
             }
 
+            position++;
+            
             System.out.println();
         }
 
