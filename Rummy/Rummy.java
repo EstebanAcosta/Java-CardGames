@@ -186,10 +186,14 @@ public class Rummy
 
         while (currentRound <= numRounds)
         {
+            int turn = 1;
+
             while (atLeastSomeoneIsOut() == false)
             {
 
                 System.out.println("Round " + currentRound + "\n");
+
+                System.out.println("Turn " + turn);
 
                 System.out.println("Discard Pile:");
 
@@ -199,6 +203,8 @@ public class Rummy
                 }
 
                 Card dontPutBackDown = null;
+
+                // System.out.println(players.get(whoseTurn).getName() + " has " + players.get(whoseTurn).getMelds().size() + (players.get(whoseTurn).getMelds().size() == 1 ? " meld " : " melds " + "so far\n"));
 
                 players.get(whoseTurn).showPlayerCards();
 
@@ -1181,7 +1187,7 @@ public class Rummy
 
                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                     // Continue prompting the user
-                    while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() || thisCardToDiscard == notThisCardPosition)
+                    while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() || (thisCardToDiscard == notThisCardPosition && players.get(whoseTurn).getNumOfPlayerCards() > 1))
                     {
                         if (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards())
                         {
@@ -1248,6 +1254,8 @@ public class Rummy
 
                 whoseTurn = changeTurn(whoseTurn);
 
+                turn++;
+
             }
 
             stack = new Deck();
@@ -1278,20 +1286,43 @@ public class Rummy
                 // loop through the player's hand
                 for (Card c : p.getPlayerHand())
                 {
-                    // if the card's value is greater than or equal to 10 (king, jack, queen, or ten)
-                    if (c.getValueOfCard() >= 10)
+
+                    if (turn == 1)
                     {
-                        // add ten points
-                        totalPoints += 10;
+                        // if the card's value is greater than or equal to 10 (king, jack, queen, or ten)
+                        if (c.getValueOfCard() >= 10)
+                        {
+                            // add ten points
+                            totalPoints += 20;
+
+                        }
+
+                        // if it's a regular card
+                        else
+                        {
+                            // add their normal value to the total points
+                            totalPoints += (c.getValueOfCard() * 2);
+                        }
 
                     }
 
-                    // if it's a regular card
                     else
                     {
-                        // add their normal value to the total points
-                        totalPoints += c.getValueOfCard();
+                        // if the card's value is greater than or equal to 10 (king, jack, queen, or ten)
+                        if (c.getValueOfCard() >= 10)
+                        {
+                            // add ten points
+                            totalPoints += 10;
 
+                        }
+
+                        // if it's a regular card
+                        else
+                        {
+                            // add their normal value to the total points
+                            totalPoints += c.getValueOfCard();
+
+                        }
                     }
                 }
             }
@@ -1312,6 +1343,9 @@ public class Rummy
                 System.out.println("________________________________________________________________________________________________\n");
 
             }
+
+            System.out.println();
+            System.out.println();
 
             // calculate how many cards we are supposed to distribute to each player
             int howManyCardsToEachPlayer = 0;
@@ -1359,6 +1393,33 @@ public class Rummy
             currentRound++;
 
         }
+
+        int maxPlayerPoints = players.get(0).getPointsWon();
+
+        int maxPlayerPosition = 0;
+
+        for (int i = 0; i < players.size(); i++)
+        {
+            if (players.get(i).getPointsWon() > maxPlayerPoints)
+            {
+                maxPlayerPosition = i;
+
+                maxPlayerPoints = players.get(i).getPointsWon();
+            }
+        }
+
+        for (Player p : players)
+        {
+            System.out.println(p.getName() + " has " + p.getPointsWon() + " points");
+
+            System.out.println("________________________________________________________________________________________________\n");
+        }
+
+        System.out.println();
+
+        System.out.println("The winner of Rummy is " + players.get(maxPlayerPosition).getName() + " with " + players.get(maxPlayerPosition).getPointsWon() + " points");
+
+        System.out.println();
 
     }
 
@@ -1519,7 +1580,7 @@ public class Rummy
                 }
 
                 // if this entry is a run
-                else if (entry.getKey() % 2 !=0 )
+                else if (entry.getKey() % 2 != 0)
                 {
                     // check the suit of the player's card against the meld card's suit
                     // if they're the same
