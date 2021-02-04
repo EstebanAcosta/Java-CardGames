@@ -197,6 +197,8 @@ public class Rummy
                 {
                     System.out.println((i + 1) + ": " + discardPile.get(i));
                 }
+                
+                Card dontPutBackDown = null;
 
                 players.get(whoseTurn).showPlayerCards();
 
@@ -291,14 +293,22 @@ public class Rummy
                         // if player chooses to pick up one card from the discard pile
                         if (pickUpOneFromDiscard == 1)
                         {
+                            //add that card to their hand
                             players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
 
+                            //store the card that player picked up 
+                            dontPutBackDown = discardPile.get(discardPile.size() - 1);
+                            
+                            //and remove it from the discard pile
                             discardPile.remove(discardPile.size() - 1);
+                            
+                            
                         }
 
                         // if the player chooses to pick up multiple cards from the discard pile
                         else
                         {
+                            //show all the cards in the discard pile
                             for (int i = 0; i < discardPile.size(); i++)
                             {
                                 System.out.println((i + 1) + ": " + discardPile.get(i));
@@ -362,6 +372,8 @@ public class Rummy
                     {
                         // remove the only card in the discard pile and place it in the player's hand
                         players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
+                        
+                        dontPutBackDown = discardPile.get(discardPile.size() - 1);
 
                         discardPile.clear();
 
@@ -786,6 +798,16 @@ public class Rummy
                                         // convert input to a number
                                         thisRun = Integer.parseInt(whichRun);
                                     }
+                                    
+                                    System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
+
+                                    for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
+                                    {
+                                        System.out.print(" ( " + c + " ) " );
+
+                                    }
+                                    
+                                    System.out.println();
 
                                     // meld that specific run
                                     players.get(whoseTurn).meldRun(thisRun);
@@ -795,18 +817,28 @@ public class Rummy
                                 // if the player only has one run
                                 else
                                 {
-                                    int position = 0;
+                                    int thisRun = 0;
 
                                     // loop through the table of runs
                                     for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
                                     {
 
                                         // since there's only one entry, store the key value of the one entry
-                                        position = entry.getKey();
+                                        thisRun = entry.getKey();
                                     }
+                                    
+                                    System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
+
+                                    for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
+                                    {
+                                        System.out.print(" ( " + c + " ) " );
+
+                                    }
+                                    
+                                    System.out.println();
 
                                     // meld that specific run
-                                    players.get(whoseTurn).meldRun(position);
+                                    players.get(whoseTurn).meldRun(thisRun);
                                 }
                             }
 
@@ -865,27 +897,48 @@ public class Rummy
                                         position++;
 
                                     }
+                                    
+
+                                    System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
+
+                                    for (Card c : players.get(whoseTurn).getSets().get(thisSet))
+                                    {
+                                        System.out.print(" ( " + c + " ) " );
+
+                                    }
+                                    
+                                    System.out.println();
 
                                     // meld that specific run
                                     players.get(whoseTurn).meldSet(thisSet);
-
 
                                 }
 
                                 // if the player has only has one set
                                 else
                                 {
-                                    int position = 0;
+                                    int thisSet = 0;
 
                                     // loop through the table of sets
                                     for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
                                     {
                                         // since there's only one entry, store the key value of the one entry
-                                        position = entry.getKey();
+                                       thisSet = entry.getKey();
                                     }
+                                    
+
+                                    System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
+
+                                    for (Card c : players.get(whoseTurn).getSets().get(thisSet))
+                                    {
+                                        System.out.print(" ( " + c + " ) " );
+
+                                    }
+                                    
+                                    System.out.println();
 
                                     // meld that specific set
-                                    players.get(whoseTurn).meldSet(position);
+                                    players.get(whoseTurn).meldSet(thisSet);
                                 }
 
                             }
@@ -895,7 +948,7 @@ public class Rummy
                         // if the player only has a set
                         else if (players.get(whoseTurn).hasASet() == true)
                         {
-                            System.out.println("You have at least one set/book in your hand \n");
+                            System.out.println("You have " + players.get(whoseTurn).getSets().size() + " books/sets in your hand \n");
 
                             players.get(whoseTurn).showSets();
 
@@ -951,6 +1004,16 @@ public class Rummy
 
                                 }
 
+                                System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
+
+                                for (Card c : players.get(whoseTurn).getSets().get(thisSet))
+                                {
+                                    System.out.print(" ( " + c + " ) " );
+
+                                }
+                                
+                                System.out.println();
+
                                 // meld that specific run
                                 players.get(whoseTurn).meldSet(thisSet);
 
@@ -959,17 +1022,27 @@ public class Rummy
                             // if the player has only has one set
                             else
                             {
-                                int position = 0;
+                                int thisSet = 0;
 
                                 // loop through the table of sets
                                 for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
                                 {
                                     // since there's only one entry, store the key value of the one entry
-                                    position = entry.getKey();
+                                    thisSet = entry.getKey();
                                 }
+                                
+                                System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
+
+                                for (Card c : players.get(whoseTurn).getSets().get(thisSet))
+                                {
+                                    System.out.print(" ( " + c + " ) " );
+
+                                }
+                                
+                                System.out.println();
 
                                 // meld that specific set
-                                players.get(whoseTurn).meldSet(position);
+                                players.get(whoseTurn).meldSet(thisSet);
                             }
 
                             System.out.println();
@@ -979,7 +1052,7 @@ public class Rummy
                         // if the player only has a run
                         else if (players.get(whoseTurn).hasARun() == true)
                         {
-                            System.out.println("You have at least one run in your hand \n");
+                            System.out.println("You have " + players.get(whoseTurn).getRuns().size() + " runs in your hand \n");
 
                             players.get(whoseTurn).showRuns();
 
@@ -1016,6 +1089,16 @@ public class Rummy
                                     thisRun = Integer.parseInt(whichRun);
                                 }
 
+                                System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
+
+                                for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
+                                {
+                                    System.out.print(" ( " + c + " ) " );
+
+                                }
+                                
+                                System.out.println();
+                                
                                 // meld that specific run
                                 players.get(whoseTurn).meldRun(thisRun);
 
@@ -1024,18 +1107,28 @@ public class Rummy
                             // if the player only has one run
                             else
                             {
-                                int position = 0;
+                                int thisRun = 0;
 
                                 // loop through the table of runs
                                 for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getRuns().entrySet())
                                 {
 
                                     // since there's only one entry, store the key value of the one entry
-                                    position = entry.getKey();
+                                    thisRun = entry.getKey();
                                 }
+                                
+                                System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
+
+                                for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
+                                {
+                                    System.out.print(" ( " + c + " ) " );
+
+                                }
+                                
+                                System.out.println();
 
                                 // meld that specific run
-                                players.get(whoseTurn).meldRun(position);
+                                players.get(whoseTurn).meldRun(thisRun);
 
                             }
 
@@ -1056,12 +1149,40 @@ public class Rummy
                     String whichCardToDiscard = "";
 
                     int thisCardToDiscard = 0;
+                    
+                    //stores the position of the card that can't be placed down again
+                    int notThisCardPosition = 1;
+                    
+                    System.out.println(dontPutBackDown);
+                                        
+                    //loop through the player's hand
+                    for(Card c : players.get(whoseTurn).getPlayerHand())
+                    {
+                        //if the card in the hand is equal to the card the player is not supposed to put down again
+                        if(c.equals(dontPutBackDown))
+                        {
+
+                            break;
+                            
+                        }
+                        //add one to the counter
+                        notThisCardPosition++;
+                    }
 
                     // If the user puts a number greater than the # of cards in the player's hand or less than 1
                     // Continue prompting the user
-                    while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards())
+                    while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() || thisCardToDiscard == notThisCardPosition)
                     {
-                        System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+                        if(thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() )
+                        {
+                            System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
+
+                        }
+                        
+                        else if(thisCardToDiscard == notThisCardPosition)
+                        {
+                            System.out.println("Please don't put down the same card you just picked up from the discard pile back into the discard pile");
+                        }
 
                         // get user input
                         whichCardToDiscard = kbd.nextLine();
@@ -1170,9 +1291,13 @@ public class Rummy
 
             for (Player p : players)
             {
+
                 System.out.println(p.getName() + " has " + p.getPointsWon() + " points so far");
 
                 p.getPlayerHand().clear();
+
+                // clear every meld each player has
+                p.clearMelds();
 
                 System.out.println("________________________________________________________________________________________________\n");
 

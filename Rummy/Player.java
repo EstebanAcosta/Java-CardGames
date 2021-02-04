@@ -243,6 +243,11 @@ public class Player
         }
 
     }
+    
+    public void clearMelds()
+    {
+        melds.clear();
+    }
 
     public void clearRuns()
     {
