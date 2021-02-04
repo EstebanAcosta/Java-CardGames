@@ -197,7 +197,7 @@ public class Rummy
                 {
                     System.out.println((i + 1) + ": " + discardPile.get(i));
                 }
-                
+
                 Card dontPutBackDown = null;
 
                 players.get(whoseTurn).showPlayerCards();
@@ -293,22 +293,21 @@ public class Rummy
                         // if player chooses to pick up one card from the discard pile
                         if (pickUpOneFromDiscard == 1)
                         {
-                            //add that card to their hand
+                            // add that card to their hand
                             players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
 
-                            //store the card that player picked up 
+                            // store the card that player picked up
                             dontPutBackDown = discardPile.get(discardPile.size() - 1);
-                            
-                            //and remove it from the discard pile
+
+                            // and remove it from the discard pile
                             discardPile.remove(discardPile.size() - 1);
-                            
-                            
+
                         }
 
                         // if the player chooses to pick up multiple cards from the discard pile
                         else
                         {
-                            //show all the cards in the discard pile
+                            // show all the cards in the discard pile
                             for (int i = 0; i < discardPile.size(); i++)
                             {
                                 System.out.println((i + 1) + ": " + discardPile.get(i));
@@ -372,7 +371,7 @@ public class Rummy
                     {
                         // remove the only card in the discard pile and place it in the player's hand
                         players.get(whoseTurn).addOneToPlayerHand(discardPile.get(discardPile.size() - 1));
-                        
+
                         dontPutBackDown = discardPile.get(discardPile.size() - 1);
 
                         discardPile.clear();
@@ -511,7 +510,7 @@ public class Rummy
 
                                 int thisMeld = 0;
 
-                                Hashtable<TypeOfMeld, ArrayList<Card>> otherPlayersMelds = playersWithMelds.get(thisOption - 1).getMelds();
+                                Hashtable<Integer, ArrayList<Card>> otherPlayersMelds = playersWithMelds.get(thisOption - 1).getMelds();
 
                                 // if this player can add to any of these melds that this other player possesses
                                 if (canAddToMelds(otherPlayersMelds, players.get(whoseTurn).getPlayerHand()) == true)
@@ -524,7 +523,7 @@ public class Rummy
                                         // show their melds
                                         playersWithMelds.get(thisOption - 1).showMelds();
 
-                                        System.out.println("\n Which meld do you want to add to?");
+                                        System.out.println("\nWhich meld do you want to add to?");
 
                                         // if the player selects an option that's not there
                                         while ((thisMeld < 1 || thisMeld > playersWithMelds.get(thisOption - 1).getMelds().size()) || canAddAnyCardToThisMeld(otherPlayersMelds, players.get(whoseTurn).getPlayerHand(), thisMeld) == false)
@@ -688,6 +687,8 @@ public class Rummy
 
                     System.out.println();
 
+                    decision = 0;
+
                     String confirm = "";
 
                     while (decision < 1 || decision > 2)
@@ -710,11 +711,11 @@ public class Rummy
                         decision = Integer.parseInt(confirm);
                     }
 
-                    System.out.println("---------------------------------------------------\n");
-
                     // if the player decides to form a meld
                     if (decision == 1)
                     {
+                        System.out.println("-----------------------------------------------------------------------------------\n");
+
                         // if the player has both a run and a set
                         if (players.get(whoseTurn).hasARun() == true && players.get(whoseTurn).hasASet() == true)
                         {
@@ -758,7 +759,7 @@ public class Rummy
                                 thisMeld = Integer.parseInt(whichMeld);
                             }
 
-                            System.out.println("---------------------------------------------------\n");
+                            System.out.println("-----------------------------------------------------------------------\n");
 
                             // if the player chose to meld the run
                             if (thisMeld == 1)
@@ -798,15 +799,15 @@ public class Rummy
                                         // convert input to a number
                                         thisRun = Integer.parseInt(whichRun);
                                     }
-                                    
+
                                     System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
 
                                     for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
                                     {
-                                        System.out.print(" ( " + c + " ) " );
+                                        System.out.print(" ( " + c + " ) ");
 
                                     }
-                                    
+
                                     System.out.println();
 
                                     // meld that specific run
@@ -826,15 +827,16 @@ public class Rummy
                                         // since there's only one entry, store the key value of the one entry
                                         thisRun = entry.getKey();
                                     }
-                                    
+
                                     System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
 
                                     for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
                                     {
-                                        System.out.print(" ( " + c + " ) " );
+                                        System.out.print(" ( " + c + " ) ");
 
                                     }
-                                    
+
+                                    System.out.println();
                                     System.out.println();
 
                                     // meld that specific run
@@ -850,6 +852,8 @@ public class Rummy
                                 {
 
                                     players.get(whoseTurn).showSets();
+
+                                    System.out.println();
 
                                     System.out.println("Which set do you want to meld?");
 
@@ -897,16 +901,16 @@ public class Rummy
                                         position++;
 
                                     }
-                                    
 
                                     System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
 
                                     for (Card c : players.get(whoseTurn).getSets().get(thisSet))
                                     {
-                                        System.out.print(" ( " + c + " ) " );
+                                        System.out.print(" ( " + c + " ) ");
 
                                     }
-                                    
+
+                                    System.out.println();
                                     System.out.println();
 
                                     // meld that specific run
@@ -923,18 +927,17 @@ public class Rummy
                                     for (Entry<Integer, ArrayList<Card>> entry : players.get(whoseTurn).getSets().entrySet())
                                     {
                                         // since there's only one entry, store the key value of the one entry
-                                       thisSet = entry.getKey();
+                                        thisSet = entry.getKey();
                                     }
-                                    
 
                                     System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
 
                                     for (Card c : players.get(whoseTurn).getSets().get(thisSet))
                                     {
-                                        System.out.print(" ( " + c + " ) " );
+                                        System.out.print(" ( " + c + " ) ");
 
                                     }
-                                    
+
                                     System.out.println();
 
                                     // meld that specific set
@@ -948,7 +951,7 @@ public class Rummy
                         // if the player only has a set
                         else if (players.get(whoseTurn).hasASet() == true)
                         {
-                            System.out.println("You have " + players.get(whoseTurn).getSets().size() + " books/sets in your hand \n");
+                            System.out.println("You have " + players.get(whoseTurn).getSets().size() + (players.get(whoseTurn).getSets().size() == 1 ? " set " : " sets ") + " in your hand \n");
 
                             players.get(whoseTurn).showSets();
 
@@ -1008,10 +1011,10 @@ public class Rummy
 
                                 for (Card c : players.get(whoseTurn).getSets().get(thisSet))
                                 {
-                                    System.out.print(" ( " + c + " ) " );
+                                    System.out.print(" ( " + c + " ) ");
 
                                 }
-                                
+
                                 System.out.println();
 
                                 // meld that specific run
@@ -1030,15 +1033,15 @@ public class Rummy
                                     // since there's only one entry, store the key value of the one entry
                                     thisSet = entry.getKey();
                                 }
-                                
+
                                 System.out.print(players.get(whoseTurn).getName() + " has melded this set:");
 
                                 for (Card c : players.get(whoseTurn).getSets().get(thisSet))
                                 {
-                                    System.out.print(" ( " + c + " ) " );
+                                    System.out.print(" ( " + c + " ) ");
 
                                 }
-                                
+
                                 System.out.println();
 
                                 // meld that specific set
@@ -1052,7 +1055,7 @@ public class Rummy
                         // if the player only has a run
                         else if (players.get(whoseTurn).hasARun() == true)
                         {
-                            System.out.println("You have " + players.get(whoseTurn).getRuns().size() + " runs in your hand \n");
+                            System.out.println("You have " + players.get(whoseTurn).getRuns().size() + (players.get(whoseTurn).getRuns().size() == 1 ? " run " : " runs ") + "in your hand \n");
 
                             players.get(whoseTurn).showRuns();
 
@@ -1093,12 +1096,12 @@ public class Rummy
 
                                 for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
                                 {
-                                    System.out.print(" ( " + c + " ) " );
+                                    System.out.print(" ( " + c + " ) ");
 
                                 }
-                                
+
                                 System.out.println();
-                                
+
                                 // meld that specific run
                                 players.get(whoseTurn).meldRun(thisRun);
 
@@ -1116,15 +1119,15 @@ public class Rummy
                                     // since there's only one entry, store the key value of the one entry
                                     thisRun = entry.getKey();
                                 }
-                                
+
                                 System.out.print(players.get(whoseTurn).getName() + " has melded this run:");
 
                                 for (Card c : players.get(whoseTurn).getRuns().get(thisRun))
                                 {
-                                    System.out.print(" ( " + c + " ) " );
+                                    System.out.print(" ( " + c + " ) ");
 
                                 }
-                                
+
                                 System.out.println();
 
                                 // meld that specific run
@@ -1136,7 +1139,16 @@ public class Rummy
 
                     }
 
-                    System.out.println("---------------------------------------------------\n");
+                    // Since the
+                    players.get(whoseTurn).clearRuns();
+
+                    players.get(whoseTurn).clearSets();
+
+                    players.get(whoseTurn).findRuns();
+
+                    players.get(whoseTurn).findSets();
+
+                    System.out.println("------------------------------------------------------------------------------------\n");
 
                 }
 
@@ -1149,23 +1161,21 @@ public class Rummy
                     String whichCardToDiscard = "";
 
                     int thisCardToDiscard = 0;
-                    
-                    //stores the position of the card that can't be placed down again
+
+                    // stores the position of the card that can't be placed down again
                     int notThisCardPosition = 1;
-                    
-                    System.out.println(dontPutBackDown);
-                                        
-                    //loop through the player's hand
-                    for(Card c : players.get(whoseTurn).getPlayerHand())
+
+                    // loop through the player's hand
+                    for (Card c : players.get(whoseTurn).getPlayerHand())
                     {
-                        //if the card in the hand is equal to the card the player is not supposed to put down again
-                        if(c.equals(dontPutBackDown))
+                        // if the card in the hand is equal to the card the player is not supposed to put down again
+                        if (c.equals(dontPutBackDown))
                         {
 
                             break;
-                            
+
                         }
-                        //add one to the counter
+                        // add one to the counter
                         notThisCardPosition++;
                     }
 
@@ -1173,13 +1183,13 @@ public class Rummy
                     // Continue prompting the user
                     while (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() || thisCardToDiscard == notThisCardPosition)
                     {
-                        if(thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards() )
+                        if (thisCardToDiscard < 1 || thisCardToDiscard > players.get(whoseTurn).getNumOfPlayerCards())
                         {
                             System.out.println("Please keep the option number between 1 and " + players.get(whoseTurn).getNumOfPlayerCards());
 
                         }
-                        
-                        else if(thisCardToDiscard == notThisCardPosition)
+
+                        else if (thisCardToDiscard == notThisCardPosition)
                         {
                             System.out.println("Please don't put down the same card you just picked up from the discard pile back into the discard pile");
                         }
@@ -1354,29 +1364,29 @@ public class Rummy
 
     /***
      * Method loops through the player's hand and checks every card against a specific meld.
-     * @param melds
+     * @param otherPlayersMelds
      * @param playerHand
      * @param position
      *            of meld
      * @return true if at least one card can be added to the meld, false if no card can be added to the meld
      */
-    public boolean canAddAnyCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand, int position)
+    public boolean canAddAnyCardToThisMeld(Hashtable<Integer, ArrayList<Card>> otherPlayersMelds, ArrayList<Card> playerHand, int position)
     {
 
-        TypeOfMeld tom = null;
+        int typeOfMeld = 0;
 
         int count = 1;
 
         ArrayList<Card> thisMeld = new ArrayList<Card>();
 
         // loop through the table that contains this other player's melds
-        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+        for (Entry<Integer, ArrayList<Card>> entry : otherPlayersMelds.entrySet())
         {
             // if the position is equal to the position the player chose
             if (count == position)
             {
                 // store the key
-                tom = entry.getKey();
+                typeOfMeld = entry.getKey();
 
                 // store the value
                 thisMeld = entry.getValue();
@@ -1393,7 +1403,7 @@ public class Rummy
         for (Card c : playerHand)
         {
             // if the entry is a set/book
-            if (tom == TypeOfMeld.SET)
+            if (typeOfMeld % 2 == 0)
             {
                 // check the rank of the player's card against the meld card's rank
                 // if they're the same
@@ -1404,7 +1414,7 @@ public class Rummy
             }
 
             // if this entry is a run
-            else if (tom == TypeOfMeld.RUN)
+            else if (typeOfMeld % 2 != 0)
             {
                 // check the suit of the player's card against the meld card's suit
                 // if they're the same
@@ -1428,21 +1438,21 @@ public class Rummy
      * Method takes the player's hand and the other player's melds as input. This method loops through the player's hand and checks each card against each meld
      * this other player possesses. If the card can be added to at least one meld in the other player's melds then the method should return true. However if none
      * of the cards in the player's hand can be added to any of the other player's melds then the method should return false
-     * @param melds
+     * @param otherPlayersMelds
      * @param playerHand
      * @return false if there are no melds that this player can add a card to this other player's melds or true if this player can add a card to
      *         this other player's melds
      */
-    public boolean canAddToMelds(Hashtable<TypeOfMeld, ArrayList<Card>> melds, ArrayList<Card> playerHand)
+    public boolean canAddToMelds(Hashtable<Integer, ArrayList<Card>> otherPlayersMelds, ArrayList<Card> playerHand)
     {
         // loop through the player's hand
         for (Card c : playerHand)
         {
             // loop through the other player's melds
-            for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+            for (Entry<Integer, ArrayList<Card>> entry : otherPlayersMelds.entrySet())
             {
                 // if the entry is a set/book
-                if (entry.getKey() == TypeOfMeld.SET)
+                if (entry.getKey() % 2 == 0)
 
                 {
                     // check the rank of the player's card against the meld card's rank
@@ -1454,7 +1464,7 @@ public class Rummy
                 }
 
                 // if this entry is a run
-                else if (entry.getKey() == TypeOfMeld.RUN)
+                else if (entry.getKey() % 2 != 0)
                 {
 
                     // check the suit of the player's card against the meld card's suit
@@ -1485,19 +1495,19 @@ public class Rummy
      * @return true if this specific card can be added to this other player's meld.
      *         Returns false if this specific card can't be added to this other player's meld
      */
-    public boolean canAddThisCardToThisMeld(Hashtable<TypeOfMeld, ArrayList<Card>> melds, Card c, int position)
+    public boolean canAddThisCardToThisMeld(Hashtable<Integer, ArrayList<Card>> otherPlayersMelds, Card c, int position)
     {
 
         int count = 1;
 
         // loop through the table that contains this other player's melds
-        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+        for (Entry<Integer, ArrayList<Card>> entry : otherPlayersMelds.entrySet())
         {
             // if the position is equal to the position the player chose
             if (count == position)
             {
                 // if the entry is a set/book
-                if (entry.getKey() == TypeOfMeld.SET)
+                if (entry.getKey() % 2 == 0)
                 {
                     // check the rank of the player's card against the meld card's rank
                     // if they're the same
@@ -1509,7 +1519,7 @@ public class Rummy
                 }
 
                 // if this entry is a run
-                else if (entry.getKey() == TypeOfMeld.RUN)
+                else if (entry.getKey() % 2 !=0 )
                 {
                     // check the suit of the player's card against the meld card's suit
                     // if they're the same

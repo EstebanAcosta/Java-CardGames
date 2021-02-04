@@ -22,7 +22,7 @@ public class Player
 
     private Hashtable<Integer, ArrayList<Card>> runs = new Hashtable<Integer, ArrayList<Card>>();
 
-    private Hashtable<TypeOfMeld, ArrayList<Card>> melds = new Hashtable<TypeOfMeld, ArrayList<Card>>();
+    private Hashtable<Integer, ArrayList<Card>> melds = new Hashtable<Integer, ArrayList<Card>>();
 
     private int pointsWon;
 
@@ -62,7 +62,7 @@ public class Player
         return this.sets;
     }
 
-    public Hashtable<TypeOfMeld, ArrayList<Card>> getMelds()
+    public Hashtable<Integer, ArrayList<Card>> getMelds()
     {
         return this.melds;
     }
@@ -158,14 +158,58 @@ public class Player
 
     /***
      * Adds this specific run to the table of melds
+     * The key value of a run is going to be an odd integer
      * @param position
      */
     public void meldRun(int position)
     {
 
-        // add this run to the table of melds
-        // key is type of meld which in this case is a run and the value is the array list of cards that form a run
-        melds.put(TypeOfMeld.RUN, runs.get(position));
+        // if there are no melds
+        // set the maxOdd variable to 0
+        // This variable will help the program find the biggest odd number in the list of melds
+        int maxOdd = 0;
+
+        // checks to see if the list of melds has an odd number (if the list of melds has a run)
+        boolean hasARun = false;
+
+        // loop through the list of melds
+        for (Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        {
+            // if the key is an odd number (if this is entry is a run)
+            if (entry.getKey() % 2 != 0)
+            {
+                // set the boolean to true
+                // (set it true to indicate there is a run)
+                hasARun = true;
+
+                // if the key value is bigger than the maximum odd number
+                if (entry.getKey() > maxOdd)
+                {
+                    //set that number to be the maximum odd number
+                    maxOdd = entry.getKey();
+                }
+
+            }
+        }
+
+        // if there isn't a run (none of the meld's key value is odd)
+        if (hasARun == false)
+        {
+            //Put the run in the meld
+            //The key value will be a 1, since one all runs' key value will be odd and two,since this
+            //is the first run being added to the list of melds, the first even integer key value has to be a 1.
+            melds.put(1, runs.get(position));
+        }
+
+        // if there is at least one run in the meld (at least one meld's key value is even)
+        else
+        {
+            //Put the run in the meld
+            //The new run will have a key value 2 + maximum odd number. Remember that the run's key integer value will always be odd
+            //and that in order to add a new run to the list of melds, the key value has to be different from all the other key values that are already in the 
+            //meld. So in order to make sure that this key value sticks to these 2 requirements, the program needed to look for the biggest odd number and add two to it.
+            melds.put(maxOdd + 2, runs.get(position));
+        }
 
         // remove this run from the player's hand
         removeMultipleFromPlayerCards(runs.get(position));
@@ -176,13 +220,57 @@ public class Player
 
     /***
      * Add this specific set to the table of melds
+     * The key value of a set is going to be an even integer
      * @param position
      */
     public void meldSet(int position)
     {
-        // add this set to the table of sets
-        // key is type of meld which in this case is a set and the value is the array list of cards that form a set
-        melds.put(TypeOfMeld.SET, sets.get(position));
+
+        // set the maxEven variable to 0
+        // This variable will help the program find the biggest even number in the list of melds
+        int maxEven = 0;
+
+        // checks to see if the list of melds has an even number (if the list of melds has a set)
+        boolean hasASet = false;
+
+        // loop through the list of melds
+        for (Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
+        {
+            // if the key is an even number (if this is entry is a set)
+            if (entry.getKey() % 2 == 0)
+            {
+                // set the boolean to true
+                // (set it true to indicate there is a set)
+                hasASet = true;
+
+                // if the key value is bigger than the maximum even number
+                if (entry.getKey() > maxEven)
+                {
+                    //set that number to be the maximum even number
+                    maxEven = entry.getKey();
+                }
+
+            }
+        }
+
+        // if there isn't a set(none of the meld's key value is even)
+        if (hasASet == false)
+        {
+            //Put the set in the meld
+            //The key value will be a 2, since one all sets' key value will be an even integer and two,since this
+            //is the first set being added to the list of melds, the first even integer key value has to be a 2.
+            melds.put(2, sets.get(position));
+        }
+
+        // if there is at least one set in the meld (at least one meld's key value is even)
+        else
+        {
+            //Put the set in the meld
+            //The new set will have a key value 2 + maximum even number. Remember that the set's key integer value will always be even
+            //and that in order to add a new set to the list of melds, the key value has to be different from all the other key values that are already in the 
+            //meld. So in order to make sure that this key value sticks to these 2 requirements, the program needed to look for the biggest even number and add two to it.
+            melds.put(maxEven + 2, sets.get(position));
+        }
 
         // remove this set from the player's hand
         removeMultipleFromPlayerCards(sets.get(position));
@@ -205,13 +293,13 @@ public class Player
         int count = 1;
 
         // loop through the table
-        for (Map.Entry<TypeOfMeld, ArrayList<Card>> entry : getMelds().entrySet())
+        for (Entry<Integer, ArrayList<Card>> entry : getMelds().entrySet())
         {
             // if this is the meld the player wants to add
             if (count == thisMeld)
             {
                 // if this meld is a run
-                if (entry.getKey() == TypeOfMeld.RUN)
+                if (entry.getKey() % 2 != 0)
                 {
                     // if this card is one less than the first card in the list of cards
                     if ((c.getValueOfCard() + 1) == entry.getValue().get(0).getValueOfCard())
@@ -243,7 +331,7 @@ public class Player
         }
 
     }
-    
+
     public void clearMelds()
     {
         melds.clear();
@@ -598,15 +686,15 @@ public class Player
         for (Map.Entry<Integer, ArrayList<Card>> entry : runs.entrySet())
         {
             // print out the key
-            System.out.print(entry.getKey() + " ");
+            System.out.print(entry.getKey() + ": [ RUN -> ");
 
-            // print out the run or set associated with that key
+            // print out the run associated with that key
             for (Card c : entry.getValue())
             {
                 System.out.print(" (" + c + ") ");
             }
 
-            System.out.println();
+            System.out.println("]");
         }
 
     }
@@ -619,22 +707,22 @@ public class Player
         System.out.println(getName() + "'s sets:");
 
         int position = 1;
-        
+
         // loop through the list of sets
         for (Map.Entry<Integer, ArrayList<Card>> entry : sets.entrySet())
         {
             // print out the key
-            System.out.print(position + ": " + entry.getKey() + " ");
+            System.out.print(position + ": [ SET -> ");
 
-            // print out the run or set associated with that key
+            // print out the set associated with that key
             for (Card c : entry.getValue())
             {
                 System.out.print(" (" + c + ") ");
             }
 
             position++;
-            
-            System.out.println();
+
+            System.out.println("]");
         }
 
     }
@@ -644,12 +732,24 @@ public class Player
         System.out.println(getName() + "'s melds:");
 
         int count = 1;
-        // loop through the list of sets
-        for (Entry<TypeOfMeld, ArrayList<Card>> entry : melds.entrySet())
+        // loop through the list of melds
+        for (Entry<Integer, ArrayList<Card>> entry : melds.entrySet())
         {
-            // print out the key
-            System.out.print(count + " " + entry.getKey() + " ");
+            
+            if(entry.getKey() % 2 == 0)
+            {
+                // print out the key
+                System.out.print(count + ": [ SET -> ");
 
+            }
+            
+            else
+            {
+                // print out the key
+                System.out.print(count + ": [ RUN -> ");
+
+            }
+      
             // print out the run or set associated with that key
             for (Card c : entry.getValue())
             {
@@ -658,7 +758,7 @@ public class Player
 
             count++;
 
-            System.out.println();
+            System.out.println("]");
         }
     }
 
