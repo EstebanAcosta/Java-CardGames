@@ -201,7 +201,7 @@ public class Player
             melds.put(1, runs.get(position));
         }
 
-        // if there is at least one run in the meld (at least one meld's key value is even)
+        // if there is at least one run in the meld (at least one meld's key value is odd)
         else
         {
             //Put the run in the meld
