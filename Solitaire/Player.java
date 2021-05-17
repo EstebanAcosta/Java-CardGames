@@ -768,15 +768,29 @@ public class Player
     public void showPlayerCards()
     {
 
-        System.out.println("\n" + getName() + "'s Hand: \n");
-
+        System.out.println(getName() + "'s Hand: \n");
         for (int i = 0; i < playerCards.size(); i++)
         {
 
-            System.out.print((i + 1) + ": ( " + playerCards.get(i) + " )\n");
+            if (playerCards.get(i).isUnflipped())
+            {
+                System.out.print(" ( CARD " + (i + 1) + " )");
+            }
+            else
+            {
+                System.out.print(" ( " + playerCards.get(i) + " ) ");
+            }
+
+            if ((i + 1) % 5 == 0 && i > 0)
+            {
+
+                System.out.println();
+                System.out.println();
+
+            }
 
         }
-
+        
         System.out.println();
         System.out.println();
 
