@@ -73,7 +73,17 @@ public class Deck
             for (Rank value : Rank.values())
             {
 
-                deck.add(new Card(suit, value));
+                if(suit == Suit.HEARTS || suit == Suit.DIAMONDS)
+                {
+                    deck.add(new Card(suit, value,Color.RED));
+
+                }
+                
+                else
+                {
+                    deck.add(new Card(suit, value,Color.BLACK));
+
+                }
 
             }
         }

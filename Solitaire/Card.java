@@ -9,7 +9,18 @@ public class Card implements Comparable<Card>
 
     private Rank rank;
 
+    private Color color;
+
     private boolean unflipped;
+    
+    public Card(Suit suit, Rank value, Color color)
+    {
+
+        setSuit(suit);
+        setRank(value);
+        setColor(color);
+
+    }
 
     public Card(Suit suit, Rank value)
     {
@@ -17,6 +28,16 @@ public class Card implements Comparable<Card>
         setSuit(suit);
         setRank(value);
 
+    }
+
+    public Color getColor()
+    {
+        return color;
+    }
+
+    public void setColor(Color color)
+    {
+        this.color = color;
     }
 
     public Rank getRank()
@@ -102,13 +123,14 @@ public class Card implements Comparable<Card>
 
         if (getSuit() != null)
         {
-            return getRank() + " of " + getSuit();
+            return getColor() + " " + getRank() + " of " + getSuit();
         }
 
         else
         {
-            return getRank() + "";
+            return getColor() + " " + getRank() + "";
         }
 
     }
+
 }

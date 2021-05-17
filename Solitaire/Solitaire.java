@@ -13,11 +13,13 @@ public class Solitaire
     {
         Scanner kbd = new Scanner(System.in);
 
+        System.out.println("Welcome To Solitaire \n");
+
         System.out.println("What is this player's name:");
 
+        // ask the player for their name
         String playerName = kbd.nextLine();
 
-        // ask each player for their name
         p.setName(playerName);
 
         System.out.println("_____________________________________________________________________");
@@ -64,10 +66,12 @@ public class Solitaire
 
             }
 
-            //add this new entry to the table, 
-            //which contains the pile number and the cards that were put down in that pile
+            // add this new entry to the table,
+            // which contains the pile number and the cards that were put down in that pile
             tableau.put(i + 1, cardsDrawn);
         }
+
+        System.out.println("___________________________________________________________");
 
         startGame(tableau, deck);
     }
@@ -75,13 +79,45 @@ public class Solitaire
     public void startGame(Hashtable<Integer, ArrayList<Card>> tableau, Deck deck)
     {
 
+        System.out.println("Solitaire Has Started\n");
+
+        int[] howManySpaces = new int[7];
+
+        // helps keep track of where we are in the array
+        int count = 0;
+
+        System.out.println("Tableau:\n");
+
+        // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
         {
-            for (int i = 0; i < entry.getValue().size(); i++)
-            {
+            // print out the first flipped card in each pile
+            System.out.print(entry.getValue().get(0) + "  ");
 
+            // get the length of the string representation of each card and store it in the array
+            howManySpaces[count] = entry.getValue().get(0).toString().length() - 7;
+
+            count++;
+
+        }
+
+        System.out.println();
+
+        // loop seven times since there are seven piles
+        for (int i = 0; i < 7; i++)
+        {
+            // reset this variable after each iteration
+            String spaces = "";
+
+            // loop through the array that contains the number of spaces
+            // that should be placed after the string
+            for (int j = 0; j < howManySpaces[i]; j++)
+            {
+                // add that # of spaces to the string
+                spaces += " ";
             }
 
+            System.out.print("   Pile " + (i + 1) + spaces);
         }
         while (endGame())
         {
