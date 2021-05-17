@@ -10,7 +10,7 @@ public class Solitaire
     {
         Scanner kbd = new Scanner(System.in);
 
-        System.out.println("What is player 1's name:");
+        System.out.println("What is this player's name:");
 
         String playerName = kbd.nextLine();
 
@@ -20,6 +20,11 @@ public class Solitaire
         System.out.println("_____________________________________________________________________0");
 
     }
+    
+    public void setUpGame()
+    {
+        
+    }
 
     public void startGame()
     {
@@ -28,7 +33,17 @@ public class Solitaire
 
         // shuffle the game deck
         deck.shuffle();
+        
+        while(endGame())
+        {
+            
+        }
 
+    }
+    
+    public boolean endGame()
+    {
+        return false;
     }
 
     public static void main(String[] args)
@@ -37,7 +52,7 @@ public class Solitaire
 
         s.setUpPlayer();
         
-        s.startGame();
+        s.setUpGame();
 
     }
 }
