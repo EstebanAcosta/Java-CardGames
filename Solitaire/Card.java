@@ -9,7 +9,9 @@ public class Card implements Comparable<Card>
 
     private Rank rank;
 
-    public Card(Suit suit, Rank value) 
+    private boolean unflipped;
+
+    public Card(Suit suit, Rank value)
     {
 
         setSuit(suit);
@@ -43,24 +45,35 @@ public class Card implements Comparable<Card>
         this.suit = suit;
     }
 
+    public void setUnflipped(boolean unflipped)
+    {
+        this.unflipped = unflipped;
+    }
+
+    public boolean isUnflipped()
+    {
+        return unflipped;
+    }
+
     @Override
     public int compareTo(Card c)
     {
-        if(this.getRank().getValue() > c.getRank().getValue())
+        if (this.getRank().getValue() > c.getRank().getValue())
         {
             return 1;
         }
-        
-        else if(this.getRank().getValue() < c.getRank().getValue())
+
+        else if (this.getRank().getValue() < c.getRank().getValue())
         {
             return -1;
         }
-        
+
         else
         {
             return 0;
         }
     }
+
     @Override
     public boolean equals(Object o)
     {
@@ -83,7 +96,7 @@ public class Card implements Comparable<Card>
 
         return this.getSuit() == c.getSuit() && this.getRank() == c.getRank();
     }
-    
+
     public String toString()
     {
 
