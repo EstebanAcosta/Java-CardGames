@@ -71,20 +71,29 @@ public class Solitaire
             tableau.put(i + 1, cardsDrawn);
         }
 
+        p.setTableau(tableau);
+
         System.out.println("___________________________________________________________");
 
-        startGame(tableau, deck);
+        startGame(deck);
     }
 
-    public void startGame(Hashtable<Integer, ArrayList<Card>> tableau, Deck deck)
+    public void startGame(Deck deck)
     {
 
-        System.out.println("Solitaire Has Started\n");
+        System.out.println("Solitaire Has Started, " + p.getName() + " \n");
 
+        // This array will contain how many spaces should be placed after
+        // the words 'Pile #' This array is only used for display reasons.
+        // We want to know how many spaces the program should put
+        // right after the words Pile # in order to make the tableau look
+        // nice and readable
         int[] howManySpaces = new int[7];
 
         // helps keep track of where we are in the array
         int count = 0;
+
+        Hashtable<Integer, ArrayList<Card>> tableau = p.getTableau();
 
         System.out.println("Tableau:\n");
 
@@ -95,6 +104,7 @@ public class Solitaire
             System.out.print(entry.getValue().get(0) + "  ");
 
             // get the length of the string representation of each card and store it in the array
+            // Subtract 7 to estimate how many spaces more or less we should put after the string
             howManySpaces[count] = entry.getValue().get(0).toString().length() - 7;
 
             count++;
@@ -119,6 +129,19 @@ public class Solitaire
 
             System.out.print("   Pile " + (i + 1) + spaces);
         }
+
+        // create a foundation
+        // There will be four piles above the tableau (the seven piles )
+        // These four piles will all start with an ace
+        // The foundation will be empty up until the point the player can
+        // start putting aces of each suit down
+        Hashtable<Integer, ArrayList<Card>> foundation = new Hashtable<Integer, ArrayList<Card>>();
+
+        for (int i = 0; i < 4; i++)
+        {
+            foundation.put(i + 1, new ArrayList<Card>());
+        }
+
         while (endGame())
         {
 
