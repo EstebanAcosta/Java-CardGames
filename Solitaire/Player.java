@@ -1,10 +1,8 @@
 package Solitaire;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 /***
@@ -56,74 +54,103 @@ public class Player
     public int getNumCardsInTableauPile(int pile)
     {
         int sizeOfPile = 0;
-        
+
         int whichPile = 1;
-        
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
+
+        // Start looping through the piles in the tableau
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             if (pile == whichPile)
             {
-                sizeOfPile = entry.getValue().size();
-                
+                // store the number of cards in that pile
+                sizeOfPile = thatPile.getValue().size();
+
                 break;
             }
-            
+
             whichPile++;
         }
-        
+
         return sizeOfPile;
 
     }
 
+    /***
+     * Add multiple sorted cards to the end of a specific pile in the tableau
+     * @param pile
+     * @param newCards
+     */
     public void addMultipleToTableau(int pile, ArrayList<Card> newCards)
     {
-        
+
         int whichPile = 1;
-        
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
+
+        // Start looping through the piles in the tableau
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             if (pile == whichPile)
             {
-                
+                // add all the new sorted cards to the end of the selected pile
+                thatPile.getValue().addAll(newCards);
+
+                break;
             }
-            
+
             whichPile++;
         }
-        
+
     }
 
+    /***
+     * Add a new card to the end of a specific pile in the tableau
+     * @param pile
+     * @param card
+     */
     public void addOneToTableau(int pile, Card card)
     {
-  int whichPile = 1;
-        
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
+        int whichPile = 1;
+
+        // Start looping through the piles in the tableau
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             if (pile == whichPile)
             {
-                
+                // add all the new card to the end of the selected pile
+                thatPile.getValue().add(card);
+
+                break;
             }
-            
+
             whichPile++;
         }
     }
 
-    public Card removeOneFromTableau(int pile, Card card)
+    /***
+     * Removes one card from the tableau in a specific pile
+     * @param pile
+     * @param position
+     * @return the card that is being removed
+     */
+    public Card removeOneFromTableau(int pile, int position)
     {
         int whichPile = 1;
-        
+
         Card removed = null;
-        
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
+
+        // Start looping through the piles in the tableau
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             if (pile == whichPile)
             {
-                
+                removed = thatPile.getValue().remove(position - 1);
+
+                break;
+
             }
-            
+
             whichPile++;
         }
-        
-        
+
         return removed;
     }
 
@@ -131,24 +158,35 @@ public class Player
      * Removes the selected cards from the player's hand
      * @param cards
      */
-    public void removeMultipleFromPlayerCards(ArrayList<Card> cards)
+    public void removeMultipleFromPlayerCards(int pile, ArrayList<Card> cards)
     {
+        int whichPile = 1;
 
-        for (Card card : cards)
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            Iterator<Card> playersHand = playerCards.iterator();
-
-            while (playersHand.hasNext())
+            if (pile == whichPile)
             {
-                Card nextCard = playersHand.next();
-
-                if (nextCard.equals(card))
+                for (Card card : thatPile.getValue())
                 {
+                    Iterator<Card> playersHand = thatPile.getValue().iterator();
 
-                    playersHand.remove();
+                    while (playersHand.hasNext())
+                    {
+                        Card nextCard = playersHand.next();
 
+                        if (nextCard.equals(card))
+                        {
+
+                            playersHand.remove();
+
+                        }
+                    }
                 }
+
             }
+
+            whichPile++;
+
         }
     }
 
@@ -157,9 +195,9 @@ public class Player
      * @param whichCard
      * @return
      */
-    public Card getCardInPlayerCards(int pile , int whichCard)
+    public Card getCardInPlayerCards(int pile, int whichCard)
     {
-        return this.playerCards.get(whichCard - 1);
+        return null;
     }
 
     /***
@@ -169,27 +207,19 @@ public class Player
      */
     public boolean containsThisCard(Card thisCard)
     {
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            
+            for (Card c : thatPile.getValue())
+            {
+                if(c.getSuit() == thisCard.getSuit() && c.getRank() == thisCard.getRank() && c.getColor() == thisCard.getColor())
+                {
+                    return true;
+                }
+            }
         }
         return false;
     }
-
-    public int howManyTimesThisCardAppears(Card card, ArrayList<Card> list)
-    {
-        int count = 0;
-
-        for (Card c : list)
-        {
-            if (c == card)
-            {
-                count++;
-            }
-        }
-
-        return count;
-    }
+    
 
     /***
      * Shows the player's hand
@@ -197,30 +227,52 @@ public class Player
     public void showPlayerTableau()
     {
 
-        System.out.println(getName() + "'s Hand: \n");
-        
-        
-//        for (int i = 0; i < playerCards.size(); i++)
-//        {
-//
-//            if (playerCards.get(i).isUnflipped())
-//            {
-//                System.out.print(" ( CARD " + (i + 1) + " )");
-//            }
-//            else
-//            {
-//                System.out.print(" ( " + playerCards.get(i) + " ) ");
-//            }
-//
-//            if ((i + 1) % 5 == 0 && i > 0)
-//            {
-//
-//                System.out.println();
-//                System.out.println();
-//
-//            }
-//
-//        }
+        // This array will contain how many spaces should be placed after
+        // the words 'Pile #' This array is only used for display reasons.
+        // We want to know how many spaces the program should put
+        // right after the words Pile # in order to make the tableau look
+        // nice and readable
+        int[] howManySpaces = new int[7];
+
+        // helps keep track of where we are in the array
+        int count = 0;
+
+        Hashtable<Integer, ArrayList<Card>> tableau = this.tableau;
+
+        System.out.println("Tableau:\n");
+
+        // loop through the tableau table
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
+        {
+            // print out the first flipped card in each pile
+            System.out.print(thatPile.getValue().get(0) + "  ");
+
+            // get the length of the string representation of each card and store it in the array
+            // Subtract 7 to estimate how many spaces more or less we should put after the string
+            howManySpaces[count] = thatPile.getValue().get(0).toString().length() - 7;
+
+            count++;
+
+        }
+
+        System.out.println();
+
+        // loop seven times since there are seven piles
+        for (int i = 0; i < 7; i++)
+        {
+            // reset this variable after each iteration
+            String spaces = "";
+
+            // loop through the array that contains the number of spaces
+            // that should be placed after the string
+            for (int j = 0; j < howManySpaces[i]; j++)
+            {
+                // add that # of spaces to the string
+                spaces += " ";
+            }
+
+            System.out.print("   Pile " + (i + 1) + spaces);
+        }
 
         System.out.println();
         System.out.println();

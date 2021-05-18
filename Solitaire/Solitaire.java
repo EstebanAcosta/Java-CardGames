@@ -82,53 +82,9 @@ public class Solitaire
     {
 
         System.out.println("Solitaire Has Started, " + p.getName() + " \n");
-
-        // This array will contain how many spaces should be placed after
-        // the words 'Pile #' This array is only used for display reasons.
-        // We want to know how many spaces the program should put
-        // right after the words Pile # in order to make the tableau look
-        // nice and readable
-        int[] howManySpaces = new int[7];
-
-        // helps keep track of where we are in the array
-        int count = 0;
-
-        Hashtable<Integer, ArrayList<Card>> tableau = p.getTableau();
-
-        System.out.println("Tableau:\n");
-
-        // loop through the tableau table
-        for (Entry<Integer, ArrayList<Card>> entry : tableau.entrySet())
-        {
-            // print out the first flipped card in each pile
-            System.out.print(entry.getValue().get(0) + "  ");
-
-            // get the length of the string representation of each card and store it in the array
-            // Subtract 7 to estimate how many spaces more or less we should put after the string
-            howManySpaces[count] = entry.getValue().get(0).toString().length() - 7;
-
-            count++;
-
-        }
-
-        System.out.println();
-
-        // loop seven times since there are seven piles
-        for (int i = 0; i < 7; i++)
-        {
-            // reset this variable after each iteration
-            String spaces = "";
-
-            // loop through the array that contains the number of spaces
-            // that should be placed after the string
-            for (int j = 0; j < howManySpaces[i]; j++)
-            {
-                // add that # of spaces to the string
-                spaces += " ";
-            }
-
-            System.out.print("   Pile " + (i + 1) + spaces);
-        }
+        
+        
+        p.showPlayerTableau();
 
         // create a foundation
         // There will be four piles above the tableau (the seven piles )
