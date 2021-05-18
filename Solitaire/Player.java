@@ -191,13 +191,42 @@ public class Player
     }
 
     /****
-     * Returns that selected card from their hand
+     * Loop through each pile in the tableau until the program finds the pile 
+     * that the player selected, go through that pile and try to find the card
+     * the player wants
      * @param whichCard
-     * @return
+     * @return that selected card from the tableau
      */
-    public Card getCardInPlayerCards(int pile, int whichCard)
+    public Card getCardInPlayerTableay(int pile, int whichCard)
     {
-        return null;
+        Card thatCard = null;
+
+        int whichPile = 1;
+
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
+        {
+            if (pile == whichPile)
+            {
+                int position = 1;
+
+                for (Card card : thatPile.getValue())
+                {
+                    if (position == whichCard)
+                    {
+                        thatCard = card;
+
+                        break;
+                    }
+
+                    position++;
+
+                }
+
+                break;
+            }
+        }
+
+        return thatCard;
     }
 
     /***
@@ -211,7 +240,7 @@ public class Player
         {
             for (Card c : thatPile.getValue())
             {
-                if(c.getSuit() == thisCard.getSuit() && c.getRank() == thisCard.getRank() && c.getColor() == thisCard.getColor())
+                if (c.getSuit() == thisCard.getSuit() && c.getRank() == thisCard.getRank() && c.getColor() == thisCard.getColor())
                 {
                     return true;
                 }
@@ -219,7 +248,6 @@ public class Player
         }
         return false;
     }
-    
 
     /***
      * Shows the player's hand
