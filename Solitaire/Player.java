@@ -51,6 +51,28 @@ public class Player
         this.tableau = tableau;
     }
 
+    /**
+     * In order to start a foundation in solitaire we need an ace,
+     * this methods allows us to quickly find an ace before doing
+     * anything else
+     * @return true if there is an ace in the tableau, otherwise return false
+     */
+    public boolean hasAceInTableau()
+    {
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
+        {
+            for (Card c : thatPile.getValue())
+            {
+                if (c.getRank() == Rank.ACE)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public int getNumCardsInTableauPile(int pile)
     {
         int sizeOfPile = 0;
@@ -162,21 +184,27 @@ public class Player
     {
         int whichPile = 1;
 
+        // loop through each pile in the tableaus
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             if (pile == whichPile)
             {
+                // loop through the pile's cards
                 for (Card card : thatPile.getValue())
                 {
+                    // create an iterator using the cards player wants to remove
                     Iterator<Card> playersHand = thatPile.getValue().iterator();
 
+                    // loop through the pile of cards
                     while (playersHand.hasNext())
                     {
+                        // get the next card in the pile
                         Card nextCard = playersHand.next();
 
                         if (nextCard.equals(card))
                         {
 
+                            // remove that card from the
                             playersHand.remove();
 
                         }
@@ -191,13 +219,13 @@ public class Player
     }
 
     /****
-     * Loop through each pile in the tableau until the program finds the pile 
+     * Loop through each pile in the tableau until the program finds the pile
      * that the player selected, go through that pile and try to find the card
      * the player wants
      * @param whichCard
      * @return that selected card from the tableau
      */
-    public Card getCardInPlayerTableay(int pile, int whichCard)
+    public Card getCardInPlayerTableau(int pile, int whichCard)
     {
         Card thatCard = null;
 
@@ -255,51 +283,25 @@ public class Player
     public void showPlayerTableau()
     {
 
-        // This array will contain how many spaces should be placed after
-        // the words 'Pile #' This array is only used for display reasons.
-        // We want to know how many spaces the program should put
-        // right after the words Pile # in order to make the tableau look
-        // nice and readable
-        int[] howManySpaces = new int[7];
-
-        // helps keep track of where we are in the array
-        int count = 0;
-
         Hashtable<Integer, ArrayList<Card>> tableau = this.tableau;
 
-        System.out.println("Tableau:\n");
+        System.out.println(getName() + "'s Tableau:\n");
+
+        int count = 1;
 
         // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
             // print out the first flipped card in each pile
-            System.out.print(thatPile.getValue().get(0) + "  ");
+            System.out.println(thatPile.getValue().get(0) + "  ");
 
-            // get the length of the string representation of each card and store it in the array
-            // Subtract 7 to estimate how many spaces more or less we should put after the string
-            howManySpaces[count] = thatPile.getValue().get(0).toString().length() - 7;
+            System.out.println("Pile " + count);
+            
+            System.out.println();
+            System.out.println();
 
             count++;
 
-        }
-
-        System.out.println();
-
-        // loop seven times since there are seven piles
-        for (int i = 0; i < 7; i++)
-        {
-            // reset this variable after each iteration
-            String spaces = "";
-
-            // loop through the array that contains the number of spaces
-            // that should be placed after the string
-            for (int j = 0; j < howManySpaces[i]; j++)
-            {
-                // add that # of spaces to the string
-                spaces += " ";
-            }
-
-            System.out.print("   Pile " + (i + 1) + spaces);
         }
 
         System.out.println();

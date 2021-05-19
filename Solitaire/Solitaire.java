@@ -28,6 +28,7 @@ public class Solitaire
 
     public void setUpGame()
     {
+        Scanner kbd = new Scanner(System.in);
 
         // Create a deck of 52 cards
         Deck deck = new Deck();
@@ -72,18 +73,58 @@ public class Solitaire
         }
 
         p.setTableau(tableau);
+        
+        System.out.println("Tableau has been created");
 
         System.out.println("___________________________________________________________");
 
-        startGame(deck);
+        int min = 1;
+
+        int max = 5;
+
+        System.out.println("What is the number of rounds you want?\n");
+
+        System.out.println("The min # is " + min + " and the max # is " + max);
+
+        String numRounds = "";
+
+        // convert input into an integer
+        int numberOfRounds = 0;
+
+        // Continue promoting the player until they provide
+        // a number between 0 and 5
+        while (numberOfRounds > max || numberOfRounds < min)
+        {
+            System.out.println("Please enter a number that is between " + min + " and " + max);
+
+            // get player input
+            numRounds = kbd.nextLine();
+
+            // continue prompting player until the player gives a number
+            while (!numRounds.matches("[0-9]+"))
+            {
+                System.out.println("Please enter a number for the number of rounds in this new game");
+
+                numRounds = kbd.nextLine();
+            }
+            // convert the player input into an integer
+            numberOfRounds = Integer.parseInt(numRounds);
+        }
+        
+        System.out.println("Player wants to play " + numberOfRounds + " of Solitaire\n");
+
+        System.out.println("_________________________________________________________________\n");
+
+        startGame(deck, numberOfRounds);
     }
 
-    public void startGame(Deck deck)
+    public void startGame(Deck deck, int rounds)
     {
 
         System.out.println("Solitaire Has Started, " + p.getName() + " \n");
-        
-        
+
+        Scanner kbd = new Scanner(System.in);
+
         p.showPlayerTableau();
 
         // create a foundation
@@ -100,13 +141,21 @@ public class Solitaire
 
         while (endGame())
         {
+            if (p.hasAceInTableau())
+            {
+                
+            }
+            
+           
 
         }
 
-    }
+    }       
+    
 
     public boolean endGame()
     {
+        
         return false;
     }
 
