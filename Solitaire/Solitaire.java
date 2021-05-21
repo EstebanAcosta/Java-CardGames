@@ -9,6 +9,8 @@ public class Solitaire
 {
     private Player p = new Player(1);
 
+    private Hashtable<Integer, ArrayList<Card>> foundation;
+
     public void setUpPlayer()
     {
         Scanner kbd = new Scanner(System.in);
@@ -134,7 +136,7 @@ public class Solitaire
         // These four piles will all start with an ace
         // The foundation will be empty up until the point the player can
         // start putting aces of each suit down
-        Hashtable<Integer, ArrayList<Card>> foundation = new Hashtable<Integer, ArrayList<Card>>();
+        foundation = new Hashtable<Integer, ArrayList<Card>>();
 
         // Go through each pile of the foundation
         for (int i = 0; i < 4; i++)
@@ -189,6 +191,43 @@ public class Solitaire
     public boolean endGame()
     {
 
+        return false;
+    }
+
+    public void printFoundation(boolean collapsedMenu)
+    {
+        int pile = 1;
+        // loop through each pile of the foundation
+        for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+        {
+            System.out.println("Pile " + pile + ":");
+
+            System.out.println();
+
+            for (Card c : thatPile.getValue())
+            {
+                System.out.println(c);
+
+            }
+        }
+    }
+
+    /**
+     * This method looks to see if the foundation has any starting piles
+     * @return true if there is at least one pile in the foundation otherwise
+     *         return false
+     */
+    public boolean doesFoundationHavePiles()
+    {
+        // loop through the piles of the foundation
+        for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+        {
+            // if this pile has at least one card
+            if (thatPile.getValue().size() > 0)
+            {
+                return true;
+            }
+        }
         return false;
     }
 
