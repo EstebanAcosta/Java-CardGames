@@ -57,43 +57,58 @@ public class Player
      * anything else
      * @return true if there is an ace in the tableau, otherwise return false
      */
-    public boolean hasAceInTableau()
+    public boolean hasAceOnTopInTableau()
     {
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            for (Card c : thatPile.getValue())
+
+            if (thatPile.getValue().get(0).getRank() == Rank.ACE)
             {
-                if (c.getRank() == Rank.ACE)
-                {
-                    return true;
-                }
+                return true;
             }
+
         }
 
         return false;
     }
 
-    public int getNumCardsInTableauPile(int pile)
+    public ArrayList<Card> findAces()
     {
-        int sizeOfPile = 0;
 
-        int whichPile = 1;
+        int pile = 1;
 
-        // Start looping through the piles in the tableau
+        ArrayList<Card> allAces = new ArrayList<Card>();
+
+        // loop through each pile of the tableau
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            if (pile == whichPile)
-            {
-                // store the number of cards in that pile
-                sizeOfPile = thatPile.getValue().size();
 
-                break;
+            // if the top card of this pile is an ace
+            if (thatPile.getValue().get(0).getRank() == Rank.ACE)
+            {
+
+                // flip the second card face up
+                thatPile.getValue().get(1).setUnflipped(false);
+
+                // add the removed aces to the list of removed aces
+                // (This is necessary in order to place the list of removed aces
+                // in the foundation)
+                allAces.add(removeOneFromTableau(pile, 0));
+
             }
 
-            whichPile++;
+            pile++;
+
         }
 
-        return sizeOfPile;
+        return allAces;
+    }
+
+    public int getNumCardsInTableauPile(int pile)
+    {
+
+        // store the number of cards in that pile
+        return tableau.get(pile).size();
 
     }
 
@@ -105,21 +120,7 @@ public class Player
     public void addMultipleToTableau(int pile, ArrayList<Card> newCards)
     {
 
-        int whichPile = 1;
-
-        // Start looping through the piles in the tableau
-        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
-        {
-            if (pile == whichPile)
-            {
-                // add all the new sorted cards to the end of the selected pile
-                thatPile.getValue().addAll(newCards);
-
-                break;
-            }
-
-            whichPile++;
-        }
+        tableau.get(pile).addAll(newCards);
 
     }
 
@@ -130,21 +131,8 @@ public class Player
      */
     public void addOneToTableau(int pile, Card card)
     {
-        int whichPile = 1;
+        tableau.get(pile).add(card);
 
-        // Start looping through the piles in the tableau
-        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
-        {
-            if (pile == whichPile)
-            {
-                // add all the new card to the end of the selected pile
-                thatPile.getValue().add(card);
-
-                break;
-            }
-
-            whichPile++;
-        }
     }
 
     /***
@@ -155,25 +143,8 @@ public class Player
      */
     public Card removeOneFromTableau(int pile, int position)
     {
-        int whichPile = 1;
 
-        Card removed = null;
-
-        // Start looping through the piles in the tableau
-        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
-        {
-            if (pile == whichPile)
-            {
-                removed = thatPile.getValue().remove(position - 1);
-
-                break;
-
-            }
-
-            whichPile++;
-        }
-
-        return removed;
+        return tableau.get(pile).remove(position);
     }
 
     /****
@@ -227,40 +198,14 @@ public class Player
      */
     public Card getCardInPlayerTableau(int pile, int whichCard)
     {
-        Card thatCard = null;
 
-        int whichPile = 1;
-
-        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
-        {
-            if (pile == whichPile)
-            {
-                int position = 1;
-
-                for (Card card : thatPile.getValue())
-                {
-                    if (position == whichCard)
-                    {
-                        thatCard = card;
-
-                        break;
-                    }
-
-                    position++;
-
-                }
-
-                break;
-            }
-        }
-
-        return thatCard;
+        return tableau.get(pile).get(whichCard - 1);
     }
 
     /***
-     * Determines if this player has a specific card in their hand
+     * Determines if this player has a specific card in their tableau
      * @param thisCard
-     * @return
+     * @return true if that card exists in their tableau, otherwise return false
      */
     public boolean containsThisCard(Card thisCard)
     {
@@ -278,7 +223,7 @@ public class Player
     }
 
     /***
-     * Shows the player's hand
+     * Shows the player's tableau
      */
     public void showPlayerTableau()
     {
@@ -292,11 +237,13 @@ public class Player
         // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
+            System.out.println("Pile " + count);
+
             // print out the first flipped card in each pile
             System.out.println(thatPile.getValue().get(0) + "  ");
 
-            System.out.println("Pile " + count);
-            
+            System.out.println("Num Of Cards Unflipped: " + (thatPile.getValue().size() - 1));
+
             System.out.println();
             System.out.println();
 

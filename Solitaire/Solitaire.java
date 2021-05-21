@@ -73,7 +73,7 @@ public class Solitaire
         }
 
         p.setTableau(tableau);
-        
+
         System.out.println("Tableau has been created");
 
         System.out.println("___________________________________________________________");
@@ -110,8 +110,8 @@ public class Solitaire
             // convert the player input into an integer
             numberOfRounds = Integer.parseInt(numRounds);
         }
-        
-        System.out.println("Player wants to play " + numberOfRounds + " of Solitaire\n");
+
+        System.out.println("Player wants to play " + numberOfRounds + " rounds of Solitaire\n");
 
         System.out.println("_________________________________________________________________\n");
 
@@ -125,6 +125,8 @@ public class Solitaire
 
         Scanner kbd = new Scanner(System.in);
 
+        int currentRound = 1;
+
         p.showPlayerTableau();
 
         // create a foundation
@@ -134,28 +136,59 @@ public class Solitaire
         // start putting aces of each suit down
         Hashtable<Integer, ArrayList<Card>> foundation = new Hashtable<Integer, ArrayList<Card>>();
 
+        // Go through each pile of the foundation
         for (int i = 0; i < 4; i++)
         {
+            // Make the key the pile number and the value an empty array list for future cards
             foundation.put(i + 1, new ArrayList<Card>());
         }
 
+        // Continue looping until the game ends either with the player winning it
+        // or with a stalemate
         while (endGame())
         {
-            if (p.hasAceInTableau())
+            // continue looping until all rounds have been completed
+            while (currentRound <= rounds)
             {
-                
+                System.out.println("Round " + currentRound + "\n");
+
+                // Find out if there are any aces in the top flipped cards of the tableau
+                if (p.hasAceOnTopInTableau())
+                {
+                    // find all the aces and store them in a list
+                    ArrayList<Card> aces = p.findAces();
+
+                    // loop through each pile of the foundation
+                    for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+                    {
+
+                        // if this pile is completely empty
+                        // (there are no aces to start the foundation)
+                        if (thatPile.getValue().size() > 0)
+                        {
+                            // remove one card from the list of aces and add it
+                            // to the foundation
+                            thatPile.getValue().add(aces.remove(0));
+                        }
+
+                    }
+                }
             }
-            
-           
+
+            currentRound++;
 
         }
 
-    }       
-    
+    }
+
+    public boolean moveWithinFoundation()
+    {
+        return false;
+    }
 
     public boolean endGame()
     {
-        
+
         return false;
     }
 
