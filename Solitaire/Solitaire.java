@@ -129,8 +129,6 @@ public class Solitaire
 
         int currentRound = 1;
 
-        p.showPlayerTableau();
-
         // create a foundation
         // There will be four piles above the tableau (the seven piles )
         // These four piles will all start with an ace
@@ -145,6 +143,8 @@ public class Solitaire
             foundation.put(i + 1, new ArrayList<Card>());
         }
 
+        printFoundation(true);
+
         // Continue looping until the game ends either with the player winning it
         // or with a stalemate
         while (endGame())
@@ -153,6 +153,13 @@ public class Solitaire
             while (currentRound <= rounds)
             {
                 System.out.println("Round " + currentRound + "\n");
+
+                if (doesFoundationHavePiles())
+                {
+                    printFoundation(true);
+                }
+
+                p.showPlayerTableau();
 
                 // Find out if there are any aces in the top flipped cards of the tableau
                 if (p.hasAceOnTopInTableau())
@@ -183,7 +190,7 @@ public class Solitaire
 
     }
 
-    public boolean moveWithinFoundation()
+    public boolean canMoveWithinFoundation()
     {
         return false;
     }
@@ -196,20 +203,31 @@ public class Solitaire
 
     public void printFoundation(boolean collapsedMenu)
     {
-        int pile = 1;
-        // loop through each pile of the foundation
-        for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+
+        ArrayList<String> printPile = new ArrayList<String>();
+
+        System.out.println("Foundation: \n");
+
+        for (int i = 1; i < 5; i++)
         {
-            System.out.println("Pile " + pile + ":");
+            System.out.print("Pile " + i + "          ");
 
             System.out.println();
 
-            for (Card c : thatPile.getValue())
+            System.out.println();
+
+        }
+
+        for (int i = 1; i < 4; i++)
+        {
+
+            if (foundation.get(i).size() > 0)
             {
-                System.out.println(c);
+                System.out.print(foundation.get(i).get(0) + "          ");
 
             }
         }
+
     }
 
     /**

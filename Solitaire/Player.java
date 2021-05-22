@@ -242,7 +242,7 @@ public class Player
             // print out the first flipped card in each pile
             System.out.println(thatPile.getValue().get(0) + "  ");
 
-            System.out.println("Num Of Cards Unflipped: " + (thatPile.getValue().size() - 1));
+            System.out.println("# of Unflipped Cards: " + (thatPile.getValue().size() - 1));
 
             System.out.println();
             System.out.println();
