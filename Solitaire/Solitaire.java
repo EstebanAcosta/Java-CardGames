@@ -143,14 +143,13 @@ public class Solitaire
             foundation.put(i + 1, new ArrayList<Card>());
         }
 
-        printFoundation(true);
-
-        // Continue looping until the game ends either with the player winning it
-        // or with a stalemate
-        while (endGame())
+        // continue looping until all rounds have been completed
+        while (currentRound <= rounds)
         {
-            // continue looping until all rounds have been completed
-            while (currentRound <= rounds)
+
+            // Continue looping until the game ends either with the player winning it
+            // or with a stalemate
+            while (endGame(deck))
             {
                 System.out.println("Round " + currentRound + "\n");
 
@@ -182,6 +181,10 @@ public class Solitaire
 
                     }
                 }
+
+                System.out.println("------------------------------------------------------------------");
+
+                break;
             }
 
             currentRound++;
@@ -190,13 +193,39 @@ public class Solitaire
 
     }
 
-    public boolean canMoveWithinFoundation()
+    public boolean canMoveWithinTableau()
     {
         return false;
     }
 
-    public boolean endGame()
+    public boolean canMoveToFoundation()
     {
+        return false;
+    }
+
+    
+
+
+    public boolean canMoveToEmptySpaceInTableau(Deck deck)
+    {
+        if (p.isThereEmptySpaceInTableau())
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean endGame(Deck deck)
+    {
+        if (canMoveWithinTableau() || deck.getSize() > 0 || canMoveToEmptySpaceInTableau(deck)
+        || canMoveToFoundation())
+        {
+            return true;
+        }
 
         return false;
     }
@@ -216,6 +245,42 @@ public class Solitaire
 
             System.out.println();
 
+        }
+
+        int minPileSize = foundation.get(0).size();
+
+        int maxPileSize = foundation.get(0).size();
+
+        int minPile = 1;
+
+        int maxPile = 1;
+
+        int pile = 1;
+
+        // loop through each pile of the foundation
+        for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+        {
+            // if the pize size (the number of cards in that pile) is greater than the max pile size
+            if (thatPile.getValue().size() > maxPileSize)
+            {
+                // make this pile the max pile
+                maxPile = pile;
+
+                // store the size of the current max pile
+                maxPileSize = thatPile.getValue().size();
+            }
+
+            // if the pize size (the number of cards in that pile) is less than the min pile size
+            if (thatPile.getValue().size() < minPileSize)
+            {
+                // make this pile the min pile
+                minPile = pile;
+
+                // store the size of the current min pile
+                minPileSize = thatPile.getValue().size();
+            }
+
+            pile++;
         }
 
         for (int i = 1; i < 4; i++)
@@ -246,6 +311,7 @@ public class Solitaire
                 return true;
             }
         }
+
         return false;
     }
 

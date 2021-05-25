@@ -222,6 +222,30 @@ public class Player
         return false;
     }
 
+    public boolean hasKing()
+    {
+        return false;
+    }
+
+    /***
+     * Determines if the tableau has an empty pile
+     * @return true if there is an empty pile, false if there isn't an empty pile
+     */
+    public boolean isThereEmptySpaceInTableau()
+    {
+        // loop through the piles of the tableau
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
+        {
+            // if this pile has at least one card
+            if (thatPile.getValue().size() == 0)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /***
      * Shows the player's tableau
      */
@@ -239,8 +263,13 @@ public class Player
         {
             System.out.println("Pile " + count);
 
-            // print out the first flipped card in each pile
-            System.out.println(thatPile.getValue().get(0) + "  ");
+            for (Card c : thatPile.getValue())
+            {
+                if (c.isUnflipped() == false)
+                {
+                    System.out.println(c + " ");
+                }
+            }
 
             System.out.println("# of Unflipped Cards: " + (thatPile.getValue().size() - 1));
 
