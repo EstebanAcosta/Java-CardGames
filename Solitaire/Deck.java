@@ -27,6 +27,11 @@ public class Deck
         return this.deck.size();
 
     }
+    
+    public boolean isEmpty()
+    {
+        return this.deck.size() == 0;
+    }
 
     /**
      * Draw any number of cards from the deck

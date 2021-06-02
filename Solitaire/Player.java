@@ -110,18 +110,47 @@ public class Player
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
 
-            // if the top card of this pile is an ace
-            if (thatPile.getValue().get(0).getRank() == Rank.ACE)
+            int position = 0;
+
+            // loop through each card in the pile
+            for (Card c : thatPile.getValue())
             {
 
-                // flip the second card face up
-                thatPile.getValue().get(1).setUnflipped(false);
+                // if this card isn't unflipped (the card is facing up) and it's an Ace
+                if (c.isUnflipped() == false && c.getRank() == Rank.ACE)
+                {
+                    // if that pile has more than one card and the next card is unflipped
+                    if (thatPile.getValue().size() > 1 && position + 1 < thatPile.getValue().size() &&
+                    thatPile.getValue().get(position + 1).isUnflipped())
+                    {
+                        // Flip that card up
+                        thatPile.getValue().get(position + 1).setUnflipped(false);
+                    }
 
-                // add the removed aces to the list of removed aces
-                // (This is necessary in order to place the list of removed aces
-                // in the foundation)
-                allAces.add(removeOneFromTableau(pile, 0));
+                    // add the removed aces to the list of removed aces
+                    // (This is necessary in order to place the list of removed aces
+                    // in the foundation)
 
+                    // Since we are removing this card from a certain position
+                    // in that pile, we shoudln't update the position
+                    // and just move on to the next card in the pile
+                    // (if there are any cards left after this)
+                    allAces.add(removeOneFromTableau(pile, position));
+
+                    continue;
+                }
+
+                // if this card is facing down, then that means there
+                // is no reason to continue looping through the rest of cards
+                // since every card after this face down card is also face down
+                // and we are only interested in the face up cards that are aces
+                else if (c.isUnflipped())
+                {
+                    break;
+                }
+
+                // update the current position of the cards in this pi;e
+                position++;
             }
 
             pile++;
@@ -285,15 +314,22 @@ public class Player
         {
             System.out.println("Pile " + count);
 
+            int flipped = 0;
+
             for (Card c : thatPile.getValue())
             {
                 if (c.isUnflipped() == false)
                 {
                     System.out.println(c + " ");
                 }
+
+                else
+                {
+                    flipped++;
+                }
             }
 
-            System.out.println("# of Unflipped Cards: " + (thatPile.getValue().size() - 1));
+            System.out.println("# of Unflipped Cards: " + flipped);
 
             System.out.println();
             System.out.println();

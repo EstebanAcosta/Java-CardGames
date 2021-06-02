@@ -155,7 +155,7 @@ public class Solitaire
 
                 if (doesFoundationHavePiles())
                 {
-                    printFoundation(true);
+                    printFoundation();
                 }
 
                 p.showPlayerTableau();
@@ -165,7 +165,7 @@ public class Solitaire
                 {
                     // find all the aces and store them in a list
                     ArrayList<Card> aces = p.findAces();
-
+                    
                     // loop through each pile of the foundation
                     for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
                     {
@@ -180,7 +180,11 @@ public class Solitaire
                         }
 
                     }
+                    
+                    System.out.println("PAPI");
                 }
+                
+                printFoundation();
 
                 System.out.println("------------------------------------------------------------------");
 
@@ -203,9 +207,14 @@ public class Solitaire
         return false;
     }
 
+    /**
+     * Determines if the player can place a card in the empty space of the tableau
+     * @param deck
+     * @return
+     */
     public boolean canMoveToEmptySpaceInTableau(Deck deck)
     {
-        if (p.isThereEmptySpaceInTableau() && deck.getSize() > 0)
+        if (p.isThereEmptySpaceInTableau() && deckHasAKing(deck))
         {
             return true;
         }
@@ -216,10 +225,38 @@ public class Solitaire
         }
     }
 
+    /***
+     * Checks to see if a king is in the deck
+     * @param deck
+     * @return true if the deck has a king, false if the deck doesn't have a king
+     */
+    public boolean deckHasAKing(Deck deck)
+    {
+        if (deck.isEmpty())
+        {
+            return false;
+        }
+
+        for (Card c : deck.getDeck())
+        {
+            if (c.getRank() == Rank.KING)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /***
+     * This method determines when the game ends
+     * @param deck
+     * @return
+     */
     public boolean endGame(Deck deck)
     {
-        if (canMoveWithinTableau() || deck.getSize() > 0 || canMoveToEmptySpaceInTableau(deck)
-        || canMoveToFoundation())
+        if (canMoveWithinTableau() || canMoveToEmptySpaceInTableau(deck)
+        || canMoveToFoundation() || deck.getSize() > 0)
         {
             return true;
         }
@@ -227,7 +264,7 @@ public class Solitaire
         return false;
     }
 
-    public void printFoundation(boolean collapsedMenu)
+    public void printFoundation()
     {
 
         System.out.println("Foundation: \n");
@@ -240,14 +277,14 @@ public class Solitaire
             System.out.print("Pile " + pile + ": ");
 
             int whichCard = 1;
-            
+
             for (Card c : thatPile.getValue())
             {
                 System.out.print(whichCard + ": " + c + " ");
-                
+
                 whichCard++;
             }
-            
+
             System.out.println();
 
             pile++;
