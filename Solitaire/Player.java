@@ -112,13 +112,20 @@ public class Player
 
             int position = 0;
 
-            // loop through each card in the pile
-            for (Card c : thatPile.getValue())
-            {
+            // create an iterator using the cards player wants to remove
 
-                // if this card isn't unflipped (the card is facing up) and it's an Ace
-                if (c.isUnflipped() == false && c.getRank() == Rank.ACE)
+            Iterator<Card> pileCards = thatPile.getValue().iterator();
+
+            // loop through each card in the pile
+            while (pileCards.hasNext())
+            {
+                // get the next card in the pile
+                Card nextCard = pileCards.next();
+
+                // if this card is face up and is an ace
+                if (nextCard.isUnflipped() == false && nextCard.getRank() == Rank.ACE)
                 {
+
                     // if that pile has more than one card and the next card is unflipped
                     if (thatPile.getValue().size() > 1 && position + 1 < thatPile.getValue().size() &&
                     thatPile.getValue().get(position + 1).isUnflipped())
@@ -127,37 +134,31 @@ public class Player
                         thatPile.getValue().get(position + 1).setUnflipped(false);
                     }
 
-                    // add the removed aces to the list of removed aces
-                    // (This is necessary in order to place the list of removed aces
-                    // in the foundation)
+                    allAces.add(nextCard);
 
-                    // Since we are removing this card from a certain position
-                    // in that pile, we shoudln't update the position
-                    // and just move on to the next card in the pile
-                    // (if there are any cards left after this)
-                    allAces.add(removeOneFromTableau(pile, position));
+                    // remove that card from the pile
+                    pileCards.remove();
 
-                    continue;
                 }
 
                 // if this card is facing down, then that means there
                 // is no reason to continue looping through the rest of cards
                 // since every card after this face down card is also face down
                 // and we are only interested in the face up cards that are aces
-                else if (c.isUnflipped())
+                else if (nextCard.isUnflipped())
                 {
                     break;
                 }
 
-                // update the current position of the cards in this pi;e
                 position++;
+
             }
 
             pile++;
-
         }
 
         return allAces;
+
     }
 
     public int getNumCardsInTableauPile(int pile)
@@ -217,22 +218,22 @@ public class Player
             if (pile == whichPile)
             {
                 // loop through the pile's cards
-                for (Card card : thatPile.getValue())
+                for (Card card : cards)
                 {
                     // create an iterator using the cards player wants to remove
-                    Iterator<Card> playersHand = thatPile.getValue().iterator();
+                    Iterator<Card> pileCards = thatPile.getValue().iterator();
 
                     // loop through the pile of cards
-                    while (playersHand.hasNext())
+                    while (pileCards.hasNext())
                     {
                         // get the next card in the pile
-                        Card nextCard = playersHand.next();
+                        Card nextCard = pileCards.next();
 
                         if (nextCard.equals(card))
                         {
 
-                            // remove that card from the
-                            playersHand.remove();
+                            // remove that card from the pile
+                            pileCards.remove();
 
                         }
                     }
@@ -307,34 +308,38 @@ public class Player
 
         System.out.println(getName() + "'s Tableau:\n");
 
-        int count = 1;
+        int pileNum = 1;
 
         // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            System.out.println("Pile " + count);
+            System.out.print("Pile " + pileNum + ": ");
 
-            int flipped = 0;
+            int unflipped = 0;
+
+            int posit = 0;
 
             for (Card c : thatPile.getValue())
             {
                 if (c.isUnflipped() == false)
                 {
-                    System.out.println(c + " ");
+                    System.out.print((posit + 1) + ": ( " + c + " )");
                 }
 
                 else
                 {
-                    flipped++;
+                    unflipped++;
                 }
             }
 
-            System.out.println("# of Unflipped Cards: " + flipped);
+            System.out.println();
+
+            System.out.println(unflipped + ( unflipped != 1 ? " Face-Down Cards In Pile " : " Face-Down Card In Pile " )+ pileNum);
 
             System.out.println();
             System.out.println();
 
-            count++;
+            pileNum++;
 
         }
 

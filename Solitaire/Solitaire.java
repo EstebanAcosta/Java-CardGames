@@ -165,14 +165,19 @@ public class Solitaire
                 {
                     // find all the aces and store them in a list
                     ArrayList<Card> aces = p.findAces();
-                    
+
                     // loop through each pile of the foundation
                     for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
                     {
 
+                        if (aces.isEmpty())
+                        {
+                            break;
+                        }
                         // if this pile is completely empty
                         // (there are no aces to start the foundation)
-                        if (thatPile.getValue().size() > 0)
+                        // and there are still aces left to the side
+                        else if (thatPile.getValue().size() == 0)
                         {
                             // remove one card from the list of aces and add it
                             // to the foundation
@@ -180,10 +185,9 @@ public class Solitaire
                         }
 
                     }
-                    
-                    System.out.println("PAPI");
+
                 }
-                
+
                 printFoundation();
 
                 System.out.println("------------------------------------------------------------------");
@@ -280,11 +284,12 @@ public class Solitaire
 
             for (Card c : thatPile.getValue())
             {
-                System.out.print(whichCard + ": " + c + " ");
+                System.out.print(whichCard + ": ( " + c + " ) ");
 
                 whichCard++;
             }
 
+            System.out.println();
             System.out.println();
 
             pile++;
