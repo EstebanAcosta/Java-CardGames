@@ -161,7 +161,7 @@ public class Solitaire
                 p.showPlayerTableau();
 
                 // Find out if there are any aces in the top flipped cards of the tableau
-                if (p.hasAceOnTopInTableau())
+                if (p.hasAceInTableau())
                 {
                     // find all the aces and store them in a list
                     ArrayList<Card> aces = p.findAces();
@@ -203,12 +203,9 @@ public class Solitaire
         return false;
     }
 
-    
-
-
     public boolean canMoveToEmptySpaceInTableau(Deck deck)
     {
-        if (p.isThereEmptySpaceInTableau())
+        if (p.isThereEmptySpaceInTableau() && deck.getSize() > 0)
         {
             return true;
         }
@@ -233,64 +230,27 @@ public class Solitaire
     public void printFoundation(boolean collapsedMenu)
     {
 
-        ArrayList<String> printPile = new ArrayList<String>();
-
         System.out.println("Foundation: \n");
-
-        for (int i = 1; i < 5; i++)
-        {
-            System.out.print("Pile " + i + "          ");
-
-            System.out.println();
-
-            System.out.println();
-
-        }
-
-        int minPileSize = foundation.get(0).size();
-
-        int maxPileSize = foundation.get(0).size();
-
-        int minPile = 1;
-
-        int maxPile = 1;
 
         int pile = 1;
 
         // loop through each pile of the foundation
         for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
         {
-            // if the pize size (the number of cards in that pile) is greater than the max pile size
-            if (thatPile.getValue().size() > maxPileSize)
+            System.out.print("Pile " + pile + ": ");
+
+            int whichCard = 1;
+            
+            for (Card c : thatPile.getValue())
             {
-                // make this pile the max pile
-                maxPile = pile;
-
-                // store the size of the current max pile
-                maxPileSize = thatPile.getValue().size();
+                System.out.print(whichCard + ": " + c + " ");
+                
+                whichCard++;
             }
-
-            // if the pize size (the number of cards in that pile) is less than the min pile size
-            if (thatPile.getValue().size() < minPileSize)
-            {
-                // make this pile the min pile
-                minPile = pile;
-
-                // store the size of the current min pile
-                minPileSize = thatPile.getValue().size();
-            }
+            
+            System.out.println();
 
             pile++;
-        }
-
-        for (int i = 1; i < 4; i++)
-        {
-
-            if (foundation.get(i).size() > 0)
-            {
-                System.out.print(foundation.get(i).get(0) + "          ");
-
-            }
         }
 
     }

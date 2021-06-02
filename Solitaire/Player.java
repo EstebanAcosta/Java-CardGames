@@ -51,20 +51,47 @@ public class Player
         this.tableau = tableau;
     }
 
+    /***
+     * In order to determine if it's possible for the player to start working
+     * with the empty pile, this method determines if there are any kings in the
+     * tableau
+     * @return true if there are kings in the tableau, false if there aren't
+     */
+    public boolean hasKingInTableau()
+    {
+        for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
+        {
+
+            for (Card c : thatPile.getValue())
+            {
+                if (c.isUnflipped() == false && c.getRank() == Rank.KING)
+                {
+                    return true;
+                }
+            }
+
+        }
+
+        return false;
+    }
+
     /**
      * In order to start a foundation in solitaire we need an ace,
      * this methods allows us to quickly find an ace before doing
      * anything else
      * @return true if there is an ace in the tableau, otherwise return false
      */
-    public boolean hasAceOnTopInTableau()
+    public boolean hasAceInTableau()
     {
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
 
-            if (thatPile.getValue().get(0).getRank() == Rank.ACE)
+            for (Card c : thatPile.getValue())
             {
-                return true;
+                if (c.isUnflipped() == false && c.getRank() == Rank.ACE)
+                {
+                    return true;
+                }
             }
 
         }
@@ -219,11 +246,6 @@ public class Player
                 }
             }
         }
-        return false;
-    }
-
-    public boolean hasKing()
-    {
         return false;
     }
 
