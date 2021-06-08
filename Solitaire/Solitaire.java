@@ -170,6 +170,8 @@ public class Solitaire
                     for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
                     {
 
+                        // if there are no more aces to place in the foundation, there
+                        // is no need to continue traversing through the foundation
                         if (aces.isEmpty())
                         {
                             break;
@@ -188,7 +190,15 @@ public class Solitaire
 
                 }
 
-                printFoundation();
+                if (canMoveCardsWithinTableau())
+                {
+
+                }
+
+                if (canMoveCardsToFoundation())
+                {
+
+                }
 
                 System.out.println("------------------------------------------------------------------");
 
@@ -201,18 +211,33 @@ public class Solitaire
 
     }
 
-    public boolean canMoveWithinTableau()
+    public boolean canMoveCardsWithinTableau()
     {
         return false;
     }
 
-    public boolean canMoveToFoundation()
+    public boolean canMoveCardsToFoundation()
     {
+        if (doesFoundationHavePiles())
+        {
+
+            ArrayList<Card> cardsToMove = new ArrayList<Card>();
+
+            // loop through the foundation table
+            for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
+            {
+                int pileSize = thatPile.getValue().size();
+                
+                cardsToMove.add(thatPile.getValue().get(pileSize - 1));
+            }
+
+            return true;
+        }
         return false;
     }
 
     /**
-     * Determines if the player can place a card in the empty space of the tableau
+     * Determines if the player can place a card in the empty pile of the tableau
      * @param deck
      * @return
      */
@@ -223,10 +248,8 @@ public class Solitaire
             return true;
         }
 
-        else
-        {
-            return false;
-        }
+        return false;
+
     }
 
     /***
@@ -259,8 +282,8 @@ public class Solitaire
      */
     public boolean endGame(Deck deck)
     {
-        if (canMoveWithinTableau() || canMoveToEmptySpaceInTableau(deck)
-        || canMoveToFoundation() || deck.getSize() > 0)
+        if (canMoveCardsWithinTableau() || canMoveToEmptySpaceInTableau(deck)
+        || canMoveCardsToFoundation() || deck.getSize() > 0)
         {
             return true;
         }
@@ -268,13 +291,22 @@ public class Solitaire
         return false;
     }
 
+    /****
+     * Displays the foundation to the screen
+     */
     public void printFoundation()
     {
 
         System.out.println("Foundation: \n");
 
+        // this 2D array is going to represent the
+        // foundation. This will have the same number of piles
+        // and # of available spaces in each pile as the foundation
+        // which in this case will be four piles and 10 empty spaces
         String[][] f = new String[4][10];
 
+        // Since we don't want to print null for any of the empty spaces that exist in the foundation
+        // we are going to put an empty string in each empty spot of the array
         for (int row = 0; row < f.length; row++)
         {
             for (int col = 0; col < f[row].length; col++)
@@ -285,22 +317,25 @@ public class Solitaire
 
         }
         int pileNum = 0;
-        
-        // loop through the tableau table
+
+        // loop through the foundation table
         for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
         {
 
             int posit = 0;
 
+            // loop through each card in that pile
             for (Card c : thatPile.getValue())
             {
 
+                // if the card is facing up
                 if (c.isUnflipped() == false)
                 {
                     f[posit][pileNum] = "( " + c + " )   ";
 
                 }
 
+                // if the card is facing down
                 else
                 {
                     f[posit][pileNum] = "( Card " + (posit + 1) + " )                  ";
@@ -314,6 +349,7 @@ public class Solitaire
 
         }
 
+        // Print the pile number on top of each pile in the foundation
         for (int i = 0; i < f.length; i++)
         {
             System.out.print("Pile " + (i + 1) + "                      ");
@@ -321,6 +357,7 @@ public class Solitaire
 
         System.out.println();
 
+        // Loop through the 2D array representation of the foundation
         for (int row = 0; row < f.length; row++)
         {
             for (int col = 0; col < f[row].length; col++)
