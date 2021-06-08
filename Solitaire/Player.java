@@ -308,43 +308,70 @@ public class Player
 
         System.out.println(getName() + "'s Tableau:\n");
 
-        int pileNum = 1;
+        int pileNum = 0;
+
+        String[][] t = new String[7][10];
+        
+        
+        
+        for (int row = 0; row < t.length; row++)
+        {
+            for (int col = 0; col < t[row].length; col++)
+            {
+                
+                t[row][col] = "";
+            }
+            
+        }
 
         // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> thatPile : tableau.entrySet())
         {
-            System.out.print("Pile " + pileNum + ": ");
-
-            int unflipped = 0;
 
             int posit = 0;
-
+            
             for (Card c : thatPile.getValue())
             {
+
                 if (c.isUnflipped() == false)
                 {
-                    System.out.print((posit + 1) + ": ( " + c + " )");
+                    t[posit][pileNum] = "( " + c + " )   ";
+
                 }
 
                 else
                 {
-                    unflipped++;
+                    t[posit][pileNum] = "( Card " + (posit + 1) + " )                  ";
+
                 }
+
+                posit++;
             }
-
-            System.out.println();
-
-            System.out.println(unflipped + ( unflipped != 1 ? " Face-Down Cards In Pile " : " Face-Down Card In Pile " )+ pileNum);
-
-            System.out.println();
-            System.out.println();
 
             pileNum++;
 
         }
+        
+        
+        for(int i = 0 ; i < t.length; i++)
+        {
+            System.out.print("Pile " + (i + 1) + "                      "); 
+        }
+        
+        System.out.println();
+ 
 
-        System.out.println();
-        System.out.println();
+        for (int row = 0; row < t.length; row++)
+        {
+            for (int col = 0; col < t[row].length; col++)
+            {
+                
+                System.out.print(t[row][col]);
+            }
+            
+            System.out.println();
+            System.out.println();
+        }
 
     }
 

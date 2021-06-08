@@ -273,26 +273,64 @@ public class Solitaire
 
         System.out.println("Foundation: \n");
 
-        int pile = 1;
+        String[][] f = new String[4][10];
 
-        // loop through each pile of the foundation
+        for (int row = 0; row < f.length; row++)
+        {
+            for (int col = 0; col < f[row].length; col++)
+            {
+
+                f[row][col] = "";
+            }
+
+        }
+        int pileNum = 0;
+        
+        // loop through the tableau table
         for (Entry<Integer, ArrayList<Card>> thatPile : foundation.entrySet())
         {
-            System.out.print("Pile " + pile + ": ");
 
-            int whichCard = 1;
+            int posit = 0;
 
             for (Card c : thatPile.getValue())
             {
-                System.out.print(whichCard + ": ( " + c + " ) ");
 
-                whichCard++;
+                if (c.isUnflipped() == false)
+                {
+                    f[posit][pileNum] = "( " + c + " )   ";
+
+                }
+
+                else
+                {
+                    f[posit][pileNum] = "( Card " + (posit + 1) + " )                  ";
+
+                }
+
+                posit++;
+            }
+
+            pileNum++;
+
+        }
+
+        for (int i = 0; i < f.length; i++)
+        {
+            System.out.print("Pile " + (i + 1) + "                      ");
+        }
+
+        System.out.println();
+
+        for (int row = 0; row < f.length; row++)
+        {
+            for (int col = 0; col < f[row].length; col++)
+            {
+
+                System.out.print(f[row][col]);
             }
 
             System.out.println();
             System.out.println();
-
-            pile++;
         }
 
     }
