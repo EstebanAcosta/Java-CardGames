@@ -127,17 +127,20 @@ public class Player
     {
         int count = 0;
 
-        Iterator<Card> c = playerCards.iterator();
-
-        while (c.hasNext())
+        for (Card card : cards)
         {
-            Card nextCard = c.next();
+            Iterator<Card> playersHand = playerCards.iterator();
 
-            if (nextCard.equals(cards.get(count)))
+            while (playersHand.hasNext())
             {
-                c.remove();
+                Card nextCard = playersHand.next();
 
-                count++;
+                if (nextCard.equals(card))
+                {
+
+                    playersHand.remove();
+
+                }
             }
         }
     }

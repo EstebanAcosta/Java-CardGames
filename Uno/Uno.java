@@ -145,8 +145,6 @@ public class Uno
 
                 String selectedCard = "";
 
-                int prevPlayer = getPreviousPlayer(whichPlayer);
-
                 // if there is more than one card in the middle, and the middle card is a draw four
                 if (middle.size() > 0 && middle.get(middle.size() - 1).isWild() && middle.get(middle.size() - 1).getSpecialValue() == SpecialValue.WILD_DRAW_FOUR)
                 {
@@ -496,22 +494,6 @@ public class Uno
 
     }
 
-    public int getPreviousPlayer(int currentTurn)
-    {
-        int previousTurn = 0;
-        if (currentTurn == 0)
-        {
-            previousTurn = players.size() - 1;
-        }
-
-        else
-        {
-
-            previousTurn = currentTurn - 1;
-        }
-
-        return previousTurn;
-    }
 
     public static void main(String[] args)
     {
